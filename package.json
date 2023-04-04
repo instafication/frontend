@@ -43,6 +43,8 @@
     "tailwindcss": "latest",
     "typescript": "latest",
     "vite": "latest",
+    "workerd": "^1.20230321.0",
+    "@cloudflare/workerd-linux-64": "latest",
     "wrangler": "latest",
     "zod": "latest"
   }
