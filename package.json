@@ -9,9 +9,8 @@
     "preview": "vite preview",
     "dev": "npm run dev:vercel",
     "dev:cloudflare": "npx wrangler pages dev --experimental-local --persist --compatibility-date=2023-04-03 -- npm run dev:vite",
-    "dev:vercel": "vite dev", 
+    "dev:vercel": "vite dev",
     "dev:vite": "vite dev",
-
     "build": "vite build"
   },
   "dependencies": {
@@ -35,6 +34,7 @@
     "eslint": "latest",
     "flowbite": "latest",
     "flowbite-svelte": "latest",
+    "kolorist": "^1.7.0",
     "postcss": "latest",
     "postcss-load-config": "latest",
     "prettier": "latest",
