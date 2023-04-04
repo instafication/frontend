@@ -1,7 +1,7 @@
 {
   "name": "blinksms-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "wd": "npx wrangler pages dev --experimental-local -- npx run dev",
