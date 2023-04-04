@@ -40,7 +40,7 @@
 
 
 
-{#if lastAuthStatus != "SIGNED_IN"}
+{#if lastAuthStatus == "SIGNED_IN"}
   <HeaderLoggedIn/>
 {:else}
   <Header />
