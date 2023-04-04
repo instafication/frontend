@@ -7,8 +7,9 @@ export default defineConfig({
 		sveltekit(),
 		SvelteKitPWA({
 			strategies: 'injectManifest',
-			srcDir: "src",
-			filename: "my-sw.ts"
+			srcDir: 'src',
+			filename: 'my-sw.ts',
+			/* other pwa options */  
 		})
 	],
 });
