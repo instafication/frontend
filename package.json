@@ -1,9 +1,8 @@
 {
-  "name": "notworking",
+  "name": "blinksms-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "compatibility-date": "2023-04-03",
   "scripts": {
     "wd": "npx wrangler pages dev --experimental-local -- npx run dev",
     "dx": "npx wrangler pages dev --local --persist -- npm run dev",
@@ -18,8 +17,8 @@
     "@prisma/client": "latest",
     "@supabase/supabase-js": "latest",
     "@sveltejs/adapter-auto": "latest",
-    "@sveltejs/adapter-cloudflare": "^2.2.0",
-    "@sveltejs/adapter-vercel": "^2.4.1",
+    "@sveltejs/adapter-cloudflare": "latest",
+    "@sveltejs/adapter-vercel": "latest",
     "@sveltejs/kit": "latest",
     "@trivago/prettier-plugin-sort-imports": "latest",
     "@trpc/client": "latest",
@@ -34,7 +33,6 @@
     "flowbite": "latest",
     "flowbite-svelte": "latest",
     "postcss": "latest",
-    "@miniflare/tre": "latest",
     "postcss-load-config": "latest",
     "prettier": "latest",
     "prisma": "latest",
@@ -45,6 +43,7 @@
     "typescript": "latest",
     "vite": "latest",
     "wrangler": "latest",
-    "zod": "latest"
+    "zod": "latest",
+    "@miniflare/tre": "next"
   }
 }
