@@ -1,0 +1,129 @@
+import { createClient, type Provider } from '@supabase/supabase-js'
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
+
+const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
+
+async function getUserId(): Promise<string> {
+	const { data: { user } } = await supabase.auth.getUser()
+	return user?.id || ""
+}
+
+async function isLoggedIn(): Promise<boolean> {
+	const user = supabase.auth.getUser();
+	if (user !== null && user !== undefined) {
+		return true;
+	}
+	return false;
+}
+
+
+async function signUp(email: string, password: string) {
+
+	const { data, error } = await supabase.auth.signUp(
+		{
+			email: email,
+			password: password,
+			options: {
+				data: {
+					email: email,
+					credits: 6,
+				},
+			}
+		});
+		
+
+	if (!error) {
+		//await DatabaseManager.Users.createUser({ email: email });
+		console.log(data);
+	} else {
+		alert(error);
+	}
+
+};
+
+async function signInWithPassword(email: string, password: string) {
+
+	const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+	if (!error) {
+		console.log(data.user);
+		
+		//console.log("Credits: " + await DatabaseManager.Users.Me.getCredits());
+	} else {
+		alert(error.message);
+	}
+
+}
+
+async function signInWithOAuth(provider: Provider = "google") {
+	try {
+		console.log("Started login with provider: " + provider);
+		const r = await supabase.auth.signInWithOAuth({ provider: provider });
+		console.log("Logged in: " + r);
+	} catch (error) {
+		alert(error);
+	}
+}
+
+async function resetPasswordForEmail(email: string) {
+	try {
+		const r = await supabase.auth.resetPasswordForEmail(email);
+		alert("Kolla din mail för att återställa lösenordet.");
+	} catch (error) {
+		console.log(error);
+		alert(error);
+	}
+}
+
+async function signOut() {
+	try {
+		const r = await supabase.auth.signOut();
+		console.log(r);
+	} catch (error) {
+		console.log(error);
+		alert(error);
+	}
+}	
+
+
+
+
+
+
+// let lastAuthStatus = null;
+// let lastSession = null;
+// supabase.auth.onAuthStateChange((event, session) => {
+
+// 	console.log(event, session);
+// 	lastAuthStatus = event;
+
+// 	if (event == 'SIGNED_OUT') {
+// 		console.log('SIGNED_OUT', session)
+// 	} else if (event == 'SIGNED_IN') {
+// 		console.log('SIGNED_IN', session)
+// 	} else if (event == 'USER_UPDATED') {
+// 		console.log('USER_UPDATED', session)
+// 	} else if (event == 'PASSWORD_RECOVERY') {
+// 		console.log('PASSWORD_RECOVERY', session)
+// 	} else if (event == 'PASSWORD_RESET') {
+// 		console.log('PASSWORD_RESET', session)
+// 	} else if (event == 'USER_DELETED') {
+// 		console.log('USER_DELETED', session)
+// 	} else if (event == 'PROFILE_UPDATED') {
+// 		console.log('PROFILE_UPDATED', session)
+// 	} else if (event == 'EMAIL_VERIFIED') {
+// 		console.log('EMAIL_VERIFIED', session)
+// 	}
+
+// })
+
+
+export {
+	signUp,
+	signInWithPassword,
+	signInWithOAuth,
+	signOut,
+	resetPasswordForEmail,
+	isLoggedIn,
+	getUserId,
+	supabase
+};
