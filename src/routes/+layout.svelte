@@ -6,18 +6,10 @@
   import Footer from '$lib/Components/Footer.svelte';
 	import { getUserId, supabase } from "../lib/Managers/AuthManager";
 	import { trpc } from "$lib/trpc/client";
+  import Toast from "../lib/Components/Toast.svelte";
+  import { Alert } from "flowbite-svelte";
 
   ///============= PWA SUPPORT =============///
-  import { onMount } from 'svelte'
-  import { pwaInfo } from 'virtual:pwa-info'
-
-  let ReloadPrompt: any;
-  onMount(async () => {
-    pwaInfo && (ReloadPrompt = (await import('$lib/Components/ReloadPrompt.svelte')).default)
-  })
-
-  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''  
-
   // onMount(async () => {
   //     if (pwaInfo) {
   //       const { registerSW } = await import('virtual:pwa-register')
@@ -37,16 +29,8 @@
   //       })
   //     }
   //   })
-    
   //   $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
-
   ///============= [PWA SUPPORT END] =============///
-
-
-
-
-
-
 
   let lastAuthStatus = "";
   let lastSession = null;
@@ -80,9 +64,6 @@
 </script>
 
 
-<svelte:head>
-    {@html webManifest}
-</svelte:head>
 
 {#if lastAuthStatus == "SIGNED_IN"}
   <HeaderLoggedIn/>
@@ -93,6 +74,6 @@
 <Footer/>
 
 
-{#if ReloadPrompt}
+<!-- {#if ReloadPrompt}
   <svelte:component this={ReloadPrompt} />
-{/if}
+{/if} -->

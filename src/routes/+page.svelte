@@ -1,6 +1,41 @@
 <script lang="ts">
+    import { getLatestNotifications } from '$lib/Managers/NotificationManager';
+    import { Timeline, Button, Modal } from 'flowbite-svelte';
+    import  ModalLogin from '../lib/Components/Modal/ModalLogin.svelte';
+    import ModalRegister from '../lib/Components/Modal/ModalRegister.svelte';
+    import TimelineItem from '$lib/Components/TimelineItem.svelte';
 
+
+    let showInformationModal: boolean = true;
+    let showLoginModal: boolean = false;
+    let showRegisterModal: boolean = false;
 </script>
+
+<ModalLogin bind:showLoginModal/>
+<ModalRegister bind:showRegisterModal/>
+
+<Modal title="Kom igång inom 30 sekunder" bind:open={showInformationModal} autoclose>
+  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+    Kom igång enkelt inom 30 sekunder och få fem gratis notifikationer via SMS när det finns lediga tider. Gör följande:
+    <br>
+    <br>
+    <b>1. Skicka:</b> Skriv ett meddelande med texten "Start Medicinaren", "Start Jerum" eller "Start Lappkärrsberget" till 0766867379 (5 notiser gratis).
+    <br>
+    <br>
+    <b>2. Invänta notifikation:</b> Vi kommer att skicka ut ett SMS till det nummer du skrev start ifrån när vi hittar en ny tid.
+    <br>
+    <br>
+    <b>3. Boka:</b> Logga in via SSSB:s bokningssida för att boka tiden som vanligt. 
+    <br>
+    <br>
+    Du kan även skapa en profil för att se dina krediter via vår hemsida. Har du redan ett konto så kan du enkelt logga in via knappen nedan.
+    </p>
+  <svelte:fragment slot='footer'>
+    <Button on:click={() => showRegisterModal = true}>Skapa ett konto</Button>
+    <Button on:click={() => showLoginModal = true} color="alternative">Logga in</Button>
+  </svelte:fragment>
+</Modal>
+
 
 <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
@@ -28,14 +63,39 @@
     </div>
 </section>
 
+
 <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-10 mx-auto max-w-screen-xl  lg:py-12 lg:px-20">
+
+<Timeline>
+
+    <TimelineItem customDiv={"animate-ping bg-blue-300"} title="Söker efter nya tider...">
+        <Button  on:click={() => showInformationModal = true} color="blue">Få notis via SMS!</Button>
+    </TimelineItem>
+
+    {#await getLatestNotifications() then notifications}
+        {#each notifications as notification}
+            <TimelineItem customDiv={"animate ping bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
+            <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
+            </TimelineItem>
+        {/each} 
+        
+    {/await}
+
+</Timeline>
+
+</section>
+
+
+
+<!-- <section class="bg-white dark:bg-gray-900">
     <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div class="mr-auto place-self-center lg:col-span-7">
 
         </div>
 
     </div>
-</section>
+</section> -->
 
 <section id="start" class="bg-slate-50 dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
@@ -81,3 +141,10 @@
         </div>
     </div>
 </section>
+
+
+
+
+
+
+

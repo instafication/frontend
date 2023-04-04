@@ -228,7 +228,7 @@ export class DatabaseManager {
       if (id == "")
         id = generateRandomUUID();
 
-      await prisma.notifications.create({
+      const r = await prisma.notifications.create({
         data: {
           id: id,
           title: title,
@@ -236,6 +236,8 @@ export class DatabaseManager {
           area: area
         },
       });
+      console.log("[Databasemanager] Created notification: " + r);
+      return r !== null;
     };
 
     public static async getNotificationsByArea(area: string) {

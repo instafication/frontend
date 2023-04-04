@@ -5,7 +5,7 @@
   import { signInWithOAuth, signInWithPassword } from '../../Managers/AuthManager';
 
   let showRegisterModal: boolean = false;
-  let showForgotPasswordModal: boolean = false;
+  let showLostPasswordModal: boolean = false;
 
   let email: string = "";
   let password: string = "";
@@ -14,7 +14,7 @@
 </script>
 
 <ModalRegister bind:showRegisterModal />
-<ModalLostPassword bind:showForgotPasswordModal />
+<ModalLostPassword bind:showLostPasswordModal />
 
 <Modal bind:open={showLoginModal} size="xs" autoclose={true} permanent={false} class="w-full">
   <form class="flex flex-col space-y-6" action="#">
