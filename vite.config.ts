@@ -5,11 +5,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [
 		sveltekit(),
-		SvelteKitPWA({
-			strategies: 'injectManifest',
-			srcDir: 'src',
-			filename: 'my-sw.ts',
-			/* other pwa options */  
-		})
+		SvelteKitPWA()
 	],
 });
