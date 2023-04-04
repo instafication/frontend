@@ -1,6 +1,7 @@
 import preprocess from "svelte-preprocess";
+import adapter from '@sveltejs/adapter-auto';
 //import adapter from '@sveltejs/adapter-cloudflare';
-import adapter from '@sveltejs/adapter-vercel';
+//import adapter from '@sveltejs/adapter-vercel';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,6 +13,12 @@ const config = {
         exclude: ['<all>']
       }
     }),
+  },
+
+  plugins: {
+    ServiceWorker: {
+      register: false
+    }
   },
 
   preprocess: [
