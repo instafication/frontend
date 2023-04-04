@@ -43,7 +43,6 @@
     "typescript": "latest",
     "vite": "latest",
     "wrangler": "latest",
-    "zod": "latest",
-    "@miniflare/tre": "next"
+    "zod": "latest"
   }
 }
