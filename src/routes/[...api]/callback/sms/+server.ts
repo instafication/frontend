@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { EmailManager } from '../../../lib/Managers/EmailManager';
+import { EmailManager } from '../../../../lib/Managers/EmailManager';
 import { DatabaseManager } from '$lib/server/managers/databasemanager';
 // import { SmsManager } from '../../../../lib/Managers/SmsManager';
 import qs from 'query-string';
