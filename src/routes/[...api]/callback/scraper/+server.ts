@@ -17,16 +17,16 @@ export const POST = (async ({ request }) => {
 	const dateObj = new Date(fullDateString);
 	const unixTimestamp = dateObj.getTime() / 1000;
 
-	console.log("[Scraper] Date string: " + fullDateString);
-	console.log("[Scraper] Unix timestamp: " + unixTimestamp);
-	console.log("[Scraper] Date string: " + dateObj.toString());
+	console.log("[/api/callback/scraper] Date string: " + fullDateString);
+	console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
+	console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
 	let dataExists = await DatabaseManager.Scraper.idExists(area);
 	if (dataExists == false) {
-		DatabaseManager.Scraper.createArea(area, dateObj.getTime());
+		await DatabaseManager.Scraper.createArea(area, dateObj.getTime());
 	}
-	const storedLastUpdated: any | null = await DatabaseManager.Scraper.getLastUpdated(area);
-	console.log(storedLastUpdated.last_update);
+	const storedLastUpdated: number | null = await DatabaseManager.Scraper.getLastUpdated(area);
+	console.log("Last updated: " + storedLastUpdated?.last_update);
 	console.log(dateObj.getTime());
 
 
@@ -41,7 +41,7 @@ export const POST = (async ({ request }) => {
 	if (dataExists && storedLastUpdated.last_update != dateObj.getTime() &&
 		Math.abs(dateObj.getTime() - now.getTime()) < 259200000) {
 
-		console.log("[Scraper] Date is not same as before and is more close then 3 days from now. SMS sent to all active users.")
+		console.log("[/api/callback/scraper] Date is not same as before and is more close then 3 days from now. SMS sent to all active users.")
 
 
 		await DatabaseManager.Scraper.updateLastUpdated(area, dateObj.getTime());
@@ -63,22 +63,22 @@ export const POST = (async ({ request }) => {
 			const users = await DatabaseManager.Profiles.getActiveUsersByArea(area);
 			for (const user of users) {
 
-				console.log("[+] User found: " + user.id);
+				console.log("[/api/callback/scraper] User found: " + user.id);
 				await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
 				const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
 				const message = `Blinksms.se har hittat en ny tid och datum i ${area}: ${data.date + ' ' + data.time}. Svara "Stop" om du vill sluta leta tvättid och få notiser. Om du vill boka denna tid logga in som vanligt via SSSB. Du har ${credits} notiser kvar. Därefter måste du köpa fler notiser via "Betala".`;
-				console.log("[+] Sending SMS to: " + user.id + " with message: " + message);
+				console.log("[/api/callback/scraper] Sending SMS to: " + user.id + " with message: " + message);
 				//await SmsManager.sendSMS(user.id, message);
 			}
 
 		} catch (error: any) {
-			console.log("[Scraper] Error: " + error.cause);
+			console.log("[/api/callback/scraper] Error: " + error.cause);
 		}
 
 		return new Response('Date is not same as before and is more close then 3 days from now. SMS sent to all active users.', { status: 200 });
 
 	} else {
-		console.log("[Scraper] New data is not closer to now than 3 days, no SMS sent.");
+		console.log("[/api/callback/scraper] New data is not closer to now than 3 days, no SMS sent.");
 		return new Response('New data is not closer to now than 3 days, no SMS sent.', { status: 200 });
 	}
 

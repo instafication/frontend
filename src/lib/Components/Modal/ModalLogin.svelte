@@ -29,7 +29,7 @@
     </Label>
     <div class="flex items-start">
         <Checkbox>Kom ihåg mig</Checkbox>
-        <a on:click={() => {showForgotPasswordModal = true; showLoginModal = false;}} href="/" class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Förlorat lösenordet?</a>
+        <a on:click={() => {showLostPasswordModal = true; showLoginModal = false;}} href="/" class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Förlorat lösenordet?</a>
     </div>
     <Button on:click="{async() => {await signInWithPassword(email, password)}}" type="submit" class="w-full1">Logga in!</Button>
     <Button on:click="{async() => {await signInWithOAuth()}}" type="submit" class="w-full1">Logga in med Google</Button>
