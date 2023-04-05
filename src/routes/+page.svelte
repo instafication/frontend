@@ -56,7 +56,7 @@
         Chatta med oss
         <img src="/discord-mark-black.svg" alt="Discord" class="w-5 h-5 ml-2" />
     </Button>
-    <Button on:click={() => window.open("discordInviteUrl")} color="alternative">
+    <Button on:click={() => showRegisterModal = true} color="alternative">
         Skapa ett konto
         <lord-icon
     src="https://cdn.lordicon.com/wcjauznf.json"
