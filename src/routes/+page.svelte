@@ -89,7 +89,20 @@
                 <!-- <div><img src="/images/sssb.svg" alt="logo" width="200px"></div>
                 <div><img src="/images/aptus.svg" alt="logo" width="128px" /></div> -->
 
+
+<div class="w-full max-w-md p-12 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-12 dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center justify-between mb-8">
+        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white"></h5>
+        <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+            
+        </a>
+   </div>
+
+
+
     <Timeline>
+
+        
 
     <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
         <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
@@ -108,106 +121,80 @@
     </div>
 </section>
 
-<!-- 
-<Card padding="xl">
-  <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Standard plan</h5>
-  <div class="flex items-baseline text-gray-900 dark:text-white">
-      <span class="text-3xl font-semibold">$</span>
-      <span class="text-5xl font-extrabold tracking-tight">49</span>
-      <span class="ml-1 text-xl font-normal text-gray-500 dark:text-gray-400">/month</span>
-  </div>
-
-  <ul class="my-7 space-y-4">
-      <li class="flex space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">2 team members</span>
-      </li>
-      <li class="flex space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">20GB Cloud storage</span>
-      </li>
-      <li class="flex space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">Integration help</span>
-      </li>
-      <li class="flex space-x-2 line-through decoration-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500">Sketch Files</span>
-      </li>
-      <li class="flex space-x-2 line-through decoration-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500">API Access</span>
-      </li>
-      <li class="flex space-x-2 line-through decoration-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500">Complete documentation</span>
-      </li>
-      <li class="flex space-x-2 line-through decoration-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500">24×7 phone & email support</span>
-      </li>
-  </ul>
-  <Button class="w-full">Välj prisplan</Button>
-</Card> -->
 
 
-<!-- <section class="bg-white dark:bg-gray-900">
-    <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div class="mr-auto place-self-center lg:col-span-7">
 
-        </div>
+<section class="bg-white dark:bg-gray-900 w-full grid grid-cols-3 grid-rows-2 gap-4 content-center items-stretch justify-start py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
-    </div>
-</section> -->
+    <!-- <section class="w-full col-span-3 h-0 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        Kom igång inom 30 sekunder!
+    </section> -->
 
-<section id="start" class="bg-slate-50 dark:bg-gray-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-        <div class="max-w-screen-md mb-8 lg:mb-16">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Kom igång inom
-                30 sekunder!</h2>
+    <section class=" bg-slate-50 dark:bg-gray-900 border-gray-100 border">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
-            <p class="text-gray-500 sm:text-xl dark:text-gray-400">Testa gratis enkelt och smidigt genom
-                följande tre steg nedan</p>
-        </div>
-        <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
-            <div>
-                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
-                    <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop">
-                    </lord-icon>
-                </div>
-                <h3 class="mb-2 text-xl font-bold dark:text-white">1. Skicka</h3>
-                <p class="text-gray-500 dark:text-gray-400">Skicka "Start Medicinaren" eller "Start Jerum" till 0766867379 (6 notiser gratis).
+            <div class="max-w-screen-md mb-8 lg:mb-16">
+                <lord-icon
+                    src="https://cdn.lordicon.com/krmfspeu.json"
+                    trigger="loop"
+                    delay="2000"
+                    colors="primary:#121331,secondary:#08a88a"
+                    style="width:62px;height:62px">
+                </lord-icon>
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                    1. Skicka SMS
+                </h2>
+                <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+                    Skicka "Start Medicinaren" eller "Start Jerum" till 0766867379 (6 notiser gratis).
                 </p>
             </div>
-            <div>
-                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
-                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" delay="1000" colors="primary:#121331,secondary:#08a88a" style="width:50px;height:50px">
+
+        </div>
+    </section>
+
+
+    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+
+            <div class="max-w-screen-md mb-8 lg:mb-16">
+                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                    trigger="loop"
+                    delay="2000"
+                    colors="primary:#121331,secondary:#08a88a"
+                    style="width:62px;height:62px">
                     </lord-icon>
-                </div>
-                <h3 class="mb-2 text-xl font-bold dark:text-white">2. Invänta notifikation</h3>
-                <p class="text-gray-500 dark:text-gray-400">Vi kommer att skicka ut ett SMS till det nummer du
-                    skrev start ifrån när vi hittar en ny tid.</p>
-            </div>
-            <div>
-                <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
-                    <lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" delay="1000" style="width:150px;height:150px">
-                    </lord-icon>
-                </div>
-                <h3 class="mb-2 text-xl font-bold dark:text-white">3. Boka</h3>
-                <p class="text-gray-500 dark:text-gray-400">Logga in via SSSB:s bokningssida för att boka tiden
-                    som vanligt.</p>
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                    2. Invänta notifikation
+                </h2>
+                <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+                    Vi kommer att skicka ut ett SMS till det nummer du
+                    skrev start ifrån när vi hittar en ny tid.
+                </p>
             </div>
 
         </div>
-    </div>
+    </section>
+
+        <section class=" bg-slate-50 dark:bg-gray-900 border-gray-100 border">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+
+            <div class="max-w-screen-md mb-8 lg:mb-16">
+                    <lord-icon src="https://cdn.lordicon.com/lupuorrc.json"
+                    trigger="loop"
+                    delay="2000"
+                    style="width:72px;height:72px">
+                    </lord-icon>
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                    3. Boka tiden som vanligt.
+                </h2>
+                <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+                    Logga in via SSSB:s bokningssida för att boka tiden
+                    som vanligt.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
 </section>
-
-
-
-
-
-
-
