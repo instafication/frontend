@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { classNames } from 'classnames';
     import { getLatestNotifications } from '$lib/Managers/NotificationManager';
     import { Timeline, Button, Modal } from 'flowbite-svelte';
     import  ModalLogin from '../lib/Components/Modal/ModalLogin.svelte';
@@ -6,7 +7,7 @@
     import TimelineItem from '$lib/Components/TimelineItem.svelte';
 
 
-    let showInformationModal: boolean = true;
+    let showInformationModal: boolean = false;
     let showLoginModal: boolean = false;
     let showRegisterModal: boolean = false;
 </script>
@@ -64,18 +65,23 @@
 </section>
 
 
-<section class="bg-white dark:bg-gray-900">
-    <div class="py-8 px-10 mx-auto max-w-screen-xl  lg:py-12 lg:px-20">
+<section class="bg-white dark:bg-gray-900 ">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+             <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-72">
+            <!-- <span class="font-semibold text-gray-400 uppercase">TJÄNSTER SOM STÖDJS</span> -->
+            <div class="flex flex-wrap justify-center items-center mt-1 text-gray-500">
+                <!-- <div><img src="/images/sssb.svg" alt="logo" width="200px"></div>
+                <div><img src="/images/aptus.svg" alt="logo" width="128px" /></div> -->
 
 <Timeline>
 
-    <TimelineItem customDiv={"animate-ping bg-blue-300"} title="Söker efter nya tider...">
-        <Button  on:click={() => showInformationModal = true} color="blue">Få notis via SMS!</Button>
+    <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
+        <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
     </TimelineItem>
 
     {#await getLatestNotifications() then notifications}
         {#each notifications as notification}
-            <TimelineItem customDiv={"animate ping bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
+            <TimelineItem customDiv={"bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
             <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
             </TimelineItem>
         {/each} 
@@ -83,7 +89,8 @@
     {/await}
 
 </Timeline>
-
+            </div>
+     
 </section>
 
 
