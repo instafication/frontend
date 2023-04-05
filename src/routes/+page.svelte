@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { classNames } from 'classnames';
     import { getLatestNotifications } from '$lib/Managers/NotificationManager';
-    import { Timeline, Button, Modal } from 'flowbite-svelte';
+    import { Timeline, Button, Modal, Card } from 'flowbite-svelte';
     import  ModalLogin from '../lib/Components/Modal/ModalLogin.svelte';
     import ModalRegister from '../lib/Components/Modal/ModalRegister.svelte';
     import TimelineItem from '$lib/Components/TimelineItem.svelte';
@@ -52,15 +51,32 @@
                 möjligheter!</span> Få en notifikation via SMS direkt när någon avbokar en tvättid.</h1>
 
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+            <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+    <Button on:click={() => window.open("https://discord.gg/vqWC3m8U8c")} color="alternative">
+        Chatta med oss
+        <img src="/discord-mark-black.svg" alt="Discord" class="w-5 h-5 ml-2" />
+    </Button>
+    <Button on:click={() => window.open("discordInviteUrl")} color="alternative">
+        Skapa ett konto
+        <lord-icon
+    src="https://cdn.lordicon.com/wcjauznf.json"
+    trigger="hover"
+    colors="primary:#000"
+    stroke="50"
+    scale="40"
+    style="width:32px;height:32px">
+        </lord-icon>
+        </Button>
+</div>
 
         </div>
-        <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-72">
-            <span class="font-semibold text-gray-400 uppercase">TJÄNSTER SOM STÖDJS</span>
+        <!-- <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-72">
+            <span class="font-semibold text-gray-400 uppercase">FÖLJ OSS</span>
             <div class="flex flex-wrap justify-center items-center mt-3 text-gray-500 sm:justify-between">
                 <div><img src="/images/sssb.svg" alt="logo" width="200px"></div>
                 <div><img src="/images/aptus.svg" alt="logo" width="128px" /></div>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -73,13 +89,13 @@
                 <!-- <div><img src="/images/sssb.svg" alt="logo" width="200px"></div>
                 <div><img src="/images/aptus.svg" alt="logo" width="128px" /></div> -->
 
-<Timeline>
+    <Timeline>
 
     <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
         <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
     </TimelineItem>
 
-    {#await getLatestNotifications() then notifications}
+    {#await getLatestNotifications(3) then notifications}
         {#each notifications as notification}
             <TimelineItem customDiv={"bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
             <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
@@ -88,11 +104,51 @@
         
     {/await}
 
-</Timeline>
-            </div>
-     
+    </Timeline>
+    </div>
 </section>
 
+<!-- 
+<Card padding="xl">
+  <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Standard plan</h5>
+  <div class="flex items-baseline text-gray-900 dark:text-white">
+      <span class="text-3xl font-semibold">$</span>
+      <span class="text-5xl font-extrabold tracking-tight">49</span>
+      <span class="ml-1 text-xl font-normal text-gray-500 dark:text-gray-400">/month</span>
+  </div>
+
+  <ul class="my-7 space-y-4">
+      <li class="flex space-x-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">2 team members</span>
+      </li>
+      <li class="flex space-x-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">20GB Cloud storage</span>
+      </li>
+      <li class="flex space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">Integration help</span>
+      </li>
+      <li class="flex space-x-2 line-through decoration-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500">Sketch Files</span>
+      </li>
+      <li class="flex space-x-2 line-through decoration-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500">API Access</span>
+      </li>
+      <li class="flex space-x-2 line-through decoration-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500">Complete documentation</span>
+      </li>
+      <li class="flex space-x-2 line-through decoration-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500">24×7 phone & email support</span>
+      </li>
+  </ul>
+  <Button class="w-full">Välj prisplan</Button>
+</Card> -->
 
 
 <!-- <section class="bg-white dark:bg-gray-900">

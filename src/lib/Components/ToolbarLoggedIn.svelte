@@ -54,8 +54,20 @@ import ToolbarLoggedIn from './ToolbarLoggedIn.svelte';
 
   <Dropdown placement="bottom" triggeredBy="#avatar-menu">
     <DropdownHeader>
-      <span class="block text-sm">{email}</span>
-      <span class="block text-sm">Krediter: {credits}</span>
+      <span class="block text-sm">
+<!-- <lord-icon
+    src="https://cdn.lordicon.com/tkgyrmwc.json"
+    trigger="hover"
+    style="width:32px;height:32px">
+</lord-icon> -->
+        {email}</span>
+      <span class="block text-sm">
+    <!-- <lord-icon
+        src="https://cdn.lordicon.com/qhviklyi.json"
+        trigger="hover"
+        style="width:24px;height:24px">
+      </lord-icon> -->
+                      <span>Krediter: {credits}</span>
     </DropdownHeader>
     <DropdownItem on:click={() => showProfileSettingsModal = true}>Inställningar</DropdownItem>
     <DropdownDivider />

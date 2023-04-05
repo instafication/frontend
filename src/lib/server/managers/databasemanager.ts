@@ -249,12 +249,12 @@ export class DatabaseManager {
     public static async getAllNotifications() {
       return await prisma.notifications.findMany();
     }
-    public static async getLatestNotifications() {
+    public static async getLatestNotifications(count: number = 5) {
       return await prisma.notifications.findMany({
         orderBy: {
           date: "desc"
         },
-        take: 10
+        take: count
       });
     }
 

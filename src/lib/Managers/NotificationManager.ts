@@ -8,8 +8,8 @@ async function getAllNotifications() {
     return notifications;
 }
 
-async function getLatestNotifications() {
-    const notifications = await trpc.getLatestNotifications.query()
+async function getLatestNotifications(count: number = 5) {
+    const notifications = await trpc.getLatestNotifications.query(count)
     return notifications;
 }
 

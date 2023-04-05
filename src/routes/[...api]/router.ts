@@ -57,9 +57,11 @@ export const appRouter = t.router({
         const notifications = await DatabaseManager.Notifications.getAllNotifications();
         return notifications;
     }),
-    getLatestNotifications: t.procedure.query(async () => {
-        const notifications = await DatabaseManager.Notifications.getLatestNotifications();
-        console.log(notifications.length);
+    getLatestNotifications: t.procedure
+        .input(z.number().optional().default(5))
+        .query(async ({ input }) => {
+            console.log(input)
+            const notifications = await DatabaseManager.Notifications.getLatestNotifications(input);
         return notifications;
     }),
 

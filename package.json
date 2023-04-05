@@ -16,7 +16,7 @@
   "dependencies": {
     "@cloudflare/workers-types": "latest",
     "@popperjs/core": "latest",
-    "@prisma/client": "latest",
+    "@prisma/client": "^4.12.0",
     "@supabase/supabase-js": "latest",
     "@sveltejs/adapter-auto": "latest",
     "@sveltejs/adapter-cloudflare": "latest",
