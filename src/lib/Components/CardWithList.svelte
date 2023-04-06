@@ -5,14 +5,16 @@
       img: { src: "/images/favicon-sssb.svg", alt: "SSSB",},
       name: "Stockholms Studentbostäder",
       status: "Aktiv: " + Math.floor(Math.random() * 5) + " min sedan sökning",
-      active: "green"
+      active: "green",
+      services: ["Tvättid"]
     },
 
     {
       img: { src: "/images/hertz-logo.svg", alt: "Hertz" },
       name: "Hertz Freerider",
       status: "Inaktiv: Kommer inom kort",
-      active: "red"
+      active: "",
+      services: ["Hyrbilar"]
     },
   ];
 </script>
@@ -20,14 +22,14 @@
 
 <Card padding="xl" size="sm" class="border-1 shadow-none bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
 
-  <div class="flex justify-between items-center mb-4">
+  <div class="flex items-center mb-8">
     <lord-icon
-    src="https://cdn.lordicon.com/hdiorcun.json"
-    trigger="loop"
-    delay="2000"
-    style="width:64px;height:64px">
-</lord-icon>
-      <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Företag vi tar pulsen på</h5>
+        src="https://cdn.lordicon.com/hdiorcun.json"
+        trigger="loop"
+        delay="4000"
+        style="width:64px;height:64px">
+    </lord-icon>
+    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Företag vi tar pulsen på</h5>
   </div>
 
   <Listgroup items={list} let:item class="border-0 dark:!bg-transparent">
@@ -41,8 +43,23 @@
         </p>
         
         <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-          <Badge color="{item.active}">{item.status}</Badge>
+          <Badge rounded color="{item.active}">
+            <svg aria-hidden="true" class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+            {item.status}
+          </Badge>
         </p>
+
+        <div class="flex items-center">
+        {#each item.services as service}
+          <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+            <Badge rounded>
+              {service}
+            </Badge>
+          </p>
+        {/each}
+        </div>
+
+
 
       </div>
 

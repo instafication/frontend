@@ -49,7 +49,7 @@
 
         <!-- <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Server status: Online</span> -->
         <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Missa inga
-                möjligheter!</span> Få en notifikation via SMS direkt när någon avbokar en tvättid.</h1>
+                möjligheter!</span> Få en notifikation via SMS direkt när någon avbokar.</h1>
 
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
             <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
@@ -104,7 +104,18 @@
 
     <section id="timeline" class="bg-white dark:bg-gray-900 bg-slate-0  border-gray-200">
 
-        <div class="w-full max-w-md p-12 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-12 dark:bg-gray-800 dark:border-gray-700">        <Timeline>  
+        <div class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <!-- <div class="flex items-center mb-8">
+              <lord-icon
+                    src="https://cdn.lordicon.com/hdiorcun.json"
+                    trigger="loop"
+                    delay="4000"
+                    style="width:64px;height:64px">
+                </lord-icon> 
+                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Senast nytt</h5>
+            </div> -->
+
+            <Timeline>  
             <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Tar pulsen och söker efter nya tider...">
                 <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
             </TimelineItem>
@@ -177,7 +188,7 @@
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">
-                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
                     trigger="loop"
                     delay="2000"
                     colors="primary:#121331,secondary:#08a88a"
