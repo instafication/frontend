@@ -71,13 +71,6 @@
 </div>
 
         </div>
-        <!-- <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-72">
-            <span class="font-semibold text-gray-400 uppercase">FÖLJ OSS</span>
-            <div class="flex flex-wrap justify-center items-center mt-3 text-gray-500 sm:justify-between">
-                <div><img src="/images/sssb.svg" alt="logo" width="200px"></div>
-                <div><img src="/images/aptus.svg" alt="logo" width="128px" /></div>
-            </div>
-        </div> -->
     </div>
 </section>
 
@@ -102,7 +95,7 @@
 
     </section>
 
-    <section id="timeline" class="bg-white dark:bg-gray-900 bg-slate-0  border-gray-200">
+    <section id="timeline" class="bg-white dark:bg-gray-900 bg-slate-0 border-gray-200">
 
         <div class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <!-- <div class="flex items-center mb-8">
@@ -154,8 +147,7 @@
 
 
 
-
-<section class="bg-white dark:bg-gray-900 w-full grid grid-cols-3 grid-rows-2 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+<section class="bg-white dark:bg-gray-900 w-full grid grid-cols-3 grid-rows-1 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
     <!-- <section class="w-full col-span-3 h-0 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
         Kom igång inom 30 sekunder!
