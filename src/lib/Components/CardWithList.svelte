@@ -9,7 +9,7 @@
     },
 
     {
-      img: { src: "/images/hertz-logo.svg", alt: "Hertz freerider" },
+      img: { src: "/images/hertz-logo.svg", alt: "Hertz" },
       name: "Hertz Freerider",
       status: "Inaktiv: Kommer inom kort",
       active: "red"
@@ -21,6 +21,12 @@
 <Card padding="xl" size="sm" class="border-1 shadow-none bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
 
   <div class="flex justify-between items-center mb-4">
+    <lord-icon
+    src="https://cdn.lordicon.com/hdiorcun.json"
+    trigger="loop"
+    delay="2000"
+    style="width:64px;height:64px">
+</lord-icon>
       <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Företag vi tar pulsen på</h5>
   </div>
 
