@@ -4,6 +4,7 @@
     import  ModalLogin from '../lib/Components/Modal/ModalLogin.svelte';
     import ModalRegister from '../lib/Components/Modal/ModalRegister.svelte';
     import TimelineItem from '$lib/Components/TimelineItem.svelte';
+  import CardWithList from '../lib/Components/CardWithList.svelte';
 
 
     let showInformationModal: boolean = false;
@@ -81,56 +82,75 @@
 </section>
 
 
-<section class="bg-white dark:bg-gray-900 ">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-             <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-72">
-            <!-- <span class="font-semibold text-gray-400 uppercase">TJÄNSTER SOM STÖDJS</span> -->
-            <div class="flex flex-wrap justify-center items-center mt-1 text-gray-500">
-                <!-- <div><img src="/images/sssb.svg" alt="logo" width="200px"></div>
-                <div><img src="/images/aptus.svg" alt="logo" width="128px" /></div> -->
+<section class="bg-white dark:bg-gray-900 w-full grid grid-cols-2 grid-rows-1 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+    
 
+    <section id="brands" class="bg-slate-0 dark:bg-gray-900 border-gray-200  rounded grid grid-rows-2 gap-4 place-items-start justify-self-end">
 
-<div class="w-full max-w-md p-12 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-12 dark:bg-gray-800 dark:border-gray-700">
-    <div class="flex items-center justify-between mb-8">
-        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white"></h5>
-        <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-            
-        </a>
-   </div>
+        <CardWithList>
 
+        </CardWithList>
+            <!-- <div class="max-w-screen-md lg:mb-16">
+                <img src="/images/sssb.svg" alt="logo" width="200px"/>
+                Status: Söker efter nya tider...
+            </div>
 
+            <div class="max-w-screen-md lg:mb-16 bg-slate-100">
+                <img src="/images/hertz-logo.svg" alt="logo" width="200px"/>
+                Status: Kommer inom kort...
+            </div> -->
 
-    <Timeline>
+    </section>
 
-        
+    <section id="timeline" class="bg-white dark:bg-gray-900 bg-slate-0  border-gray-200">
 
-    <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
-        <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
-    </TimelineItem>
-
-    {#await getLatestNotifications(3) then notifications}
-        {#each notifications as notification}
-            <TimelineItem customDiv={"bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
-            <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
+        <div class="w-full max-w-md p-12 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-12 dark:bg-gray-800 dark:border-gray-700">        <Timeline>  
+            <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Tar pulsen och söker efter nya tider...">
+                <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
             </TimelineItem>
-        {/each} 
-        
-    {/await}
 
-    </Timeline>
-    </div>
+                {#await getLatestNotifications(3) then notifications}
+                    {#each notifications as notification}
+                        <TimelineItem customDiv={"bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
+                        <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
+                        </TimelineItem>
+                    {/each} 
+                    
+                {/await}
+        </Timeline></div>
+
+        <!-- <Timeline>  
+            <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
+                <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
+            </TimelineItem>
+
+                {#await getLatestNotifications(3) then notifications}
+                    {#each notifications as notification}
+                        <TimelineItem customDiv={"bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
+                        <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
+                        </TimelineItem>
+                    {/each} 
+                    
+                {/await}
+        </Timeline> -->
+
+    
+    </section>
+
+
 </section>
 
 
 
 
-<section class="bg-white dark:bg-gray-900 w-full grid grid-cols-3 grid-rows-2 gap-4 content-center items-stretch justify-start py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+
+<section class="bg-white dark:bg-gray-900 w-full grid grid-cols-3 grid-rows-2 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
     <!-- <section class="w-full col-span-3 h-0 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
         Kom igång inom 30 sekunder!
     </section> -->
 
-    <section class=" bg-slate-50 dark:bg-gray-900 border-gray-100 border">
+    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -153,7 +173,7 @@
     </section>
 
 
-    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border">
+    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -175,7 +195,7 @@
         </div>
     </section>
 
-        <section class=" bg-slate-50 dark:bg-gray-900 border-gray-100 border">
+        <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -185,7 +205,7 @@
                     style="width:72px;height:72px">
                     </lord-icon>
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-                    3. Boka tiden som vanligt.
+                    3. Boka tiden som vanligt
                 </h2>
                 <p class="text-gray-500 sm:text-xl dark:text-gray-400">
                     Logga in via SSSB:s bokningssida för att boka tiden
