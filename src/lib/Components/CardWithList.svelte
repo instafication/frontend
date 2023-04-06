@@ -2,14 +2,14 @@
   import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
    let list = [
     {
-      img: { src: "/images/sssb.svg", alt: "Neil Sims",},
+      img: { src: "/images/favicon-sssb.svg", alt: "SSSB",},
       name: "Stockholms Studentbostäder",
       status: "Aktiv: " + Math.floor(Math.random() * 5) + " min sedan sökning",
       active: "green"
     },
 
     {
-      img: { src: "/images/hertz-logo.svg", alt: "Bonnie Green" },
+      img: { src: "/images/hertz-logo.svg", alt: "Hertz freerider" },
       name: "Hertz Freerider",
       status: "Inaktiv: Kommer inom kort",
       active: "red"
