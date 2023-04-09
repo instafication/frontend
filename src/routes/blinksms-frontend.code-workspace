@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../blinksms-backend-scraper"
+		}
+	],
+	"settings": {}
+}

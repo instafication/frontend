@@ -1,9 +1,19 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '$lib/server/managers/databasemanager';
+import { EmailManager } from '../../../../lib/Managers/EmailManager';
 
-export const POST = (async ({ request }) => {
+interface Template {
+	service: string; // Servicename, example: ["Stockholms Studentbostäder", "Hertz Freerider"]
+	params: {};
+}
 
-	const data = await request.json();
+interface Sssb {
+	area: string; //[Medicinaren, Jerum]
+	date: string; //2021-09-01
+	time: string; //12:00
+}
+async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response> {
+
 	const area = data.area;
 	const now = new Date();
 	const dateString = `${data.date} ${data.time}`;
@@ -17,9 +27,9 @@ export const POST = (async ({ request }) => {
 	const dateObj = new Date(fullDateString);
 	const unixTimestamp = dateObj.getTime() / 1000;
 
-	console.log("[/api/callback/scraper] Date string: " + fullDateString);
-	console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
-	console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
+	// console.log("[/api/callback/scraper] Date string: " + fullDateString);
+	// console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
+	// console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
 	let dataExists = await DatabaseManager.Scraper.idExists(area);
 	if (dataExists == false) {
@@ -60,19 +70,73 @@ export const POST = (async ({ request }) => {
 		console.log("[/api/callback/scraper] Notification created: " + success);
 
 		try {
-			const users = await DatabaseManager.Profiles.getActiveUsersByArea(area);
-			for (const user of users) {
 
-				console.log("[/api/callback/scraper] User found: " + user.id);
-				await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
-				const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
-				const message = `Blinksms.se har hittat en ny tid och datum i ${area}: ${data.date + ' ' + data.time}. Svara "Stop" om du vill sluta leta tvättid och få notiser. Om du vill boka denna tid logga in som vanligt via SSSB. Du har ${credits} notiser kvar. Därefter måste du köpa fler notiser via "Betala".`;
-				console.log("[/api/callback/scraper] Sending SMS to: " + user.id + " with message: " + message);
-				//await SmsManager.sendSMS(user.id, message);
+
+
+			const usersByArea: any = await DatabaseManager.Services.getUserIdsByOptions("area", area);
+			if (usersByArea.length > 0) {
+				const userIds: string[] = usersByArea.map((user: any) => user.user);
+				console.log("[/api/callback/scraper] Users with setting activated: ");
+				console.log(usersByArea);
+				console.log("[/api/callback/scraper] UserIds: ");
+				console.log(userIds);
+				const usersWithCredits: any[] = await DatabaseManager.Profiles.getUsersWithCreditsByUserIds(userIds);
+				console.log("[/api/callback/scraper] usersWithCredits: ");
+				console.log(usersWithCredits);
+
+				for (const user of usersWithCredits) {
+
+					console.log("[/api/callback/scraper] User found and active for area with credits: ");
+					console.log(user);
+					const message = `Blinksms.se har hittat en ny tvättid i ${area}: ${data.date + ' ' + data.time}. Om du vill boka denna tid logga in som vanligt via SSSB`;
+
+					// Check notification method by service
+					usersByArea.forEach(async (userInside: any) => {
+
+						if (userInside.user == user.id) {
+
+							// Calculate the difference in minutes
+							const differenceInSeconds = Math.abs(dateObj.getTime() - now.getTime()) / (1000);
+
+							// Check if time found is close to now than userInside.NotificationWithin, time is more so return and exit
+							console.log("Difference in seconds: " + differenceInSeconds);
+							console.log("Is dateObj more close than 30 min: " + (differenceInSeconds < 30 * 60));
+
+
+							if (differenceInSeconds > userInside.notificationWithin) {
+								console.log("[/api/callback/scraper] Time is more far away, return and exit: " + userInside.notificationWithin);
+							} else {
+
+								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
+								const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
+
+								console.log("[/api/callback/scraper] Sending trigger to: " + user.id + " with message: " + message);
+								if (userInside.notification == "Email" && userInside.user == user.id) {
+									const hasSent = await EmailManager.sendEmail(user.email, message);
+									console.log("[/api/callback/scraper] Email sent1: " + hasSent);
+								} else if (userInside.service == "SMS" && userInside.user == user.id) {
+									//const hasSent = await sendSMS(user.id, message);
+									console.log("[/api/callback/scraper] SMS not sent!");
+								} else {
+									console.log("[/api/callback/scraper] No notification method found for user: " + userInside.id);
+								}
+
+							}
+						} else {
+							console.log("[/api/callback/scraper] User not found: " + userInside.id);
+						}
+					});
+
+
+
+					//await SmsManager.sendSMS(user.id, message);
+				}
+			} else {
+				console.log("[/api/callback/scraper] No users found with setting activated for area: " + area);
 			}
 
 		} catch (error: any) {
-			console.log("[/api/callback/scraper] Error: " + error.cause);
+			console.log("[/api/callback/scraper] No users for area found: " + error.cause);
 		}
 
 		return new Response('Date is not same as before and is more close then 3 days from now. SMS sent to all active users.', { status: 200 });
@@ -83,5 +147,58 @@ export const POST = (async ({ request }) => {
 	}
 
 	return new Response('OK', { status: 200 });
+}
+
+interface Hertz {
+	from: string; //Stockholm
+	to: string; //Göteborg
+}
+async function HandleHertz(request: RequestHandler, params: Hertz): Promise<Response> {
+
+
+	// const sent: boolean = await sendEmail("Hertz Freerider", "marti.pa.jakobsson@icloud.com", "new_booking_time");
+	// console.log("Sent: " + sent);
+
+	// if (sent) {
+	// 	return new Response('200', { status: 200 });
+	// } else {
+	// 	return new Response('400', { status: 400 });
+	// }
+	return new Response('OK', { status: 200 });
+
+}
+
+export const POST = (async ({ request }) => {
+
+	const data: Template = await request.json();
+	const service: string = data.service; // "Stockholms Studentbostäder" | "Hertz Freerider"
+
+	if (service == "Stockholms Studentbostäder") {
+		let params = data.params as Sssb;
+		if (params == undefined) {
+			console.log("[!] Missing params");
+			return new Response('Missing params', { status: 400 });
+		} else if (params.area == undefined) {
+			console.log("[!] Missing area");
+			return new Response('Missing area', { status: 400 });
+		} else if (params.date == undefined) {
+			console.log("[!] Missing date");
+			return new Response('Missing date', { status: 400 });
+		} else if (params.time == undefined) {
+			console.log("[!] Missing time");
+			return new Response('Missing time', { status: 400 });
+		}
+
+		const response: Response = await HandleSssb(request, params as Sssb);
+		return response;
+
+	} else if (service == "Hertz Freerider") {
+		let params = data.params as Hertz;
+		const response: Response = await HandleHertz(request, params as Hertz);
+		return response;
+	} else {
+		console.log("[!] Unknown service: " + service);
+		return new Response('Unknown service', { status: 400 });
+	}
 
 }) satisfies RequestHandler;

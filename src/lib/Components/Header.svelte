@@ -13,7 +13,25 @@ let showRegisterModal = false;
 <ModalRegister bind:showRegisterModal/>
 <Navbar let:hidden let:toggle>
   <NavBrand href="/">
-    <img src="images/logo.png" class="mr-3 h-6 sm:h-9" alt="BlinkSMS Logo"/>
+
+    <lord-icon
+    src="https://cdn.lordicon.com/alnsmmtf.json"
+    trigger="hover"
+    colors="primary:#4be1ec,secondary:#cb5eee"
+    stroke="90"
+    style="width:64px;height:64px">
+    </lord-icon>
+
+<!-- <lord-icon
+    src="https://cdn.lordicon.com/tyounuzx.json"
+    trigger="hover"
+    colors="primary:#121331,secondary:#3080e8"
+    stroke="90"
+    style="width:64px;height:64px">
+</lord-icon> -->
+
+
+    <!-- <img src="images/logo.png" class="mr-3 h-6 sm:h-9" alt="BlinkSMS Logo"/> -->
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">BlinkSMS</span>
   </NavBrand>
 

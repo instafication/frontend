@@ -12,30 +12,42 @@ generator client {
 }
 
 model profiles {
-  id      String   @id
-  email   String?  @unique
-  name    String?
-  phone   String?  @unique
-  active  Boolean? @default(false)
-  area    String?
-  credits Int?     @default(6)
+  id                 String   @id
+  email              String?  @unique
+  name               String?
+  phone              String?  @unique
+  credits            Int?     @default(15)
+  raw_user_meta_data Json?    @default("{}")
 
+  @@schema("public")
+}
+
+model services {
+  id                 String  @id @default(uuid())
+  user               String //UUID
+  name               String //Service name
+  notification       String // "Email onpr SMS"
+  notificationWithin String // "Timestamp, notification within 1 hour, within 1 day or 2 days"
+  options            Json?   @default("{}") //Options for the service
+
+  @@unique([user, name])
   @@schema("public")
 }
 
 model scraper {
   id          String  @unique // Example medicinaren
+  company     String? // Example Stockholms Studentbostäder
   last_update BigInt? // Example 1620000000
 
   @@schema("public")
 }
 
 model notifications {
-  id        String   @id @default(uuid())
-  title     String // Example 'Ny notification'
-  body      String // Example 'Ny tid hittad!'
-  date      DateTime @default(now())  // Example 2021-05-01T00:00:00.000Z
-  area      String // Example medicinaren
+  id    String   @id @default(uuid())
+  title String // Example 'Ny notification'
+  body  String // Example 'Ny tid hittad!'
+  date  DateTime @default(now()) // Example 2021-05-01T00:00:00.000Z
+  area  String // Example medicinaren
 
   @@schema("public")
 }

@@ -2,9 +2,7 @@ import { trpc } from '$lib/trpc/client';
 import { getUserId } from './AuthManager';
 
 async function getAllNotifications() {
-    console.log("getAllNotifications");
     const notifications = await trpc.getAllNotifications.query()
-    console.log("notifications: " + notifications);
     return notifications;
 }
 

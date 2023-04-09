@@ -1,34 +1,50 @@
+import fetch from 'node-fetch';
+
+
+interface Parameters {
+    message: string;
+};
+
+
 export class EmailManager {
+    private static readonly API_URL = 'https://api.sendinblue.com/v3/smtp/email';
 
-    // src/lib/emailManager.ts
- public static async sendEmail(title: string, body: string) {
-    const send_request = new Request('https://api.mailchannels.net/tx/v1/send', {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-            personalizations: [
-                {
-                    to: [{ email: 'martin.pa.jakobsson@icloud.com', name: 'Martin Jakobsson' }],
-                },
-            ],
-            from: {
-                email: 'hej@blinksms.se',
-                name: 'Blinksms.se',
+    public static async sendEmail(
+        to: string,
+        body: string,
+    ): Promise<boolean> {
+        const requestBody = JSON.stringify({
+            to: [{ email: to, name: "Blinksms" }],
+            // sender: { "name": "Blinksms", "email": "Blinksms <hej@blinksms.se>" },
+            templateId: 7,
+            params: {
+                "message": body,
             },
-            subject: title,
-            content: [
-                {
-                    type: 'text/plain',
-                    value: body,
-                },
-            ],
-        }),
-    });
+        });
 
-    const resp = await fetch(send_request);
-    const respText = await resp.text();
-    let respContent = resp.status + ' ' + resp.statusText + '\n\n' + respText;
-}
+        try {
+            const response = await fetch(EmailManager.API_URL, {
+                method: 'POST',
+                headers: {
+                    "accept": "application/json",
+                    "Content-Type": "application/json",
+                    "api-key": "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",
+                },
+                body: requestBody,
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(
+                    `[Emailmanager, -] Error sending email: ${response.status} ${response.statusText}\n\n${errorText}`,
+                );
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('[Emailmanager, -] Error sending email:', error.message);
+            return false;
+        }
+    }
 }

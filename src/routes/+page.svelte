@@ -5,28 +5,31 @@
     import ModalRegister from '../lib/Components/Modal/ModalRegister.svelte';
     import TimelineItem from '$lib/Components/TimelineItem.svelte';
   import CardWithList from '../lib/Components/CardWithList.svelte';
+  import ModalServices from '../lib/Components/Modal/ModalServices.svelte';
 
 
     let showInformationModal: boolean = false;
     let showLoginModal: boolean = false;
     let showRegisterModal: boolean = false;
+    let showServicesModal: boolean = true;
 </script>
 
+<ModalServices bind:showServicesModal/>
 <ModalLogin bind:showLoginModal/>
 <ModalRegister bind:showRegisterModal/>
 
 <Modal title="Kom igång inom 30 sekunder" bind:open={showInformationModal} autoclose>
   <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-    Kom igång enkelt inom 30 sekunder och få fem gratis notifikationer via SMS när det finns lediga tider. Gör följande:
+    Kom igång enkelt inom 30 sekunder:
     <br>
     <br>
-    <b>1. Skicka:</b> Skriv ett meddelande med texten "Start Medicinaren", "Start Jerum" eller "Start Lappkärrsberget" till 0766867379 (5 notiser gratis).
+    <b>1. Registrera konto:</b> Klicka uppe i högra hörnet för att registrera ett konto (eller logga in direkt med Google).
     <br>
     <br>
-    <b>2. Invänta notifikation:</b> Vi kommer att skicka ut ett SMS till det nummer du skrev start ifrån när vi hittar en ny tid.
+    <b>2. Aktivera notifikationer:</b> Klicka på din profilbild uppe i högra hörnet och välj tjänster. Där kan du sedan aktivera vilka tjänster du vill få notifikationer för.
     <br>
     <br>
-    <b>3. Boka:</b> Logga in via SSSB:s bokningssida för att boka tiden som vanligt. 
+    <b>3. Boka:</b> Logga in via företagets hemsida för att boka tiden som vanligt. 
     <br>
     <br>
     Du kan även skapa en profil för att se dina krediter via vår hemsida. Har du redan ett konto så kan du enkelt logga in via knappen nedan.
@@ -49,7 +52,7 @@
 
         <!-- <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Server status: Online</span> -->
         <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Missa inga
-                möjligheter!</span> Få en notifikation via SMS direkt när någon avbokar.</h1>
+                möjligheter!</span> Få en notifikation direkt när någon avbokar.</h1>
 
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
             <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
@@ -110,7 +113,7 @@
 
             <Timeline>  
             <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Tar pulsen och söker efter nya tider...">
-                <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
+                <!-- <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button> -->
             </TimelineItem>
 
                 {#await getLatestNotifications(3) then notifications}
@@ -165,10 +168,10 @@
                     style="width:62px;height:62px">
                 </lord-icon>
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-                    1. Skicka SMS
+                    1. Registrera ett konto
                 </h2>
                 <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-                    Skicka "Start Medicinaren" eller "Start Jerum" till 0766867379 (6 notiser gratis).
+                    Klicka uppe i högra hörnet för att registrera ett konto (eller logga in direkt med Google).
                 </p>
             </div>
 
@@ -187,11 +190,10 @@
                     style="width:62px;height:62px">
                     </lord-icon>
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-                    2. Invänta notifikation
+                    2. Invänta notifikationer
                 </h2>
                 <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-                    Vi kommer att skicka ut ett SMS till det nummer du
-                    skrev start ifrån när vi hittar en ny tid.
+                    Vi kommer att skicka ut ett email till den addressen du använde när du skapade ett konto på vår hemsida direkt när någon avbokar en tid.
                 </p>
             </div>
 
@@ -211,8 +213,7 @@
                     3. Boka tiden som vanligt
                 </h2>
                 <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-                    Logga in via SSSB:s bokningssida för att boka tiden
-                    som vanligt.
+                    Logga in via företagets sida som vanligt och boka.
                 </p>
             </div>
 

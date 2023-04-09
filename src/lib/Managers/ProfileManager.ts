@@ -13,11 +13,11 @@ async function parseUserDataById(id: string): Promise<{ email: string, phone: st
 
 
 async function updateProfileById(id: string, email: string, phone: string): Promise<void> {
-  // await trpc.updateprofileById.query({
-  //     id: id,
-  //     email: email,
-  //     phone: phone
-  // });
+  await trpc.updateprofileById.query({
+      id: id,
+      email: email,
+      phone: phone
+  });
   console.log("Profile updated successfully!");
 }
 

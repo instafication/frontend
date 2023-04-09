@@ -33,7 +33,7 @@ export const POST = (async ({ request }) => {
 
     if (userExists === false && command === "start") {
         if (area !== undefined && area !== null && area !== "" && (area === "medicinaren" || area === "jerum" || area === "lappkärrsberget")) {
-            const createdSuccess = await DatabaseManager.Profiles.createUser({ phone: customersNumber, area: area, active: true });
+            const createdSuccess = await DatabaseManager.Profiles.createUser({ phone: customersNumber, area: area, active: true, credits: 6 });
             console.log("Created new by phone: " + createdSuccess);
 
             const message = `Du har nu startat notiser för ${area}. Du har 6 notiser kvar. Därefter måste du skicka 'Betala' för att köpa nya notiser.`

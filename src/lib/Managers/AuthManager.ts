@@ -33,7 +33,6 @@ async function signUp(email: string, password: string) {
 		
 
 	if (!error) {
-		//await DatabaseManager.Users.createUser({ email: email });
 		console.log(data);
 	} else {
 		alert(error);
@@ -46,8 +45,6 @@ async function signInWithPassword(email: string, password: string) {
 	const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 	if (!error) {
 		console.log(data.user);
-		
-		//console.log("Credits: " + await DatabaseManager.Users.Me.getCredits());
 	} else {
 		alert(error.message);
 	}

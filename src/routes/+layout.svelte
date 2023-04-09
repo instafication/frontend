@@ -6,31 +6,7 @@
   import Footer from '$lib/Components/Footer.svelte';
 	import { getUserId, supabase } from "../lib/Managers/AuthManager";
 	import { trpc } from "$lib/trpc/client";
-  import Toast from "../lib/Components/Toast.svelte";
-  import { Alert } from "flowbite-svelte";
 
-  ///============= PWA SUPPORT =============///
-  // onMount(async () => {
-  //     if (pwaInfo) {
-  //       const { registerSW } = await import('virtual:pwa-register')
-  //       registerSW({
-  //         immediate: true,
-  //         onRegistered(r) {
-  //           // uncomment following code if you want check for updates
-  //           r && setInterval(() => {
-  //              console.log('Checking for sw update')
-  //              r.update()
-  //           }, 20000 /* 20s for testing purposes */)
-  //           console.log(`SW Registered: ${r}`)
-  //         },
-  //         onRegisterError(error) {
-  //           console.log('SW registration error', error)
-  //         }
-  //       })
-  //     }
-  //   })
-  //   $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
-  ///============= [PWA SUPPORT END] =============///
 
   let lastAuthStatus = "";
   let lastSession = null;
@@ -38,7 +14,7 @@
   supabase.auth.onAuthStateChange((event, session) => {
     
   
-    console.log(event, session);
+    // console.log(event, session);
     lastAuthStatus = event;
     lastSession = session;
 
@@ -64,7 +40,6 @@
 </script>
 
 
-
 {#if lastAuthStatus == "SIGNED_IN"}
   <HeaderLoggedIn/>
 {:else}
@@ -72,8 +47,3 @@
 {/if}
 <slot></slot>
 <Footer/>
-
-
-<!-- {#if ReloadPrompt}
-  <svelte:component this={ReloadPrompt} />
-{/if} -->

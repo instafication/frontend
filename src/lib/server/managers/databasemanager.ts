@@ -1,6 +1,7 @@
 import { getUserId } from '../../Managers/AuthManager';
 import { generateRandomUUID } from '$lib/Inbox/Utils';
 import { PrismaClient } from '@prisma/client';
+import { promises } from 'dns';
 const prisma = new PrismaClient();
 
 export class DatabaseManager {
@@ -53,14 +54,23 @@ export class DatabaseManager {
       return hasUpdated;
     }
 
-
+    public static async getRawUserData(id: string): Promise<{}> {
+      const userObj = await prisma.profiles.findUnique({
+        where: { id },
+      });
+      return userObj?.raw_user_meta_data || {};
+    }
 
     public static async getCreditsById(id: string): Promise<number> {
       const userObj = await prisma.profiles.findUnique({
         where: { id },
       });
-      console.log("Credits: " + userObj?.credits)
-      return userObj?.credits || -1;
+
+      if (userObj != null) {
+        return userObj.credits;
+      } else {
+        return -1;
+      }
 
     }
     public static async getCreditsByPhone(phone: string): Promise<number> {
@@ -99,19 +109,24 @@ export class DatabaseManager {
       return userObj?.id || "";
     }
 
-    public static async userExistsByPhone(phone: string): Promise<boolean> {
-      const userObj = await prisma.profiles.findUnique({
+    public static async checkIfPhoneNumberExistsInRows(phone: string): Promise<boolean> {
+      const userObj = await prisma.profiles.findMany({
         where: { phone },
       });
       return userObj !== null;
     }
 
-    public static async userExistsByEmail(email: string): Promise<boolean> {
-      const userObj = await prisma.profiles.findUnique({
-        where: { email },
+    public static async userExistsByPhone(phone: string): Promise<boolean> {
+
+      const exists = !!await prisma.profiles.findFirst({
+        where: {
+          phone: phone
+        },
       });
-      return userObj !== null;
+      return exists;
     }
+
+
 
 
     public static Me = class {
@@ -137,7 +152,7 @@ export class DatabaseManager {
     }
 
 
-    public static async createUser({ uuid = "", phone = "", email = "", area = "", active = false }: { uuid?: string, phone?: string, email?: string, area?: string, active?: boolean }): Promise<boolean> {
+    public static async createUser({ uuid = "", phone = "", email = "", area = "", active = false, credits = 0 }: { uuid?: string, phone?: string, email?: string, area?: string, active?: boolean, credits?: number }): Promise<boolean> {
 
       if (uuid == "")
         uuid = generateRandomUUID();
@@ -147,6 +162,7 @@ export class DatabaseManager {
       console.log("[DatabaseManager] Creating user with email: " + email);
       console.log("[DatabaseManager] Creating user with area: " + area);
       console.log("[DatabaseManager] Creating user with active: " + active);
+      console.log("[DatabaseManager] Creating user with credits: " + credits);
 
       const hasCreated = await prisma.profiles.create({
         data: {
@@ -155,6 +171,7 @@ export class DatabaseManager {
           area: area,
           phone: phone,
           email: email,
+          credits: credits,
         },
       });
       return hasCreated !== null;
@@ -178,11 +195,18 @@ export class DatabaseManager {
       });
     }
 
-    public static async removeOneCreditFromUserID(id: string) {
-      await prisma.profiles.update({
+    public static async getUsersWithCreditsByUserIds(ids: string[]): Promise<any> {
+      return await prisma.profiles.findMany({
+        where: { credits: { gt: 0 }, id: { in: ids } },
+      });
+    }
+
+    public static async removeOneCreditFromUserID(id: string): Promise<boolean> {
+      const success = await prisma.profiles.update({
         where: { id },
         data: { credits: { decrement: 1 } },
       });
+      return success !== null;
     }
 
     public static async getAllActiveUsers() {
@@ -210,12 +234,22 @@ export class DatabaseManager {
       return hasActivated !== null;
     }
 
-    public static async getUserCreditsByID(id: string) {
-      const user = await prisma.profiles.findUnique({
+    public static async getUserCreditsByID(id: string): Promise<number> {
+      const profile = await prisma.profiles.findUnique({
         where: { id },
         select: { credits: true },
-      })
+      });
+
+      if (profile === null || profile === undefined || profile.credits === null || profile.credits === undefined) {
+        return -1;
+      }
+
+      return profile.credits;
+
     }
+
+
+
 
 
   }
@@ -260,6 +294,122 @@ export class DatabaseManager {
 
 
 
+  }
+
+
+  public static Services = class {
+
+    //   addService: t.procedure
+    //     .input(z.object({
+    //       user: z.string(),
+    // name: z.string(),
+    // notification: z.string(),
+    // notificationWithIn: z.number(),
+    // options: z.object({ }),
+    //       }))
+    //       .query((async ({ input }) => {
+    //   const { user, name, notification, notificationWithIn, options } = input;
+    //   await DatabaseManager.Services.addService(user, name, notification, notificationWithIn, options);
+    //   return true;
+
+
+    public static async getServiceConfiguration(uuid: string, name: string): Promise<any> {
+      const serviceConfiguration = await prisma.services.findUnique({
+        where: {
+          user_name: {
+            user: uuid,
+            name: name,
+          },
+        },
+      });
+
+      console.log("Databasemanager — Service configuration: ");
+      console.log(serviceConfiguration);
+
+      return serviceConfiguration;
+    }
+
+
+    public static async getUserIdsByOptions(key: string, value: any): Promise<any> {
+      const userIds = await prisma.services.findMany({
+        where: {
+          options: {
+            path: [key],
+            equals: value,
+          },
+        },
+      });
+
+      console.log(userIds);
+      return userIds;
+    }
+
+
+    public static async createService(user: string, name: string, notification: string, notificationWithin: number, options: {}) {
+
+      // Check if a record with the same user and name combination exists
+      const existingService = await prisma.services.findUnique({
+        where: {
+          user_name: {
+            user: user,
+            name: name,
+          },
+        },
+      });
+
+      let r;
+
+      if (existingService === null) {
+        // If the record doesn't exist, create a new one
+        r = await prisma.services.create({
+          data: {
+            user: user,
+            name: name,
+            notification: notification,
+            notificationWithin: notificationWithin,
+            options: options,
+          },
+        });
+        console.log("[Databasemanager] Created service: " + r);
+      } else {
+        // If the record exists, update it
+        r = await prisma.services.update({
+          where: {
+            id: existingService.id,
+          },
+          data: {
+            notification: notification,
+            notificationWithin: notificationWithin,
+            options: options,
+          },
+        });
+        console.log("[Databasemanager] Updated service: " + r);
+      }
+
+      return r !== null;
+      // const r = await prisma.services.upsert({
+      //   where: {
+      //     user_name: {
+      //       user: user,
+      //       name: name,
+      //     }
+      //   },
+      //   update: {
+      //     notification: notification,
+      //     notificationWithIn: notificationWithIn,
+      //     options: options,
+      //   },
+      //   create: {
+      //     user: user,
+      //     name: name,
+      //     notification: notification,
+      //     notificationWithIn: notificationWithIn,
+      //     options: options,
+      //   },
+      // });
+      console.log("[Databasemanager] Upserted service: " + r);
+      return r !== null;
+    }
   }
 
 
