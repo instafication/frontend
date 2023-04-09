@@ -5,7 +5,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 
 const trpcHandler = ({ request }) => {
     return fetchRequestHandler({
-        endpoint: '/api',
+        endpoint: 'https://blinksms.se/api',
         req: request,
         router: appRouter,
         createContext
