@@ -20,7 +20,7 @@
     "@supabase/supabase-js": "latest",
     "@sveltejs/adapter-auto": "latest",
     "@sveltejs/adapter-cloudflare": "latest",
-    "@sveltejs/adapter-vercel": "latest",
+    "@sveltejs/adapter-vercel": "^2.4.1",
     "@sveltejs/kit": "latest",
     "@trivago/prettier-plugin-sort-imports": "latest",
     "@trpc/client": "latest",
