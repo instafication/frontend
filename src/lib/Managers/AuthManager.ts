@@ -1,5 +1,6 @@
 import { createClient, type Provider } from '@supabase/supabase-js'
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
+//import { EmailManager } from './EmailManager'
 
 const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
 
@@ -33,6 +34,7 @@ async function signUp(email: string, password: string) {
 		
 
 	if (!error) {
+		//const hasSent = await EmailManager.SendEmailWhenUserIsCreated(email, "");
 		console.log(data);
 	} else {
 		alert(error);
@@ -44,6 +46,7 @@ async function signInWithPassword(email: string, password: string) {
 
 	const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 	if (!error) {
+
 		console.log(data.user);
 	} else {
 		alert(error.message);
