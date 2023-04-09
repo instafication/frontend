@@ -1,7 +1,5 @@
-import { getUserId } from '../../Managers/AuthManager';
 import { generateRandomUUID } from '$lib/Inbox/Utils';
 import { PrismaClient } from '@prisma/client';
-import { promises } from 'dns';
 const prisma = new PrismaClient();
 
 export class DatabaseManager {
@@ -152,26 +150,15 @@ export class DatabaseManager {
     }
 
 
-    public static async createUser({ uuid = "", phone = "", email = "", area = "", active = false, credits = 0 }: { uuid?: string, phone?: string, email?: string, area?: string, active?: boolean, credits?: number }): Promise<boolean> {
+    public static async createUserByEmail(email: string): Promise<boolean> {
 
-      if (uuid == "")
-        uuid = generateRandomUUID();
 
-      console.log("[DatabaseManager] Creating user with id: " + uuid);
-      console.log("[DatabaseManager] Creating user with phone: " + phone);
       console.log("[DatabaseManager] Creating user with email: " + email);
-      console.log("[DatabaseManager] Creating user with area: " + area);
-      console.log("[DatabaseManager] Creating user with active: " + active);
-      console.log("[DatabaseManager] Creating user with credits: " + credits);
 
       const hasCreated = await prisma.profiles.create({
         data: {
-          id: uuid,
-          active: active,
-          area: area,
-          phone: phone,
+          id: generateRandomUUID(),
           email: email,
-          credits: credits,
         },
       });
       return hasCreated !== null;

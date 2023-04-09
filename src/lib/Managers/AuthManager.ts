@@ -26,7 +26,7 @@ async function signUp(email: string, password: string) {
 			options: {
 				data: {
 					email: email,
-					credits: 6,
+					credits: 15,
 				},
 			}
 		});
