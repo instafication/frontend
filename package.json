@@ -11,10 +11,10 @@
     "dev:cloudflare": "npx wrangler pages dev --experimental-local --persist --compatibility-date=2023-04-03 -- npm run dev:vite",
     "dev:vercel": "vite dev",
     "dev:vite": "vite dev",
-    "build": "vite build",
+    "build": "vite build"
 
-    "vercel-build": "prisma generate && prisma migrate deploy && vite build",
-    "prisma:generate": "prisma generate"
+    // "vercel-build": "prisma generate && prisma migrate deploy && vite build",
+    // "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@cloudflare/workers-types": "latest",
