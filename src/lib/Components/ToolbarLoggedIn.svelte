@@ -18,16 +18,17 @@ import ModalServices from './Modal/ModalServices.svelte';
   let rawUserMetaData: {} = {};
   async function parseUserData() {
     userId = await getUserId();    
-    rawUserMetaData = await trpc.raw_user_meta_data.query(userId);
     email = await trpc.email.query(userId);
     phone = await trpc.phone.query(userId);
     credits = await trpc.credits.query(userId);
 
-    // console.log("[layout.svelte] User ID: " + userId);
-    // console.log("[layout.svelte] User email: " + email);
-    // console.log("[layout.svelte] User phone: " + phone);
-    // console.log("[layout.svelte] User credits: " + credits);
-    // console.log(rawUserMetaData);
+    console.log("[layout.svelte] User ID: " + userId);
+    console.log("[layout.svelte] User email: " + email);
+    console.log("[layout.svelte] User phone: " + phone);
+    console.log("[layout.svelte] User credits: " + credits);
+
+    rawUserMetaData = await trpc.raw_user_meta_data.query(userId);
+    console.log(rawUserMetaData);
 
   }
   onMount(async () => {

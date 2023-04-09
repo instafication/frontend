@@ -56,7 +56,11 @@ export class DatabaseManager {
       const userObj = await prisma.profiles.findUnique({
         where: { id },
       });
-      return userObj?.raw_user_meta_data || {};
+      if (userObj != null) {
+        return userObj?.raw_user_meta_data || {};
+      } else {
+        return { "Message": "Error" };
+      }
     }
 
     public static async getCreditsById(id: string): Promise<number> {
