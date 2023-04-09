@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '$lib/server/managers/databasemanager';
-import { EmailManager } from '../../../../lib/Managers/EmailManager';
+import { sendEmail, SendEmailWhenUserIsCreated } from '../../../../lib/Managers/EmailManager';
 
 interface Template {
 	service: string; // Servicename, example: ["Stockholms Studentbostäder", "Hertz Freerider"]
@@ -112,7 +112,7 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 
 								console.log("[/api/callback/scraper] Sending trigger to: " + user.id + " with message: " + message);
 								if (userInside.notification == "Email" && userInside.user == user.id) {
-									const hasSent = await EmailManager.sendEmail(user.email, message);
+									const hasSent = await sendEmail(user.email, message);
 									console.log("[/api/callback/scraper] Email sent1: " + hasSent);
 								} else if (userInside.service == "SMS" && userInside.user == user.id) {
 									//const hasSent = await sendSMS(user.id, message);
