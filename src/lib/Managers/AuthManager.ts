@@ -1,6 +1,7 @@
 import { createClient, type Provider } from '@supabase/supabase-js'
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
-//import { EmailManager } from './EmailManager'
+import { SendEmailWhenUserIsCreated } from './EmailManager'
+
 
 const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
 
@@ -34,7 +35,8 @@ async function signUp(email: string, password: string) {
 		
 
 	if (!error) {
-		//const hasSent = await EmailManager.SendEmailWhenUserIsCreated(email, "");
+		const hasSent = await SendEmailWhenUserIsCreated(email, "");
+		console.log("Sent: " + hasSent);
 		console.log(data);
 	} else {
 		alert(error);
