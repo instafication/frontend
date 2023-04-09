@@ -234,8 +234,15 @@
 
 <!-- name: string, notification: string, notificationWithIn: number, options: {} -->
 	<Button on:click={async() => {
-		await createService("Stockholms Studentbostäder", SelectedValue3Notification, SelectedValue2Within, {"area": SelectedValue1Area});
-		alert("Ändringarna har sparats.");
+
+		if (SelectedValue3Notification == null || SelectedValue2Within == null || SelectedValue1Area == null ||
+			SelectedValue3Notification == "" || SelectedValue2Within == "" || SelectedValue1Area == "") {
+			alert("Du måste fylla i alla fält innan du sparar.");
+			return;
+		} else {
+			await createService("Stockholms Studentbostäder", SelectedValue3Notification, SelectedValue2Within, {"area": SelectedValue1Area});
+			alert("Ändringarna har sparats.");
+		}
 		}}
 		>Spara ändringarna!</Button>
 

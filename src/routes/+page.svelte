@@ -11,7 +11,7 @@
     let showInformationModal: boolean = false;
     let showLoginModal: boolean = false;
     let showRegisterModal: boolean = false;
-    let showServicesModal: boolean = true;
+    let showServicesModal: boolean = false;
 </script>
 
 <ModalServices bind:showServicesModal/>
