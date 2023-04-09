@@ -12,9 +12,6 @@
     "dev:vercel": "vite dev",
     "dev:vite": "vite dev",
     "build": "vite build"
-
-    // "vercel-build": "prisma generate && prisma migrate deploy && vite build",
-    // "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@cloudflare/workers-types": "latest",
