@@ -112,7 +112,7 @@ import ModalServices from './Modal/ModalServices.svelte';
     <DropdownDivider />
     <DropdownItem on:click={async() => {await signOut()}}>Logga ut</DropdownItem>
   </Dropdown>
-    <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1"/>
+    <!-- <NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1"/> -->
   </div>
 
 </Navbar>
