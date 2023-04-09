@@ -13,22 +13,13 @@
   let lastAuthStatus = "";
   let lastSession = null;
   let userLoggedIn: boolean = false; 
-
   onMount(async () => {
-    let user = await supabase.auth.getUser();
-    user = user.data.user;
-
-    console.log(user);
-    if (user !== null && user !== undefined) {
-      userLoggedIn = true;
-    } else {
-      userLoggedIn = false;
-    }
+    userLoggedIn = await isLoggedIn();
   })
 
 
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
+supabase.auth.onAuthStateChange(async (event, session) => {
       
     lastAuthStatus = event;
     lastSession = session;
@@ -38,8 +29,10 @@
 
     if (event == 'SIGNED_OUT') {
       console.log('SIGNED_OUT', session)
+      userLoggedIn = false;
     } else if (event == 'SIGNED_IN') {
       console.log('SIGNED_IN', session)
+      userLoggedIn = true;
     } else if (event == 'USER_UPDATED') {
       console.log('USER_UPDATED', session)
     } else if (event == 'PASSWORD_RECOVERY') {

@@ -9,11 +9,17 @@ async function getUserId(): Promise<string> {
 }
 
 async function isLoggedIn(): Promise<boolean> {
-	const user = supabase.auth.getUser();
+	let userLoggedIn = false;
+	let user = await supabase.auth.getUser();
+	user = user.data.user;
+	console.log(user);
 	if (user !== null && user !== undefined) {
-		return true;
+		userLoggedIn = true;
+	} else {
+		userLoggedIn = false;
 	}
-	return false;
+
+	return userLoggedIn;
 }
 
 
