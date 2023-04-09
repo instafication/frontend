@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "dev": "npm run dev:vercel",
     "dev:cloudflare": "npx wrangler pages dev --experimental-local --persist --compatibility-date=2023-04-03 -- npm run dev:vite",
-    "dev:vercel": "vite dev",
+    "dev:vercel": "vercel dev",
     "dev:vite": "vite dev",
     "build": "vite build"
   },
