@@ -1,22 +1,40 @@
 <script lang="ts">
+	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 
   import "../app.postcss";
   import HeaderLoggedIn from '$lib/Components/ToolbarLoggedIn.svelte';
   import Header from '$lib/Components/Header.svelte';
   import Footer from '$lib/Components/Footer.svelte';
-	import { getUserId, supabase } from "../lib/Managers/AuthManager";
+	import { getUserId, isLoggedIn, supabase } from "../lib/Managers/AuthManager";
 	import { trpc } from "$lib/trpc/client";
+  import { onMount } from 'svelte';
 
 
   let lastAuthStatus = "";
   let lastSession = null;
+  let userLoggedIn: boolean = false; 
 
-  supabase.auth.onAuthStateChange((event, session) => {
-    
-  
-    // console.log(event, session);
+  onMount(async () => {
+    let user = await supabase.auth.getUser();
+    user = user.data.user;
+
+    console.log(user);
+    if (user !== null && user !== undefined) {
+      userLoggedIn = true;
+    } else {
+      userLoggedIn = false;
+    }
+  })
+
+
+
+  supabase.auth.onAuthStateChange(async (event, session) => {
+      
     lastAuthStatus = event;
     lastSession = session;
+
+    console.log("event", event)
+    console.log("session", session);
 
     if (event == 'SIGNED_OUT') {
       console.log('SIGNED_OUT', session)
@@ -40,7 +58,7 @@
 </script>
 
 
-{#if lastAuthStatus == "SIGNED_IN"}
+{#if userLoggedIn}
   <HeaderLoggedIn/>
 {:else}
   <Header />
