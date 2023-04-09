@@ -4,7 +4,6 @@
   import { onMount } from 'svelte';
   import { updateProfileById } from '$lib/Managers/ProfileManager';
   import { trpc } from '$lib/trpc/client';
-	import { page } from '$app/stores';
 
   let id: string = "";
   let email: string = "";
@@ -13,10 +12,6 @@
     id = await getUserId();    
     email = await trpc.email.query(id);
     phone = await trpc.phone.query(id);
-
-    console.log("[layout.svelte] User ID: " + id);
-    console.log("[layout.svelte] User email: " + email);
-    console.log("[layout.svelte] User phone: " + phone);
   }
   onMount(async () => {
     parseUserData();

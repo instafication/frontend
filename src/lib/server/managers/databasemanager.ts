@@ -4,6 +4,15 @@ const prisma = new PrismaClient();
 
 export class DatabaseManager {
 
+  public static Ping = async () => {
+    const res = await prisma.profiles.findFirst({
+      where: {
+        email: "test@test.com"
+      }
+    })
+    return res;
+  }
+
 
   public static Scraper = class {
 
@@ -200,30 +209,30 @@ export class DatabaseManager {
       return success !== null;
     }
 
-    public static async getAllActiveUsers() {
-      return await prisma.profiles.findMany({
-        where: { credits: { gt: 0 }, active: true }
-      });
-    }
+    // public static async getAllActiveUsers() {
+    //   return await prisma.profiles.findMany({
+    //     where: { credits: { gt: 0 }, active: true }
+    //   });
+    // }
 
-    public static async getActiveUsersByArea(area: string): Promise<any> {
-      const profiles = await prisma.profiles.findMany({
-        where: { credits: { gt: 0 }, active: true, area: area },
-      });
-      return profiles;
-    }
+    // public static async getActiveUsersByArea(area: string): Promise<any> {
+    //   const profiles = await prisma.profiles.findMany({
+    //     where: { credits: { gt: 0 }, activ, area: area },
+    //   });
+    //   return profiles;
+    // }
 
     public static async getAllUsers() {
       return await prisma.profiles.findMany();
     }
 
-    public static async setUserActiveByPhone(phone: string, active: boolean): Promise<boolean> {
-      const hasActivated = await prisma.profiles.update({
-        where: { phone },
-        data: { active },
-      });
-      return hasActivated !== null;
-    }
+    // public static async setUserActiveByPhone(phone: string, active: boolean): Promise<boolean> {
+    //   const hasActivated = await prisma.profiles.update({
+    //     where: { phone },
+    //     data: { active },
+    //   });
+    //   return hasActivated !== null;
+    // }
 
     public static async getUserCreditsByID(id: string): Promise<number> {
       const profile = await prisma.profiles.findUnique({

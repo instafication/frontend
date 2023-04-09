@@ -29,6 +29,10 @@ export const appRouter = t.router({
     ping: t.procedure.query(() => {
         return "Pong!";
     }),
+    pingdb: t.procedure.query(async () => {
+        const res = await DatabaseManager.Ping();
+        return res;
+    }),
 
     getConfiguration: t.procedure
         .input(z.object({
@@ -82,6 +86,7 @@ export const appRouter = t.router({
         .input(z.string())
         .query((async ({ input }) => {
             const email: string = await DatabaseManager.Profiles.getEmailById(input);
+            console.log(email)
             return email;
         })),
 

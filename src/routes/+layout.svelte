@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 
   import "../app.postcss";
   import HeaderLoggedIn from '$lib/Components/ToolbarLoggedIn.svelte';
