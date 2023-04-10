@@ -6,3 +6,5 @@ export let showRegisterModal = writable<boolean>(false);
 export let showServicesModal = writable<boolean>(false);
 export let showLostPasswordModal = writable<boolean>(false);
 export let showProfileSettingsModal = writable<boolean>(false);
+
+export let userLoggedIn = writable<boolean>(false);

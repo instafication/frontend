@@ -1,9 +1,9 @@
 <script lang="ts">
 
   import "../app.postcss";
-  import { getUserId, isLoggedIn, supabase } from "$lib/Managers/AuthManager";
-	import { trpc } from "$lib/trpc/client";
+  import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
   import { onMount } from 'svelte';
+  import { userLoggedIn } from '$lib/sharedStore';
 
   import HeaderLoggedIn from '$lib/Components/HeaderLoggedIn.svelte';
   import Header from '$lib/Components/Header.svelte';
@@ -17,9 +17,9 @@
 
   let lastAuthStatus = "";
   let lastSession = null;
-  let userLoggedIn: boolean = false; 
+
   onMount(async () => {
-    userLoggedIn = await isLoggedIn();
+    $userLoggedIn = await isLoggedIn();
   })
 
   supabase.auth.onAuthStateChange(async (event, session) => {
@@ -32,10 +32,10 @@
 
     if (event == 'SIGNED_OUT') {
       console.log('SIGNED_OUT', session)
-      userLoggedIn = false;
+      $userLoggedIn = false;
     } else if (event == 'SIGNED_IN') {
       console.log('SIGNED_IN', session)
-      userLoggedIn = true;
+      $userLoggedIn = true;
     }
     
   })
@@ -50,7 +50,7 @@
 <ProfileSettingsModal/>
 
 
-{#if userLoggedIn}
+{#if $userLoggedIn}
   <HeaderLoggedIn/>
 {:else}
   <Header />

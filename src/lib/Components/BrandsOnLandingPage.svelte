@@ -1,6 +1,6 @@
 <script>
   import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
-  import { showServicesModal } from "$lib/sharedStore";
+  import { showServicesModal, showLoginModal, userLoggedIn } from "$lib/sharedStore";
 
    let list = [
     {
@@ -35,7 +35,14 @@
     <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Företag vi tar pulsen på</h5>
   </div>
 
-  <Listgroup items={list} let:item class="border-1 p-2 dark:!bg-transparent" on:click={() => $showServicesModal = true}>
+  <Listgroup items={list} let:item class="border-1 p-2 dark:!bg-transparent" on:click={() => {
+
+    if ($userLoggedIn == true) 
+      $showServicesModal = true;
+    else
+      $showLoginModal = true;
+  
+  }}>
 
     <div class="flex items-center space-x-4">
       <Avatar src={item.img.src} alt={item.img.alt} class="flex-shrink-0"/>
