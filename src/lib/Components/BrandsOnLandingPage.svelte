@@ -45,7 +45,7 @@
   }}>
 
     <div class="flex items-center space-x-4">
-      <Avatar src={item.img.src} alt={item.img.alt} class="flex-shrink-0"/>
+      <Avatar  size="md"  src={item.img.src} alt={item.img.alt} class="flex-shrink-0 bg-transparent"rounded dot={{color: item.active}}  />
       <div class="flex-1 min-w-0 py-2">
         
         <p class="text-sm font-medium text-gray-900 truncate dark:text-white">

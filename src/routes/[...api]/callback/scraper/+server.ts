@@ -100,13 +100,13 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 							// Calculate the difference in minutes
 							const differenceInSeconds = Math.abs(dateObj.getTime() - now.getTime()) / (1000);
 
-							// Check if time found is close to now than userInside.NotificationWithin, time is more so return and exit
-							console.log("Difference in seconds: " + differenceInSeconds);
-							console.log("Is dateObj more close than 30 min: " + (differenceInSeconds < 30 * 60));
+
+							console.log("[+] Difference in seconds: " + differenceInSeconds);
+							console.log("[+] Is free time more close than user setting: " + (differenceInSeconds < userInside.notificationWithin));
 
 
 							if (differenceInSeconds > userInside.notificationWithin) {
-								console.log("[/api/callback/scraper] Time is more far away, return and exit: " + userInside.notificationWithin);
+								console.log("[/api/callback/scraper] Free time is more far away, user configuration (sec): " + userInside.notificationWithin);
 							} else {
 
 								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
@@ -124,8 +124,6 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 								}
 
 							}
-						} else {
-							console.log("[/api/callback/scraper] User not found: " + userInside.id);
 						}
 					});
 
