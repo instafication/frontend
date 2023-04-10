@@ -39,7 +39,7 @@
 
     <div class="flex items-center space-x-4">
       <Avatar src={item.img.src} alt={item.img.alt} class="flex-shrink-0"/>
-      <div class="flex-1 min-w-0">
+      <div class="flex-1 min-w-0 py-2">
         
         <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
           {item.name}
@@ -54,7 +54,7 @@
 
         <div class="flex items-center">
         {#each item.services as service}
-          <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+          <p class="text-sm text-gray-500 truncate dark:text-gray-400 py-0">
             <Badge rounded>
               {service}
             </Badge>
