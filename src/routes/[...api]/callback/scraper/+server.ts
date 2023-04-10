@@ -14,11 +14,13 @@ interface Sssb {
 }
 async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response> {
 
+	console.log(data);
+
 	const area = data.area;
 	const now = new Date();
 	const dateString = `${data.date} ${data.time}`;
 	const currentYear = new Date().getFullYear();
-	const [, , date, monthName, startTime]: any | null = dateString.match(/([A-Z]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/);
+	const [, , date, monthName, startTime]: any | null = dateString.match(/([A-ZÅÄÖ]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/);
 
 	const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	const monthNumber = monthNames.indexOf(monthName) + 1;
@@ -172,6 +174,7 @@ export const POST = (async ({ request }) => {
 
 	const data: Template = await request.json();
 	const service: string = data.service; // "Stockholms Studentbostäder" | "Hertz Freerider"
+	console.log(data);
 
 	if (service == "Stockholms Studentbostäder") {
 		let params = data.params as Sssb;
