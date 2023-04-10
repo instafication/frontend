@@ -4,6 +4,7 @@
   import { onMount } from 'svelte';
   import { updateProfileById } from '$lib/Managers/ProfileManager';
   import { trpc } from '$lib/trpc/client';
+  import { showProfileSettingsModal } from '$lib/sharedStore';
 
   let id: string = "";
   let email: string = "";
@@ -18,10 +19,9 @@
   })
 
 
-  export let showProfileSettingsModal: boolean = false;
 </script>
 
-<Modal bind:open={showProfileSettingsModal} size="xs" autoclose={true} class="w-full">
+<Modal bind:open={$showProfileSettingsModal} size="xs" autoclose={true} class="w-full">
   <form class="flex flex-col space-y-6" action="#">
     <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Inställningar</h3>
     <Label class="space-y-2">

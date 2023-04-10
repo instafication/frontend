@@ -8,6 +8,7 @@ const config = {
   
   
   kit: {
+    alias: { 'lib/': './src/routes/lib/' },
     adapter: adapter({
       runtime: "nodejs18.x",
       routes: {

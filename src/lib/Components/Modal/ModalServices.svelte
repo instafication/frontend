@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Avatar, Badge, Button, Modal, Label, Select, ListgroupItem } from 'flowbite-svelte';
-		import { createService, getServiceConfiguration } from '$lib/Managers/ServiceManager';
 	import { onMount } from 'svelte';
-	import type { SvelteComponent } from 'svelte';
+	import { Avatar, Badge, Button, Modal, Label, Select } from 'flowbite-svelte';
+	import { createService, getServiceConfiguration } from '$lib/Managers/ServiceManager';
+	import { showServicesModal } from '$lib/sharedStore';
+
 
 	interface Service {
 		img: {
@@ -74,7 +75,6 @@
 	}
 
 
-	export let showServicesModal: boolean = false;
 </script>
 
 
@@ -83,7 +83,7 @@
 
 
 
-<Modal bind:open={showServicesModal} size="md">
+<Modal bind:open={$showServicesModal} size="md">
 
 	<h3 class="text-xl font-medium text-gray-900 dark:text-white">Konfigurera tjänster</h3>
 	

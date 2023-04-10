@@ -1,15 +1,11 @@
 <script lang="ts">
 
-import { json } from '@sveltejs/kit';
-import { Navbar,NavHamburger,  NavBrand,  Toolbar, ToolbarButton, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ButtonGroup, Button } from 'flowbite-svelte'
-import ProfileSettingsModal from '$lib/Components/Modal/Profile/ProfileSettingsModal.svelte';
-import { getUserId, signOut, supabase } from '$lib/Managers/AuthManager';
-import { page } from '$app/stores';
-import { trpc } from '$lib/trpc/client';
-import { onMount } from 'svelte';
-import NotificationDropdown from './Modal/NotificationDropdown.svelte';
-import ModalServices from './Modal/ModalServices.svelte';
-
+  import { trpc } from '$lib/trpc/client';
+  import { onMount } from 'svelte';
+  import { Navbar,  NavBrand,  Toolbar, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ButtonGroup, Button } from 'flowbite-svelte'
+  import { getUserId, signOut, supabase } from '$lib/Managers/AuthManager';
+  import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
+  import { showServicesModal, showProfileSettingsModal } from "$lib/sharedStore";
 
   let userId: string = "";
   let email: string = "";
@@ -35,14 +31,8 @@ import ModalServices from './Modal/ModalServices.svelte';
     parseUserData();
   })
 
-  
-  let showServicesModal: boolean = false;
-  let showProfileSettingsModal: boolean = false;
-
 </script>
 
-<ModalServices bind:showServicesModal />
-<ProfileSettingsModal bind:showProfileSettingsModal />
 
 <Navbar let:hidden let:toggle>
 
@@ -107,8 +97,8 @@ import ModalServices from './Modal/ModalServices.svelte';
        <span>Krediter: {credits}</span>
     </DropdownHeader>
     <!-- <DropdownItem on:click={() => showProfileSettingsModal = true}>Telefon</DropdownItem> -->
-    <DropdownItem on:click={() => showServicesModal = true}>Tjänster</DropdownItem>
-    <DropdownItem on:click={() => showProfileSettingsModal = true}>Inställningar</DropdownItem>
+    <DropdownItem on:click={() => $showServicesModal = true}>Tjänster</DropdownItem>
+    <DropdownItem on:click={() => $showProfileSettingsModal = true}>Inställningar</DropdownItem>
     <DropdownDivider />
     <DropdownItem on:click={async() => {await signOut()}}>Logga ut</DropdownItem>
   </Dropdown>

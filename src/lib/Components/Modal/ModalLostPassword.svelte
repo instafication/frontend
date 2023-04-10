@@ -1,13 +1,12 @@
 <script lang="ts">
   import { Button, Modal, Label, Input} from 'flowbite-svelte';
-  import { resetPasswordForEmail } from '../../Managers/AuthManager';
+  import { resetPasswordForEmail } from '$lib/Managers/AuthManager';
+  import { showLostPasswordModal } from '$lib/sharedStore';
 
   let email: string = "";
-
-  export let showLostPasswordModal: boolean = false;
 </script>
 
-<Modal bind:open={showLostPasswordModal} size="xs" autoclose={true} class="w-full">
+<Modal bind:open={$showLostPasswordModal} size="xs" autoclose={true} class="w-full">
   <form class="flex flex-col space-y-6" action="#">
     <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Återställ ditt lösenord</h3>
     <Label class="space-y-2">

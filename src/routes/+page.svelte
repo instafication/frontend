@@ -1,26 +1,18 @@
 <script lang="ts">
+
+    import { Timeline, Button, Modal } from 'flowbite-svelte';
+    import { showInformationModal, showRegisterModal, showLoginModal } from '$lib/sharedStore';
     import { getLatestNotifications } from '$lib/Managers/NotificationManager';
-    import { Timeline, Button, Modal, Card } from 'flowbite-svelte';
-    import  ModalLogin from '../lib/Components/Modal/ModalLogin.svelte';
-    import ModalRegister from '../lib/Components/Modal/ModalRegister.svelte';
     import TimelineItem from '$lib/Components/TimelineItem.svelte';
-  import CardWithList from '../lib/Components/CardWithList.svelte';
-  import ModalServices from '../lib/Components/Modal/ModalServices.svelte';
-
-
-    let showInformationModal: boolean = false;
-    let showLoginModal: boolean = false;
-    let showRegisterModal: boolean = false;
-    let showServicesModal: boolean = false;
-
+    import CardWithList from "$lib/Components/BrandsOnLandingPage.svelte";
 
 </script>
 
-<ModalServices bind:showServicesModal/>
+<!-- <ModalServices bind:showServicesModal/>
 <ModalLogin bind:showLoginModal/>
-<ModalRegister bind:showRegisterModal/>
+<ModalRegister bind:showRegisterModal/> -->
 
-<Modal title="Kom igång inom 30 sekunder" bind:open={showInformationModal} autoclose>
+<Modal title="Kom igång inom 30 sekunder" bind:open={$showInformationModal} autoclose>
   <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
     Kom igång enkelt inom 30 sekunder:
     <br>
@@ -37,8 +29,8 @@
     Du kan även skapa en profil för att se dina krediter via vår hemsida. Har du redan ett konto så kan du enkelt logga in via knappen nedan.
     </p>
   <svelte:fragment slot='footer'>
-    <Button on:click={() => showRegisterModal = true}>Skapa ett konto</Button>
-    <Button on:click={() => showLoginModal = true} color="alternative">Logga in</Button>
+    <Button on:click={() => $showRegisterModal = true}>Skapa ett konto</Button>
+    <Button on:click={() => $showLoginModal = true} color="alternative">Logga in</Button>
   </svelte:fragment>
 </Modal>
 
@@ -62,7 +54,7 @@
         Chatta med oss
         <img src="/discord-mark-black.svg" alt="Discord" class="w-5 h-5 ml-2" />
     </Button>
-    <Button on:click={() => showRegisterModal = true} color="alternative">
+    <Button on:click={() => $showRegisterModal = true} color="alternative">
         Skapa ett konto
         <lord-icon
     src="https://cdn.lordicon.com/wcjauznf.json"

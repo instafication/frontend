@@ -1,4 +1,4 @@
-import { generateRandomUUID } from '$lib/Inbox/Utils';
+import { generateRandomUUID } from '../../Inbox/Utils';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 

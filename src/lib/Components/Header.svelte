@@ -1,16 +1,12 @@
 <script lang="ts">
+
     import { Navbar, NavBrand, NavHamburger, NavUl, NavLi, Button} from 'flowbite-svelte'
-    import ModalLogin from './Modal/ModalLogin.svelte'
-    import ModalRegister from './Modal/ModalRegister.svelte'
-
-
-let showLoginModal = false;
-let showRegisterModal = false;
+    import { showLoginModal, showRegisterModal } from '$lib/sharedStore'
 
 </script>
 
-<ModalLogin bind:showLoginModal />
-<ModalRegister bind:showRegisterModal/>
+<!-- <ModalLogin bind:showLoginModal />
+<ModalRegister bind:showRegisterModal/> -->
 
 <Navbar let:hidden let:toggle>
   <NavBrand href="/">
@@ -39,7 +35,7 @@ let showRegisterModal = false;
     <NavHamburger on:click={toggle} />
 
   <NavUl {hidden} class="order-1">
-    <NavLi href="#" on:click="{() => showLoginModal = true}"><Button color="alternative">
+    <NavLi href="#" on:click="{() => $showLoginModal = true}"><Button color="alternative">
       Logga in 
       <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
 <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
@@ -52,7 +48,7 @@ let showRegisterModal = false;
     style="width:32px;height:32px">
 </lord-icon>
     </Button></NavLi>
-    <NavLi href="#" on:click="{() => showRegisterModal = true}"><Button>
+    <NavLi href="#" on:click="{() => $showRegisterModal = true}"><Button>
       Registrera
 <lord-icon
     src="https://cdn.lordicon.com/wcjauznf.json"

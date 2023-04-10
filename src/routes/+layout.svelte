@@ -1,12 +1,18 @@
 <script lang="ts">
 
   import "../app.postcss";
-  import HeaderLoggedIn from '$lib/Components/ToolbarLoggedIn.svelte';
-  import Header from '$lib/Components/Header.svelte';
-  import Footer from '$lib/Components/Footer.svelte';
-	import { getUserId, isLoggedIn, supabase } from "../lib/Managers/AuthManager";
+  import { getUserId, isLoggedIn, supabase } from "$lib/Managers/AuthManager";
 	import { trpc } from "$lib/trpc/client";
   import { onMount } from 'svelte';
+
+  import HeaderLoggedIn from '$lib/Components/HeaderLoggedIn.svelte';
+  import Header from '$lib/Components/Header.svelte';
+  import Footer from '$lib/Components/Footer.svelte';
+  import ModalLogin from "$lib/Components/Modal/ModalLogin.svelte";
+  import ModalLostPassword from "$lib/Components/Modal/ModalLostPassword.svelte";
+  import ModalServices from "$lib/Components/Modal/ModalServices.svelte";
+  import ModalRegister from "$lib/Components/Modal/ModalRegister.svelte";
+  import ProfileSettingsModal from "$lib/Components/Modal/Profile/ProfileSettingsModal.svelte";
 
 
   let lastAuthStatus = "";
@@ -16,9 +22,7 @@
     userLoggedIn = await isLoggedIn();
   })
 
-
-
-supabase.auth.onAuthStateChange(async (event, session) => {
+  supabase.auth.onAuthStateChange(async (event, session) => {
       
     lastAuthStatus = event;
     lastSession = session;
@@ -32,25 +36,18 @@ supabase.auth.onAuthStateChange(async (event, session) => {
     } else if (event == 'SIGNED_IN') {
       console.log('SIGNED_IN', session)
       userLoggedIn = true;
-    } else if (event == 'USER_UPDATED') {
-      console.log('USER_UPDATED', session)
-    } else if (event == 'PASSWORD_RECOVERY') {
-      console.log('PASSWORD_RECOVERY', session)
-    } else if (event == 'PASSWORD_RESET') {
-      console.log('PASSWORD_RESET', session)
-    } else if (event == 'USER_DELETED') {
-      console.log('USER_DELETED', session)
-    } else if (event == 'PROFILE_UPDATED') {
-      console.log('PROFILE_UPDATED', session)
-    } else if (event == 'EMAIL_VERIFIED') {
-      console.log('EMAIL_VERIFIED', session)
     }
+    
   })
 
-
-
-
 </script>
+
+
+<ModalLogin/>
+<ModalRegister/>
+<ModalLostPassword/>
+<ModalServices/>
+<ProfileSettingsModal/>
 
 
 {#if userLoggedIn}

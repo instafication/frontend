@@ -1,8 +1,8 @@
 <script lang="ts">
-	import {getLatestNotifications } from '$lib/Managers/NotificationManager';
+	
+  import {getLatestNotifications } from '$lib/Managers/NotificationManager';
   import {Dropdown, DropdownItem, MenuButton } from 'flowbite-svelte'
 
-  
 </script>
 
 <MenuButton class="dots-menu dark:text-white" vertical />
