@@ -8,5 +8,4 @@ export let showLostPasswordModal = writable<boolean>(false);
 export let showProfileSettingsModal = writable<boolean>(false);
 
 export let userLoggedIn = writable<boolean>(false);
-
-export let selectedLanguage = writable<string>("sv");
+export let selectedLanguage = writable<string>("");
