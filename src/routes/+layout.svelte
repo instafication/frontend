@@ -20,7 +20,7 @@
   let lastSession = null;
 
   onMount(async () => {
-    selectedLanguage.set($page.data.language);
+    //selectedLanguage.set($page.data.language);
     $userLoggedIn = await isLoggedIn();
   })
 

@@ -42,30 +42,30 @@
 
 
 
-import fetch from 'node-fetch';
-import { selectedLanguage } from '$lib/sharedStore';
+// import fetch from 'node-fetch';
+// import { selectedLanguage } from '$lib/sharedStore';
 
-/** @type {import('@sveltejs/kit').Handle} */
-export async function handle({ event, resolve }) {
+// /** @type {import('@sveltejs/kit').Handle} */
+// export async function handle({ event, resolve }) {
 
 
-    if (!event.cookies.get("language")) {
+//     if (!event.cookies.get("language")) {
 
-        const ip = event.getClientAddress();
-        const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,countryCode`);
-        const data = await res.json();
+//         const ip = event.getClientAddress();
+//         const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,countryCode`);
+//         const data = await res.json();
 
-        if (data.status === 'success') {
-            const language = data.countryCode === 'SE' ? 'sv' : 'en';
-            selectedLanguage.set(language);
-            event.cookies.set("language", language, { path: "/" })
-        } else {
-            selectedLanguage.set("sv"); // Default swedish language
-            event.cookies.set("language", "sv", { path: "/" })
-        }
+//         if (data.status === 'success') {
+//             const language = data.countryCode === 'SE' ? 'sv' : 'en';
+//             selectedLanguage.set(language);
+//             event.cookies.set("language", language, { path: "/" })
+//         } else {
+//             selectedLanguage.set("sv"); // Default swedish language
+//             event.cookies.set("language", "sv", { path: "/" })
+//         }
 
-    }
+//     }
 
-    const response = await resolve(event);
-    return response;
-} 
+//     const response = await resolve(event);
+//     return response;
+// } 
