@@ -3,8 +3,8 @@
   import "../app.postcss";
   import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
   import { onMount } from 'svelte';
-  import { userLoggedIn } from '$lib/sharedStore';
-
+  import { selectedLanguage, userLoggedIn } from '$lib/sharedStore';
+  import { page } from '$app/stores';
   import HeaderLoggedIn from '$lib/Components/HeaderLoggedIn.svelte';
   import Header from '$lib/Components/Header.svelte';
   import Footer from '$lib/Components/Footer.svelte';
@@ -13,12 +13,14 @@
   import ModalServices from "$lib/Components/Modal/ModalServices.svelte";
   import ModalRegister from "$lib/Components/Modal/ModalRegister.svelte";
   import ProfileSettingsModal from "$lib/Components/Modal/Profile/ProfileSettingsModal.svelte";
+  import type { RequestEvent } from "@sveltejs/kit";
 
 
   let lastAuthStatus = "";
   let lastSession = null;
 
   onMount(async () => {
+    selectedLanguage.set($page.data.language);
     $userLoggedIn = await isLoggedIn();
   })
 
