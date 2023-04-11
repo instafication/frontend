@@ -1,6 +1,7 @@
 <script>
   import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
   import { showServicesModal, showLoginModal, userLoggedIn } from "$lib/sharedStore";
+  import { t } from "$lib/i18n";
 
    let list = [
     {
@@ -8,15 +9,15 @@
       name: "Stockholms Studentbostäder",
       status: "Aktiv: " + Math.floor(Math.random() * 5) + " min sedan sökning",
       active: "green",
-      services: ["Tvättid"]
+      services: [$t("laundry")]
     },
 
     {
       img: { src: "/images/hertz-logo.svg", alt: "Hertz" },
       name: "Hertz Freerider",
-      status: "Inaktiv: Kommer inom kort",
+      status: $t("status_inactive"),
       active: "",
-      services: ["Hyrbilar"]
+      services: [$t("rental_cars")]
     },
   ];
 
@@ -32,7 +33,7 @@
         delay="4000"
         style="width:64px;height:64px">
     </lord-icon>
-    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Företag vi tar pulsen på</h5>
+    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">{$t("pulse")}</h5>
   </div>
 
   <Listgroup items={list} let:item class="border-1 p-2 dark:!bg-transparent" on:click={() => {

@@ -51,5 +51,8 @@
     "vite": "latest",
     "wrangler": "latest",
     "zod": "latest"
+  },
+  "devDependencies": {
+    "svelte-flags": "^0.4.1"
   }
 }

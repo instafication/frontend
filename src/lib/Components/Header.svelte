@@ -1,7 +1,9 @@
 <script lang="ts">
 
-    import { Navbar, NavBrand, NavHamburger, NavUl, NavLi, Button} from 'flowbite-svelte'
-    import { showLoginModal, showRegisterModal } from '$lib/sharedStore'
+  import { Navbar, NavBrand, NavHamburger, NavUl, NavLi, Button} from 'flowbite-svelte'
+  import { showLoginModal, showRegisterModal } from '$lib/sharedStore'
+  import LanguageSelector from './LanguageSelector.svelte';
+  import { t } from '$lib/i18n';
 
 </script>
 
@@ -35,30 +37,44 @@
     <NavHamburger on:click={toggle} />
 
   <NavUl {hidden} class="order-1">
-    <NavLi href="#" on:click="{() => $showLoginModal = true}"><Button color="alternative">
-      Logga in 
+    <NavLi href="#" on:click="{() => $showLoginModal = true}">
+      <Button color="alternative">
+		      <lord-icon
+          src="https://cdn.lordicon.com/rqqkvjqf.json"
+          trigger="hover"
+          colors="primary:#121331,secondary:#12133"
+          stroke="40"
+          scale="40"
+          style="width:32px;height:32px">
+      </lord-icon>
+      {$t("log_in")}
       <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
-<script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
-<lord-icon
-    src="https://cdn.lordicon.com/rqqkvjqf.json"
-    trigger="hover"
-    colors="primary:#121331,secondary:#12133"
-    stroke="40"
-    scale="40"
-    style="width:32px;height:32px">
-</lord-icon>
-    </Button></NavLi>
-    <NavLi href="#" on:click="{() => $showRegisterModal = true}"><Button>
-      Registrera
-<lord-icon
-    src="https://cdn.lordicon.com/wcjauznf.json"
-    trigger="hover"
-    colors="primary:#FFF,secondary:#FFF"
-    stroke="50"
-    scale="40"
-    style="width:32px;height:32px">
-</lord-icon>
-    </Button></NavLi>
-    <!-- <Button size="sm">Registrera</Button> -->
+      <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    </Button>
+  </NavLi>
+
+
+
+  <NavLi href="#" on:click="{() => $showRegisterModal = true}">
+    <Button>
+			    <lord-icon
+          src="https://cdn.lordicon.com/wcjauznf.json"
+          trigger="hover"
+          colors="primary:#FFF,secondary:#FFF"
+          stroke="50"
+          scale="40"
+          style="width:32px;height:32px">
+      </lord-icon>
+      {$t('register')}
+	</Button>
+  </NavLi>
+
+
+	<NavLi href="#" class="divide-y">
+		<LanguageSelector/>
+	</NavLi>
+
+
   </NavUl>
+
 </Navbar>
