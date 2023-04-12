@@ -88,7 +88,7 @@ export class DatabaseManager {
       const userObj = await prisma.profiles.findUnique({
         where: { phone },
       });
-      console.log("Credits: " + userObj?.credits)
+      console.log(`Credits: ${userObj?.credits}`)
       return userObj?.credits || -1;
     }
 
@@ -166,7 +166,7 @@ export class DatabaseManager {
     public static async createUserByEmail(email: string): Promise<boolean> {
 
 
-      console.log("[DatabaseManager] Creating user with email: " + email);
+      console.log(`[DatabaseManager] Creating user with email: ${email}`);
 
       const hasCreated = await prisma.profiles.create({
         data: {
@@ -259,7 +259,7 @@ export class DatabaseManager {
 
 
     public static async createNotification({ id = "", title = "", body = "", area = "", date = "" }: { id?: string, title?: string, body?: string, area?: string, date?: string }) {
-      if (id == "")
+      if (id === "")
         id = generateRandomUUID();
 
       const r = await prisma.notifications.create({
@@ -270,7 +270,7 @@ export class DatabaseManager {
           area: area
         },
       });
-      console.log("[Databasemanager] Created notification: " + r);
+      console.log(`[Databasemanager] Created notification: ${r}`);
       return r !== null;
     };
 
@@ -383,7 +383,7 @@ export class DatabaseManager {
             options: options,
           },
         });
-        console.log("[Databasemanager] Updated service: " + r);
+        console.log(`[Databasemanager] Updated service: ${r}`);
       }
 
       return r !== null;
@@ -407,7 +407,7 @@ export class DatabaseManager {
       //     options: options,
       //   },
       // });
-      console.log("[Databasemanager] Upserted service: " + r);
+      console.log(`[Databasemanager] Upserted service: ${r}`);
       return r !== null;
     }
   }

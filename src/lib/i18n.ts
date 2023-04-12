@@ -4,7 +4,7 @@ import { selectedLanguage } from "$lib/sharedStore";
 
 export const locales = Object.keys(translations);
 
-function translate(selectedLanguage: string, key: string, vars: any) {
+function translate(selectedLanguage: string, key: string, vars) {
     // Let's throw some errors if we're trying to use keys/locales that don't exist.
     // We could improve this by using Typescript and/or fallback values.
     if (!key) throw new Error("no key provided to $t()");

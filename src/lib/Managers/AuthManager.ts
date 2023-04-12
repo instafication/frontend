@@ -36,7 +36,7 @@ async function signUp(email: string, password: string) {
 
 	if (!error) {
 		const hasSent = await SendEmailWhenUserIsCreated(email, "");
-		console.log("Sent: " + hasSent);
+		console.log(`Sent: ${hasSent}`);
 		console.log(data);
 	} else {
 		alert(error);
@@ -58,9 +58,9 @@ async function signInWithPassword(email: string, password: string) {
 
 async function signInWithOAuth(provider: Provider = "google") {
 	try {
-		console.log("Started login with provider: " + provider);
+		console.log(`Started login with provider: ${provider}`);
 		const r = await supabase.auth.signInWithOAuth({ provider: provider });
-		console.log("Logged in: " + r);
+		console.log(`Logged in: ${r}`);
 	} catch (error) {
 		alert(error);
 	}

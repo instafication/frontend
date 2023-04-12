@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
 
-export let showInformationModal = writable<boolean>(false);
-export let showLoginModal = writable<boolean>(false);
-export let showRegisterModal = writable<boolean>(false);
-export let showServicesModal = writable<boolean>(false);
-export let showLostPasswordModal = writable<boolean>(false);
-export let showProfileSettingsModal = writable<boolean>(false);
+export const showInformationModal = writable<boolean>(false);
+export const showLoginModal = writable<boolean>(false);
+export const showRegisterModal = writable<boolean>(false);
+export const showServicesModal = writable<boolean>(false);
+export const showLostPasswordModal = writable<boolean>(false);
+export const showProfileSettingsModal = writable<boolean>(false);
 
-export let userLoggedIn = writable<boolean>(false);
-export let selectedLanguage = writable<string>("sv");
+export const userLoggedIn = writable<boolean>(false);
+export const selectedLanguage = writable<string>("sv");
