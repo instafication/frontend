@@ -54,6 +54,19 @@ export default {
         "log_in_with_google": "Logga in med Google",
         "not_registered": "Inte registrerad?",
 
+        // Lost password modal
+        "lost_password_reset_password": "Återställ ditt lösenord",
+        "lost_password_your_email": "Din email",
+        "lost_password_email_placeholder": "e.x. namn@gmail.com",
+        "lost_password_reset_password_button": "Återställ lösenordet!",
+
+        // Profile settings modal:
+        "profile_settings": "Inställningar",
+        "profile_your_email": "Din e-post",
+        "profile_email_placeholder": "exempel@exempel.com",
+        "profile_your_phone_number": "Ditt telefonnummer",
+        "profile_save_changes": "Spara ändringar",
+
     },
     en: {
         "get_started_in_30_seconds": "Get started in 30 seconds",
@@ -110,7 +123,18 @@ export default {
         "log_in_with_google": "Log in with Google",
         "not_registered": "Not registered?",
 
+        // Lost Password Modal:
+        "lost_password_reset_password": "Reset your password",
+        "lost_password_your_email": "Your email",
+        "lost_password_email_placeholder": "e.g. name@gmail.com",
+        "lost_password_reset_password_button": "Reset password!",
 
+        // Profile settings modal:
+        "profile_settings": "Settings",
+        "profile_your_email": "Your Email",
+        "profile_email_placeholder": "example@example.com",
+        "profile_your_phone_number": "Your Phone Number",
+        "profile_save_changes": "Save Changes",
 
     },
 
