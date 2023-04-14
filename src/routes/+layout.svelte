@@ -29,14 +29,12 @@
     lastAuthStatus = event;
     lastSession = session;
 
-    console.log("event", event)
-    console.log("session", session);
+    //console.log("event", event)
+    //console.log("session", session);
 
     if (event == 'SIGNED_OUT') {
-      console.log('SIGNED_OUT', session)
       $userLoggedIn = false;
     } else if (event == 'SIGNED_IN') {
-      console.log('SIGNED_IN', session)
       $userLoggedIn = true;
     }
     

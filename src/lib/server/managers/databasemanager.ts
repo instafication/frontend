@@ -232,6 +232,25 @@ export class DatabaseManager {
         data: { subscription_expiration_date: futureTimestamp.toString(), credits: 500 },
       });
       return hasProlonged !== null;
+
+    }
+
+    public static async RefillByEmail(email: string, credits: number): Promise<boolean> {
+
+      const user = await prisma.profiles.findUnique({
+        where: { email },
+      });
+
+      if (user == null || user.credits == null) {
+        return false;
+      }
+
+      const refilled = await prisma.profiles.update({
+        where: { email },
+        data: { credits: user.credits + 2 },
+      });
+      return refilled !== null;
+
     }
 
 

@@ -39,40 +39,74 @@ class RandomEmailGenerator {
 }
 
 
-async function prolong(invoice: Stripe.Invoice): Promise<boolean> {
+async function prolong(email: string): Promise<boolean> {
 
-    //intent.email = "martin.pa.jakobsson@icloud.com";
-    //intent.email = RandomEmailGenerator.generateEmail();
-    //console.log(`🔔 Webhook received: ${intent.object} ${intent.status}!`);
-    //console.log('💰 Payment captured!');
-    //console.log(intent);
 
-    if (invoice.customer_email !== null) {
+    if (email !== null) {
 
-        const email: string = invoice.customer_email;
+        console.log("👤 [prolong] Email found: ", email);
+        console.log("✅ [prolong] Product purchased: premium");
 
-        console.log("👤 Email found: ", email);
-        console.log("✅ Product purchased: ", invoice.lines.data[0].description);
-
-        const userCreated: boolean = await signUp(email, "Sweden2023!!", true)
+        const userCreated: boolean = await signUp(email, email, true)
         if (!userCreated) {
 
             const prolonged: boolean = await DatabaseManager.Profiles.ProlongSubscriptionByEmail(email, 30);
             if (prolonged) {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Din prenumeration är nu förlängd!", "Hej, din prenumeration har nu förlängts med 30 dagar!");
-                console.log("📧 Email sent: ", emailSent);
-                console.log(`✅ ${email} subscription has been prolonged: ${prolonged}`);
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Din prenumeration är nu förlängd! 🎉", "Hej, din prenumeration har nu förlängts med 30 dagar!");
+                console.log("📧 [prolong]Email sent: ", emailSent);
+                console.log(`✅ [prolong] ${email} has been prolonged: ${prolonged}`);
             } else {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Din prenumeration går inte förlänga", "Hej, din prenumeration går inte förlängas. Vänligen kontakta oss på: hej@blinksms.se eller i Discord-kanalen för att komma vidare.");
-                console.log("📧 Email sent: ", emailSent);
-                console.log("❌ User subscription could not be prolonged: ", email);
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Din prenumeration går inte förlänga 📞", "Hej, din prenumeration går inte förlängas. Vänligen kontakta oss på: hej@blinksms.se eller i Discord-kanalen för att komma vidare.");
+                console.log("📧 [prolong] Email sent: ", emailSent);
+                console.log("❌ [prolong] User subscription could not be prolonged: ", email);
                 return false;
             }
 
         } else {
             console.log("✅ New premium account has been created: ", email);
             const emailSent: boolean = await SendEmailWhenUserIsCreated(email, "Välkommen till Blinksms premium! 🎉", "Välkommen till Blinksms premium. Du kan nu logga in med samma email som du använde vid betalning. Lösenordet är detsamma som din email.");
-            console.log("📧 Email sent: ", emailSent);
+            console.log("📧 [prolong]Email sent: ", emailSent);
+        }
+
+    } else {
+        console.error('❌ [prolong] Email is null');
+        return false;
+    }
+
+    return true;
+}
+async function refill(email: string): Promise<boolean> {
+
+    //intent.email = "martin.pa.jakobsson@icloud.com";
+    //intent.email = RandomEmailGenerator.generateEmail();
+    //console.log(`🔔 Webhook received: ${intent.object} ${intent.status}!`);
+    //console.log('💰 Payment captured!');
+   // console.log(intent);
+
+    if (email !== null) {
+
+        console.log("👤 Email found: ", email);
+        console.log("✅ Product purchased: credits");
+
+        const userCreated: boolean = await signUp(email, email, true)
+        if (!userCreated) {
+
+            const refilled: boolean = await DatabaseManager.Profiles.RefillByEmail(email, 2);
+            if (refilled) {
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Ditt konto har laddats på! 💰", "Hej, ditt konto har nu laddats på med två krediter som du direkt kan använda för notifikationer.");
+                console.log("📧 [refilled] Email sent: ", emailSent);
+                console.log(`✅ [refilled] ${email} has been refilled: ${refilled}`);
+            } else {
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Ditt konto går inte ladda på", "Hej, ditt konto går inte ladda på med nya krediter. Vänligen kontakta oss på: hej@blinksms.se eller i Discord-kanalen för att komma vidare.");
+                console.log("📧 [refilled] Email sent: ", emailSent);
+                console.log("❌ [refilled] User account could not be refilled: ", email);
+                return false;
+            }
+
+        } else {
+            console.log("✅ [refilled] New account has been created and refilled: ", email);
+            const emailSent: boolean = await SendEmailWhenUserIsCreated(email, "Välkommen till Blinksms! 🎉", "Välkommen till Blinksms. Du kan nu logga in med samma email som du använde vid betalning. Lösenordet är detsamma som din email.");
+            console.log("📧 [refilled] Email sent: ", emailSent);
         }
 
     } else {
@@ -81,43 +115,6 @@ async function prolong(invoice: Stripe.Invoice): Promise<boolean> {
     }
 
     return true;
-}
-async function refill(intent: Stripe.PaymentIntent): Promise<boolean> {
-
-    //intent.email = "martin.pa.jakobsson@icloud.com";
-    //intent.email = RandomEmailGenerator.generateEmail();
-    console.log(`🔔 Webhook received: ${intent.object} ${intent.status}!`);
-    console.log('💰 Payment captured!');
-    console.log(intent);
-
-    if (intent.customer_details.email !== null) {
-
-        console.log("👤 Email found: ", intent.customer_details.email);
-        console.log("[+] Product purchased: ", intent.metadata.plan);
-        console.log(intent);
-
-        const userCreated: boolean = await signUp(intent.customer_details.email, "Sweden2023!!", true)
-        if (!userCreated) {
-
-            const prolonged: boolean = await DatabaseManager.Profiles.ProlongSubscriptionByEmail(intent.customer_details.email, 30);
-            console.log("📝 User subscription has been prolonged 30 days from now: ", prolonged);
-            if (prolonged) {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(intent.customer_details.email, "Blinksms – Välkommen till Premium!", "Hej, premium har nu aktiveras för ditt konto. Du har nu 30 dagar på dig att testa tjänsten. Om du inte vill fortsätta med tjänsten så kommer din prenumeration att avslutas automatiskt efter 30 dagar. Du kan alltid välja att avsluta prenumerationen tidigare genom att logga in på ditt konto och avsluta prenumerationen. Om du vill fortsätta med tjänsten så behöver du inte göra något. Din prenumeration kommer att förlängas automatiskt efter 30 dagar. Du kommer då få en ny faktura på ditt konto. Du kan alltid välja att avsluta prenumerationen genom att logga in på ditt konto och avsluta prenumerationen.");
-                console.log("📧 Email sent: ", emailSent);
-
-            } else {
-                console.log("📧 User subscription could not be prolonged: ", intent.customer_details.email);
-            }
-
-        } else {
-            console.log("📧 New premium account has been created: ", intent.customer_details.email);
-        }
-
-
-
-    } else {
-        console.error('Email not found in PaymentIntent');
-    }
 }
 
 
@@ -152,33 +149,56 @@ export async function POST({ request }) {
     if (eventType === 'checkout.session.completed') {
 
         intent = data.object as Stripe.PaymentIntent;
-
-        //console.log(intent);
+        const email: string = intent.customer_details.email;
         console.log(`✅ ${intent.customer_details.name, intent.customer_details.email} paid ${intent.amount_total / 100} sek for: ${intent.metadata.plan}!`);
 
         if (intent.metadata.plan === "basic") {
-            //refill(intent);
+
+            const refilled: boolean = await refill(email);
+            if (refilled) {
+                console.log(`✅ [invoice.paid] ${email} refilled, paid with ${intent.payment_method_types[0]}`);
+            } else {
+                console.log(`❌ [invoice.paid] ${email} could not be refilled, paid with ${intent.payment_method_types[0]}`);
+            }
+
         } else if (intent.metadata.plan === "premium") {
-            //prolong(intent);
+
+            const prolonged: boolean = await prolong(email);
+            if (prolonged) {
+                console.log(`✅ [invoice.paid'] ${email} prolonged, paid with ${intent.payment_method_types[0]}`);
+            } else {
+                console.log(`❌ [invoice.paid'] ${email} could not be prolonged, paid with ${intent.payment_method_types[0]}`);
+            }
+
         } else {
-            console.log("❌ Unknown metadata plan: ", intent.metadata.plan);
+            console.log("❌ [checkout.session.completed] Unknown metadata plan: ", intent.metadata.plan);
         }
 
     } else if (eventType === 'invoice.paid') {
 
         const invoice = data.object as Stripe.Invoice;
+        const email: string = invoice.customer_email;
         console.log("💰 [invoice.paid'] Subscription renewal paid for: ", invoice.lines.data[0].plan?.product);
-        //console.log(invoice);
-        // Make sure its the correct product (start of free trail).
+
+        console.log(invoice);
         //prod_NhwXD5rubTmHMw === Basic
         //prod_NhZ5sps4EIDyae === Premium
         if (invoice.lines.data[0].plan?.product === "prod_NhZ5sps4EIDyae") {
 
-            const prolonged: boolean = await prolong(invoice);
+            const prolonged: boolean = await prolong(email);
             if (prolonged) {
-                console.log("✅ [invoice.paid'] Subscription prolonged for: ", invoice.lines.data[0].plan?.product);
+                console.log(`✅ [invoice.paid'] ${email} prolonged`);
             } else {
-                console.log("❌ [invoice.paid'] Subscription could not be prolonged");
+                console.log(`❌ [invoice.paid'] ${email} could not be prolonged`);
+            }
+
+        } else if (invoice.lines.data[0].plan?.product === "prod_NhwXD5rubTmHMw") {
+
+            const refilled: boolean = await refill(email);
+            if (refilled) {
+                console.log(`✅ [invoice.paid] ${email} refilled`);
+            } else {
+                console.log(`❌ [invoice.paid] ${email} could not be refilled`);
             }
 
         } else {
@@ -190,8 +210,8 @@ export async function POST({ request }) {
     } else if (eventType === 'payment_intent.payment_failed') {
 
         intent = data.object as Stripe.PaymentIntent;
-        console.log(`🔔 Webhook received: ${intent.object} ${intent.status}!`);
-        console.log('❌ Payment failed for: ', intent.receipt_email);
+        console.log(`🔔 [payment_intent.payment_failed] Webhook received: ${intent.object} ${intent.status}!`);
+        console.log("❌ [payment_intent.payment_failed] Payment failed for: ", intent.receipt_email);
         return json({ received: false });
 
     } else {
@@ -199,8 +219,6 @@ export async function POST({ request }) {
         intent = data.object as Stripe.PaymentIntent;
         console.log(`❌ Webhook not implemented: ${intent.object} ${intent.status}!`);
         //console.log(intent);
-        // Send email about declined payment
-
     }
 
 
