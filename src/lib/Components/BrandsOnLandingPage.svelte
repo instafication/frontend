@@ -24,7 +24,7 @@
 </script>
 
 
-<Card padding="xl" size="sm" class="border-1 shadow-none bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
+<Card padding="xl" size="sm" class="border-1 rounded-3xl shadow-none bg-slate-0 dark:bg-gray-900 border-gray-200 border">
 
   <div class="flex items-center mb-8">
     <lord-icon

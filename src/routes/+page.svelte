@@ -48,7 +48,7 @@
 <section class="bg-white dark:bg-gray-900 w-full grid md:grid-cols-2 grid-rows-1 gap-4 md:content-center md:items-stretch md:justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
     
 
-    <section id="brands" class=" bg-slate-0 dark:bg-gray-900 border-gray-200  rounded grid grid-rows-1 md:grid-rows-2 gap-4 place-items-start justify-self-center md:justify-self-end">
+    <section id="brands" class=" bg-slate-0  dark:bg-gray-900 border-gray-200 grid grid-rows-1 md:grid-rows-2 gap-4 place-items-start justify-self-center md:justify-self-end">
 
         <CardWithList>
 
@@ -65,7 +65,7 @@
 
     </section>
 
-    <section id="timeline" class="bg-white dark:bg-gray-900 bg-slate-0 border-gray-200  place-items-start justify-self-center md:justify-self-start">
+    <section id="timeline" class="bg-white dark:bg-gray-900 bg-slate-0 border-gray-200 place-items-start justify-self-center md:justify-self-start">
 
         <div class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <!-- <div class="flex items-center mb-8">
@@ -123,13 +123,14 @@
 </section>
 
 
-<section class="bg-white dark:bg-gray-900 w-full grid md:grid-cols-3 grid-rows-1 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
-    <!-- <section class="w-full col-span-3 h-0 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+<section class="bg-white dark:bg-gray-900 w-full grid md:grid-cols-3 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+
+    <!-- <section class="w-full col-span-all text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
         Kom igång inom 30 sekunder!
     </section> -->
 
-    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
+    <section class="bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded-3xl">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -152,7 +153,7 @@
     </section>
 
 
-    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
+    <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded-3xl">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">
@@ -173,7 +174,7 @@
         </div>
     </section>
 
-        <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded">
+        <section class=" bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded-3xl">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
             <div class="max-w-screen-md mb-8 lg:mb-16">

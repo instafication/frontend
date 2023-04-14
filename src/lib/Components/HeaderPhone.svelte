@@ -39,7 +39,7 @@
 
         </div> -->
 
-        <h1 class="mt-10 max-w-lg text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">{$t("header_title")}</h1>
+        <h1 class="mt-10 max-w-lg text-6xl font-bold tracking-tight text-gray-900 sm:text-6xl">{$t("header_title")}</h1>
         <p class="mt-6 text-lg leading-8 text-gray-600">
           {$t("header_body")}
         </p>
