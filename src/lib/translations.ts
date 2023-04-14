@@ -1,5 +1,20 @@
 export default {
     sv: {
+        // FAQ
+        "FAQ_TITLE": "Vanliga frågor",
+        "FAQ_Q1": "Vad är Blinksms?",
+        "FAQ_Q2": "Vilka företags stöds av Blinksms?",
+        "FAQ_Q3": "Hur använder jag tjänsten?",
+        "FAQ_Q4": "Vad kostar det?",
+        "FAQ_Q5": "Hur kontaktar jag er?",
+
+        "FAQ_A1": "Blinksms är en tjänst som skickar notiser via e-post när en tvättid blir tillgänglig. Vi bevakar ständigt tvättider åt dig och meddelar dig så snart en tid blir tillgänglig.",
+        "FAQ_A2": "För nuvarande så söker vi endast hos Stockholms Studentbostäder (SSSB) efter tvättider.",
+        "FAQ_A3": "Genom att klicka på 'Kom igång' högst upp. Då får du 30 dagar test gratis. Det går alltid avbryta innan 30 dagar har passerat.",
+        "FAQ_A4": "Alternativ 1: Gratis i 30 dagar. Därefter betalning på 19kr/månad för att få oändligt antal notiser. Alternativ 2: 9kr för att köpa 2 notiser. Du kan helt kostnadsfritt skapa ett konto via knappen uppe i menyraden 'Skapa ett konto', eller direkt logga in med ditt Google-konto genom att klicka på Logga in i högra hörnet i menyraden.",
+        "FAQ_A5": "Ni kan kontakta oss via email hej@blinksms.se eller gå med i vår Discord-kanal via: https://discord.gg/SvWJAc4RNB.",
+
+
         // Overall:
         "month": "månad",
 
@@ -28,7 +43,6 @@ export default {
         "pricing_modal_premium_body_point3": "Prioriterad kundtjänst",
         "pricing_modal_premium_body_point4": "Tillgång till nya funktioner tidigare",
         "pricing_modal_premium_button": "Testa gratis i 30 dagar",
-
 
 
         "get_started_in_30_seconds": "Kom igång inom 30 sekunder",
@@ -100,6 +114,22 @@ export default {
 
     },
     en: {
+
+        // FAQ
+        "FAQ_TITLE": "Frequently asked questions",
+        "FAQ_Q1": "What is Blinksms?",
+        "FAQ_Q2": "Which companies are supported by Blinksms?",
+        "FAQ_Q3": "How do I use the service?",
+        "FAQ_Q4": "What does it cost?",
+        "FAQ_Q5": "How do I contact you?",
+
+        "FAQ_A1": "Blinksms is a service that sends notifications via email when a laundry time becomes available. We constantly monitor laundry times for you and notify you as soon as a time becomes available.",
+        "FAQ_A2": "Currently, we only search for laundry times at Stockholm Student Housing (SSSB).",
+        "FAQ_A3": "By clicking 'Get started' at the top. Then you get 30 days of free testing. It's always possible to cancel before 30 days have passed.",
+        "FAQ_A4": "Option 1: Free for 30 days. Then payment of 19 SEK/month for unlimited notifications. Option 2: 9 SEK to buy 2 notifications. You can create an account for free via the 'Create an account' button in the menu bar, or log in directly with your Google account by clicking on 'Log in' in the upper right corner of the menu bar.",
+        "FAQ_A5": "You can contact us via email at hej@blinksms.se or join our Discord channel at: https://discord.gg/SvWJAc4RNB.",
+
+
         // Overall:
         "month": "month",
 

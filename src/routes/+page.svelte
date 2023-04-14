@@ -8,6 +8,7 @@
     import { t } from "$lib/i18n";
     import PriceSection from '$lib/Components/PriceSection.svelte';
     import HeaderPhone from '$lib/Components/HeaderPhone.svelte';
+    import FAQ from '$lib/Components/FAQ.svelte';
 
 </script>
 
@@ -119,6 +120,15 @@
 <section class="bg-white dark:bg-gray-900 w-full grid md:grid-cols-1 grid-rows-1 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
     
     <PriceSection/>
+
+</section>
+
+
+
+<section class="bg-white dark:bg-gray-900 w-full content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+
+    
+    <FAQ/>
 
 </section>
 
