@@ -16,8 +16,9 @@ model profiles {
   email              String?  @unique
   name               String?
   phone              String?  @unique
-  credits            Int?     @default(15)
-  raw_user_meta_data Json?    @default("{}")
+  credits            Int?     @default(5)
+  subscription_expiration_date String?
+  raw_user_meta_data Json? 
 
   @@schema("public")
 }

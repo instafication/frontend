@@ -1,6 +1,6 @@
-import { createClient, type Provider } from '@supabase/supabase-js'
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
-import { SendEmailWhenUserIsCreated } from './EmailManager'
+import { createClient, type Provider } from '@supabase/supabase-js';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
+import { SendEmailWhenUserIsCreated } from './EmailManager';
 
 
 const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
@@ -25,22 +25,35 @@ async function isLoggedIn(): Promise<boolean> {
 }
 
 
-async function signUp(email: string, password: string) {
+async function signUp(email: string, password: string, isPremium: boolean = false): Promise<boolean> {
 
-	const { data, error } = await supabase.auth.signUp(
-		{
-			email: email,
-			password: password,
-		});
-		
+	let params = {};
+	let mailSubject: string = "Välkommen till Blinksms! 👋";
 
-	if (!error) {
-		const hasSent = await SendEmailWhenUserIsCreated(email, "");
-		console.log(`Sent: ${hasSent}`);
-		console.log(data);
+	if (isPremium) {
+		mailSubject = "Välkommen till Blinksms Premium! 👋";
+		params = {
+			credits: 500,
+			subscription_expiration_date: Date.now().toString(),
+		};
 	} else {
-		alert(error);
+		params = {
+			credits: 5,
+		};
 	}
+
+
+	const { data, error } = await supabase.auth.signUp({
+		email: email,
+		password: password,
+		options: {
+			"data": params
+		},
+	});
+
+	if (error) return false;
+
+	return true;
 
 };
 

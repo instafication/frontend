@@ -1,4 +1,5 @@
 import { generateRandomUUID } from '../../Inbox/Utils';
+import { supabase, signUp } from "$lib/Managers/AuthManager";
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -162,20 +163,30 @@ export class DatabaseManager {
 
     }
 
+    // public static async createFreeUserByEmail(email: string): Promise<boolean> {
+    //   console.log(`[DatabaseManager] createFreeUserByEmail with email: ${email}`);
 
-    public static async createUserByEmail(email: string): Promise<boolean> {
+    //   const hasCreated = await prisma.profiles.create({
+    //     data: {
+    //       id: generateRandomUUID(),
+    //       email: email,
+    //     },
+    //   });
+    //   return hasCreated !== null;
+    // }
 
+    // public static async createPaidUserByEmail(email: string, datePaid: string): Promise<boolean> {
+    //   console.log(`[DatabaseManager] createPaidUserByEmail with email: ${email}`);
 
-      console.log(`[DatabaseManager] Creating user with email: ${email}`);
-
-      const hasCreated = await prisma.profiles.create({
-        data: {
-          id: generateRandomUUID(),
-          email: email,
-        },
-      });
-      return hasCreated !== null;
-    }
+    //   const hasCreated = await prisma.profiles.create({
+    //     data: {
+    //       id: generateRandomUUID(),
+    //       email: email,
+    //       datePaid: datePaid,
+    //     },
+    //   });
+    //   return hasCreated !== null;
+    // }
 
     public static async removeUser(id: string) {
       await prisma.profiles.delete({
@@ -208,6 +219,21 @@ export class DatabaseManager {
       });
       return success !== null;
     }
+
+
+    public static async ProlongSubscriptionByEmail(email: string, daysToProlong: number): Promise<boolean> {
+
+      const now: Date = new Date();
+      const futureDate: Date = new Date(now.getTime() + daysToProlong * 24 * 60 * 60 * 1000);
+      const futureTimestamp: number = Math.floor(futureDate.getTime() / 1000);
+
+      const hasProlonged = await prisma.profiles.update({
+        where: { email },
+        data: { subscription_expiration_date: futureTimestamp.toString(), credits: 500 },
+      });
+      return hasProlonged !== null;
+    }
+
 
     // public static async getAllActiveUsers() {
     //   return await prisma.profiles.findMany({
