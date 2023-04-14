@@ -1,5 +1,20 @@
 export default {
     sv: {
+
+        // COFIGURATION SERVICES
+        "SERVICES_TITLE": "Konfigurera tjänster",
+        "SERVICES_OPTION1_TITLE": "Välj notifikation:",
+        "SERVICES_OPTION2_TITLE": "Få notifikation om tid inom:",
+        "SERVICES_OPTION3_TITLE": "Välj område:",
+        "SERVICES_BUTTON1": "Spara ändringarna!",
+
+
+        // HEADER LOGGED IN
+        "HEADER_LOGGEDIN_I1": "Krediter: ",
+        "HEADER_LOGGEDIN_I2": "Tjänster",
+        "HEADER_LOGGEDIN_I3": "Inställningar",
+        "HEADER_LOGGEDIN_I4": "Logga ut",
+
         // FAQ
         "FAQ_TITLE": "Vanliga frågor",
         "FAQ_Q1": "Vad är Blinksms?",
@@ -114,6 +129,20 @@ export default {
 
     },
     en: {
+
+        // CONFIGURATION SERVICES
+        "SERVICES_TITLE": "Configure services",
+        "SERVICES_OPTION1_TITLE": "Choose notification:",
+        "SERVICES_OPTION2_TITLE": "Get notification about time within:",
+        "SERVICES_OPTION3_TITLE": "Choose area:",
+        "SERVICES_BUTTON1": "Save changes!",
+
+
+        // HEADER LOGGED IN
+        "HEADER_LOGGEDIN_I1": "Credits: ",
+        "HEADER_LOGGEDIN_I2": "Services",
+        "HEADER_LOGGEDIN_I3": "Settings",
+        "HEADER_LOGGEDIN_I4": "Sign out",
 
         // FAQ
         "FAQ_TITLE": "Frequently asked questions",

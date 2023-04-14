@@ -1,12 +1,13 @@
 <script lang="ts">
 
-  import { trpc } from '$lib/trpc/client';
-  import { onMount } from 'svelte';
-  import { Navbar,  NavBrand,  Toolbar, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ButtonGroup, Button } from 'flowbite-svelte'
-  import { getUserId, signOut, supabase } from '$lib/Managers/AuthManager';
-  import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
-  import { showServicesModal, showProfileSettingsModal } from "$lib/sharedStore";
-  import LanguageSelector from './LanguageSelector.svelte';
+    import { trpc } from '$lib/trpc/client';
+    import { onMount } from 'svelte';
+    import { Navbar,  NavBrand,  Toolbar, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ButtonGroup, Button } from 'flowbite-svelte'
+    import { getUserId, signOut, supabase } from '$lib/Managers/AuthManager';
+    import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
+    import { showServicesModal, showProfileSettingsModal } from "$lib/sharedStore";
+    import LanguageSelector from './LanguageSelector.svelte';
+    import { t } from '$lib/i18n';
 
   let userId: string = "";
   let email: string = "";
@@ -62,15 +63,15 @@
     
                 <span class="flex text-sm">
                     <!-- <lord-icon class="flex-1" src="https://cdn.lordicon.com/qhviklyi.json" trigger="hover" style="width:32px;height:32px"></lord-icon> -->
-                    <div class="flex-1">Krediter: {credits}</div>
+                    <div class="flex-1">{$t("HEADER_LOGGEDIN_I1")}</div>
                 </span>
 
             </DropdownHeader>
 
-            <DropdownItem on:click={() => $showServicesModal = true}>Tjänster</DropdownItem>
-            <DropdownItem on:click={() => $showProfileSettingsModal = true}>Inställningar</DropdownItem>
+            <DropdownItem on:click={() => $showServicesModal = true}>{$t("HEADER_LOGGEDIN_I2")}</DropdownItem>
+            <DropdownItem on:click={() => $showProfileSettingsModal = true}>{$t("HEADER_LOGGEDIN_I3")}</DropdownItem>
             <DropdownDivider />
-            <DropdownItem on:click={async() => {await signOut()}}>Logga ut</DropdownItem>
+            <DropdownItem on:click={async() => {await signOut()}}>{$t("HEADER_LOGGEDIN_I4")}</DropdownItem>
         </Dropdown>
 
     </div>

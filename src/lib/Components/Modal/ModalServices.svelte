@@ -3,6 +3,7 @@
 	import { Avatar, Badge, Button, Modal, Label, Select } from 'flowbite-svelte';
 	import { createService, getServiceConfiguration } from '$lib/Managers/ServiceManager';
 	import { showServicesModal } from '$lib/sharedStore';
+    import { t } from '$lib/i18n';
 
 
 	interface Service {
@@ -85,7 +86,7 @@
 
 <Modal bind:open={$showServicesModal} size="md">
 
-	<h3 class="text-xl font-medium text-gray-900 dark:text-white">Konfigurera tjänster</h3>
+	<h3 class="text-xl font-medium text-gray-900 dark:text-white">{$t("SERVICES_TITLE")}</h3>
 	
 	<section class="bg-white dark:bg-gray-900 grid md:grid-cols-auto grid-rows-1 gap-4 md:content-center md:items-stretch md:justify-start py-8 px-8 mx-auto max-w-screen-xl">
 		
@@ -123,17 +124,17 @@
 						<form>
 				 
 							<div class="mb-2">
-								<Label>Välj notifikation:</Label>
+								<Label>{$t("SERVICES_OPTION1_TITLE")}</Label>
 								<Select size="sm" class="mt-2" items={Items3} bind:value={SelectedValue3Notification} placeholder={Placeholder3} />  
 							</div>
 
 							<div class="mb-2">
-									<Label>Få notifikation om tid inom:</Label>
+									<Label>{$t("SERVICES_OPTION2_TITLE")}</Label>
 									<Select size="sm" class="mt-2" items={Items2} bind:value={SelectedValue2Within} placeholder={Placeholder2} />
 							</div>
 
 							<div class="mb-2">
-								<Label>Välj område:</Label>
+								<Label>{$t("SERVICES_OPTION3_TITLE")}</Label>
 								<Select size="sm" class="mt-2" items={Items1} bind:value={SelectedValue1Area} placeholder={Placeholder1} />
 							</div>
 
@@ -244,6 +245,7 @@
 			alert("Ändringarna har sparats.");
 		}
 		}}
-		>Spara ändringarna!</Button>
+		>
+		{$t("SERVICES_BUTTON1")}</Button>
 
 </Modal>
