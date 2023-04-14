@@ -237,20 +237,29 @@ export class DatabaseManager {
 
     public static async RefillByEmail(email: string, credits: number): Promise<boolean> {
 
-      const user = await prisma.profiles.findUnique({
-        where: { email },
-      });
+        const user = await prisma.profiles.findUnique({
+            where: { email },
+        });
 
-      if (user == null || user.credits == null) {
-        return false;
-      }
+        let data = {};
 
-      const refilled = await prisma.profiles.update({
-        where: { email },
-        data: { credits: user.credits + 2 },
-      });
-      return refilled !== null;
+        if (user !== null) {
 
+            if (user.credits === null) {
+                data = { credits: credits };
+            } else {
+                data = { credits: user.credits + credits };
+            }
+
+            const refilled = await prisma.profiles.update({
+                where: { email },
+                data: data,
+            });
+
+            return refilled !== null;
+        } else {
+            return false;
+        }
     }
 
 
