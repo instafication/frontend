@@ -76,9 +76,15 @@
             <DropdownItem on:click={() => $showServicesModal = true}>{$t("HEADER_LOGGEDIN_I2")}</DropdownItem>
             <DropdownItem on:click={() => $showProfileSettingsModal = true}>{$t("HEADER_LOGGEDIN_I3")}</DropdownItem>
             <DropdownItem on:click={async() => {
-                const url = await trpc.create_customer_portal_session.query(email)
-                goto(url);
-                }}>Prenumeration</DropdownItem>
+                const url = await trpc.create_customer_portal_session.query(email);
+
+                if (url === "") {
+                    goto("https://buy.stripe.com/test_cN2cQTexF9hke9W6oq");
+                } else {
+                    goto(url);
+                }
+
+            }}>Prenumeration</DropdownItem>
             <DropdownDivider />
             <DropdownItem on:click={async() => {await signOut()}}>{$t("HEADER_LOGGEDIN_I4")}</DropdownItem>
         </Dropdown>

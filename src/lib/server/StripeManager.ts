@@ -30,14 +30,23 @@ async function createPortalByEmail(email: string): Promise<string> {
     const customers = await stripe.customers.search({
         query: `email:'${email}'`,
     });
-    const customerId: string = customers.data[0].id
-    const session = await stripe.billingPortal.sessions.create({
-        customer: customerId,
-        return_url: "https://blinksms.se",
-    });
+
+    if (customers.data.length === 0) {
+
+        return "";
+
+    } else {
+
+        const customerId: string = customers.data[0].id;
+        const session = await stripe.billingPortal.sessions.create({
+            customer: customerId,
+            return_url: "https://blinksms.se",
+        });
+
+        return session.url;
+    }
 
 
-    return session.url;
 }
 
 export { createPortalByEmail };

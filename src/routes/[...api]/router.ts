@@ -36,9 +36,9 @@ export const appRouter = t.router({
 
     create_customer_portal_session: t.procedure
         .input(z.string())
+        .output(z.string())
         .query((async ({ input }) => {
-            const portalUrl = await createPortalByEmail(input);
-            console.log(portalUrl);
+            const portalUrl: string = await createPortalByEmail(input);
             return portalUrl;
         })),
 
