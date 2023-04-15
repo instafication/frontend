@@ -35,7 +35,7 @@ model services {
   @@schema("public")
 }
 
-model scraper {
+model scrapers {
   id          String  @id // Example medicinaren
   company     String? // Example Stockholms Studentbostäder
   last_update BigInt? // Example 1620000000, latest booking time found

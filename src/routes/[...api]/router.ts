@@ -34,6 +34,13 @@ export const appRouter = t.router({
         return res;
     }),
 
+
+    get_all_scrapers: t.procedure.query(async () => {
+        const scrapers = await DatabaseManager.Scrapers.getAllScrapers();
+        return scrapers;
+    }),
+
+
     create_customer_portal_session: t.procedure
         .input(z.string())
         .output(z.string())

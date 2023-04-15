@@ -1,6 +1,7 @@
 <script>
   import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
   import { showServicesModal, showLoginModal, userLoggedIn } from "$lib/sharedStore";
+  import { getAllScrapers } from "$lib/Managers/ScrapingManager";
   import { t } from "$lib/i18n";
 
    let list = [
@@ -20,6 +21,9 @@
       services: [$t("rental_cars")]
     },
   ];
+
+    const scrapers = [getAllScrapers()]
+    console.log(scrapers);
 
 </script>
 

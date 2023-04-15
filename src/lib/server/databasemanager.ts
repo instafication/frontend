@@ -17,17 +17,18 @@ export class DatabaseManager {
 
   public static Scraper = class {
 
-      public static async updatePingTimestamp(id: string, unixTimestamp: number): Promise<boolean> {
-          const updated: boolean = !!(await prisma.scraper.update({
+    public static async updatePingTimestamp(id: string, unixTimestamp: number) {
+      const updated = await prisma.scrapers.update({
               where: { id: id },
               data: { last_ping: unixTimestamp },
-          }));
+      });
+      console.log(`Updated: ${updated}`);
           return updated;
       }
 
     public static async idExists(id: string) {
       // e.x. id : string = "Medicinaren"
-      const scraper = await prisma.scraper.findUnique({
+      const scraper = await prisma.scrapers.findUnique({
         where: { id },
       });
       return scraper !== null;
@@ -35,7 +36,7 @@ export class DatabaseManager {
 
       public static async createScraper(id: string, last_update: number, company: string) {
           // e.x. id : string = "Medicinaren"
-          await prisma.scraper.create({
+        await prisma.scrapers.create({
               data: {
                   id: id,
                   last_update: last_update,
@@ -46,7 +47,7 @@ export class DatabaseManager {
 
     public static async updateLastUpdated(id: string, last_update: number) {
       // e.x. id : string = "medicinaren"
-      await prisma.scraper.update({
+      await prisma.scrapers.update({
         where: { id: id },
         data: { last_update: last_update },
       });
@@ -54,7 +55,7 @@ export class DatabaseManager {
 
     public static async getLastUpdated(id: string) {
       // e.x. id : string = "medicinaren"
-      return await prisma.scraper.findUnique({
+      return await prisma.scrapers.findUnique({
         where: { id },
       });
     }
@@ -356,6 +357,16 @@ export class DatabaseManager {
     }
 
 
+
+  }
+
+
+  public static Scrapers = class {
+
+    public static async getAllScrapers() {
+      const scrapers = await prisma.scrapers.findMany();
+      return scrapers
+    }
 
   }
 

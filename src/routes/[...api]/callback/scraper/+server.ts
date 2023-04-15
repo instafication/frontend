@@ -33,10 +33,6 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 	// console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
 	// console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
-	const dataExists = await DatabaseManager.Scraper.idExists(area);
-	if (dataExists === false) {
-		await DatabaseManager.Scraper.createScraper(area, dateObj.getTime(), "Stockholms Studentbostäder");
-	}
 	const storedLastUpdated: number | null = await DatabaseManager.Scraper.getLastUpdated(area);
 	console.log(`Last updated: ${storedLastUpdated?.last_update}`);
 	console.log(dateObj.getTime());
@@ -44,13 +40,13 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 
 
 	// Check if the stored date and time is the same as the new one
-	if (dataExists && storedLastUpdated?.last_update === dateObj.getTime()) {
+	if (storedLastUpdated?.last_update === dateObj.getTime()) {
 		console.log("[Scraper] New data is the same as the stored data, no SMS sent.");
 		return new Response('New data is the same as the stored data, no SMS sent.', { status: 200 });
 	}
 
 	// Check if the stored date and time is the same as the new one and if dateObj is more close than 3 days from now:
-	if (dataExists && storedLastUpdated.last_update !== dateObj.getTime() &&
+	if (storedLastUpdated.last_update !== dateObj.getTime() &&
 		Math.abs(dateObj.getTime() - now.getTime()) < 259200000) {
 
 		console.log("[/api/callback/scraper] Date is not same as before and is more close then 3 days from now. SMS sent to all active users.")
@@ -162,7 +158,6 @@ export const POST = (async ({ request }) => {
 
 	if (service === "Stockholms Studentbostäder") {
 		const params = data.params as Sssb;
-		const updated: boolean = await updatePingTimestamp(params.area, new Date().getTime());
 
 		if (params === undefined) {
 			console.log("[!] Missing params");
@@ -178,7 +173,14 @@ export const POST = (async ({ request }) => {
 			return new Response('Missing time', { status: 400 });
 		}
 
+		const dataExists = await DatabaseManager.Scraper.idExists(params.area);
+		if (dataExists === false) {
+			await DatabaseManager.Scraper.createScraper(params.area, new Date().getTime(), service);
+		}
+
+		const updated: boolean = await updatePingTimestamp(params.area, new Date().getTime());
 		const response: Response = await HandleSssb(request, params as Sssb);
+
 		return response;
 
 	} else if (service === "Hertz Freerider") {
