@@ -15,6 +15,12 @@
 			"$lib/*": ["./src/lib/*"]
 		},
 	},
-	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte", "src/**/*.ts"],
+	"include": [
+		"src/global.d.ts",
+		"src/**/*.d.ts",
+		"src/**/*.js",
+		"src/**/*.svelte",
+		"src/**/*.ts"
+	],
 	"exclude": ["node_modules/*", ".svelte-kit/*", "static/*"],
 }

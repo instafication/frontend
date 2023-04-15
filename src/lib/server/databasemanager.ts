@@ -440,7 +440,7 @@ export class DatabaseManager {
             user: user,
             name: name,
             notification: notification,
-            notificationWithin: notificationWithin,
+            notificationWithin: notificationWithin.toString(),
             options: options,
           },
         });

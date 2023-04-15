@@ -46,6 +46,7 @@
 		"query-string": "latest",
 		"sib-api-v3-typescript": "^2.2.2",
 		"stripe": "^12.0.0",
+		"superjson": "^1.12.2",
 		"svelte": "latest",
 		"svelte-preprocess": "latest",
 		"tailwindcss": "latest",

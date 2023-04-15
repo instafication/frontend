@@ -1,29 +1,44 @@
 <script>
-  import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
-  import { showServicesModal, showLoginModal, userLoggedIn } from "$lib/sharedStore";
-  import { getAllScrapers } from "$lib/Managers/ScrapingManager";
-  import { t } from "$lib/i18n";
+
+	import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
+	import { showServicesModal, showLoginModal, userLoggedIn } from "$lib/sharedStore";
+	import { getAllScrapers } from "$lib/Managers/ScrapingManager";
+	import { t } from "$lib/i18n";
+	import { onMount } from "svelte";
+	import { getMinutesDiffFromUnixTimestamp } from "$lib/Inbox/Utils";
+
+
 
    let list = [
     {
       img: { src: "/images/favicon-sssb.svg", alt: "SSSB",},
-      name: "Stockholms Studentbostäder",
-      status: "Aktiv: " + Math.floor(Math.random() * 5) + " min sedan sökning",
+      name: "Medicinaren",
+      status: "Senaste sök: -1 min sedan sökning",
       active: "green",
       services: [$t("laundry")]
     },
+   ];
 
-    {
-      img: { src: "/images/hertz-logo.svg", alt: "Hertz" },
-      name: "Hertz Freerider",
-      status: $t("status_inactive"),
-      active: "",
-      services: [$t("rental_cars")]
-    },
-  ];
+  onMount(async () => {
 
-    const scrapers = [getAllScrapers()]
-    console.log(scrapers);
+		const scrapers = await getAllScrapers();
+		list = scrapers.map((scraper) => {
+
+			const diffMinutes = getMinutesDiffFromUnixTimestamp(scraper.last_ping);
+			const active = diffMinutes <= 10 ? "green" : "red";
+
+			return {
+				img: { src: "/images/favicon-sssb.svg", alt: scraper.company },
+				name: scraper.id,
+				status: "Senaste sökning: " + diffMinutes + " min",
+				active: active,
+				services: ["Tvättid"],
+			};
+		});
+
+		console.log(list);
+
+  });
 
 </script>
 
