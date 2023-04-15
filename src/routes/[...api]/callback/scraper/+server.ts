@@ -8,7 +8,7 @@ interface Template {
 }
 
 interface Sssb {
-	area: string; //[Medicinaren, Jerum]
+	area: string; //[Medicinaren, Jerum], same as id
 	date: string; //2021-09-01
 	time: string; //12:00
 }
@@ -33,24 +33,24 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 	// console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
 	// console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
-	let dataExists = await DatabaseManager.Scraper.idExists(area);
-	if (dataExists == false) {
-		await DatabaseManager.Scraper.createArea(area, dateObj.getTime());
+	const dataExists = await DatabaseManager.Scraper.idExists(area);
+	if (dataExists === false) {
+		await DatabaseManager.Scraper.createScraper(area, dateObj.getTime(), "Stockholms Studentbostäder");
 	}
 	const storedLastUpdated: number | null = await DatabaseManager.Scraper.getLastUpdated(area);
-	console.log("Last updated: " + storedLastUpdated?.last_update);
+	console.log(`Last updated: ${storedLastUpdated?.last_update}`);
 	console.log(dateObj.getTime());
 
 
 
 	// Check if the stored date and time is the same as the new one
-	if (dataExists && storedLastUpdated?.last_update == dateObj.getTime()) {
+	if (dataExists && storedLastUpdated?.last_update === dateObj.getTime()) {
 		console.log("[Scraper] New data is the same as the stored data, no SMS sent.");
 		return new Response('New data is the same as the stored data, no SMS sent.', { status: 200 });
 	}
 
 	// Check if the stored date and time is the same as the new one and if dateObj is more close than 3 days from now:
-	if (dataExists && storedLastUpdated.last_update != dateObj.getTime() &&
+	if (dataExists && storedLastUpdated.last_update !== dateObj.getTime() &&
 		Math.abs(dateObj.getTime() - now.getTime()) < 259200000) {
 
 		console.log("[/api/callback/scraper] Date is not same as before and is more close then 3 days from now. SMS sent to all active users.")
@@ -60,7 +60,7 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 
 		// Add the notification to notifications table
 		const notificationTitle: string = `Ny tid och datum i ${area}`;
-		const notificationMessage: string = `Ny tid och datum i ${area}: ${data.date + ' ' + data.time}.`;
+		const notificationMessage: string = `Ny tid och datum i ${area}: ${`${data.date} ${data.time}`}.`;
 		const notificationArea: string = area;
 		const notificationDate: string = dateObj.toString();
 		const success = await DatabaseManager.Notifications.createNotification({
@@ -69,7 +69,7 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 			area: notificationArea,
 			date: notificationDate,
 		});
-		console.log("[/api/callback/scraper] Notification created: " + success);
+		console.log(`[/api/callback/scraper] Notification created: ${success}`);
 
 		try {
 
@@ -90,37 +90,37 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 
 					console.log("[/api/callback/scraper] User found and active for area with credits: ");
 					console.log(user);
-					const message = `Blinksms.se har hittat en ny tvättid i ${area}: ${data.date + ' ' + data.time}. Om du vill boka denna tid logga in som vanligt via SSSB`;
+					const message = `Blinksms.se har hittat en ny tvättid i ${area}: ${`${data.date} ${data.time}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
 
 					// Check notification method by service
 					usersByArea.forEach(async (userInside: any) => {
 
-						if (userInside.user == user.id) {
+						if (userInside.user === user.id) {
 
 							// Calculate the difference in minutes
 							const differenceInSeconds = Math.abs(dateObj.getTime() - now.getTime()) / (1000);
 
 
-							console.log("[+] Difference in seconds: " + differenceInSeconds);
-							console.log("[+] Is free time more close than user setting: " + (differenceInSeconds < userInside.notificationWithin));
+							console.log(`[+] Difference in seconds: ${differenceInSeconds}`);
+							console.log(`[+] Is free time more close than user setting: ${(differenceInSeconds < userInside.notificationWithin)}`);
 
 
 							if (differenceInSeconds > userInside.notificationWithin) {
-								console.log("[/api/callback/scraper] Free time is more far away, user configuration (sec): " + userInside.notificationWithin);
+								console.log(`[/api/callback/scraper] Free time is more far away, user configuration (sec): ${userInside.notificationWithin}`);
 							} else {
 
 								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
 								const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
 
-								console.log("[/api/callback/scraper] Sending trigger to: " + user.id + " with message: " + message);
-								if (userInside.notification == "Email" && userInside.user == user.id) {
+								console.log(`[/api/callback/scraper] Sending trigger to: ${user.id} with message: ${message}`);
+								if (userInside.notification === "Email" && userInside.user == user.id) {
 									const hasSent = await sendEmail(user.email, message);
-									console.log("[/api/callback/scraper] Email sent1: " + hasSent);
-								} else if (userInside.service == "SMS" && userInside.user == user.id) {
+									console.log(`[/api/callback/scraper] Email sent1: ${hasSent}`);
+								} else if (userInside.service === "SMS" && userInside.user === user.id) {
 									//const hasSent = await sendSMS(user.id, message);
 									console.log("[/api/callback/scraper] SMS not sent!");
 								} else {
-									console.log("[/api/callback/scraper] No notification method found for user: " + userInside.id);
+									console.log(`[/api/callback/scraper] No notification method found for user: ${userInside.id}`);
 								}
 
 							}
@@ -132,11 +132,11 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 					//await SmsManager.sendSMS(user.id, message);
 				}
 			} else {
-				console.log("[/api/callback/scraper] No users found with setting activated for area: " + area);
+				console.log(`[/api/callback/scraper] No users found with setting activated for area: ${area}`);
 			}
 
 		} catch (error: any) {
-			console.log("[/api/callback/scraper] No users for area found: " + error.cause);
+			console.log(`[/api/callback/scraper] No users for area found: ${error.cause}`);
 		}
 
 		return new Response('Date is not same as before and is more close then 3 days from now. SMS sent to all active users.', { status: 200 });
@@ -146,26 +146,12 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 		return new Response('New data is not closer to now than 3 days, no SMS sent.', { status: 200 });
 	}
 
-	return new Response('OK', { status: 200 });
 }
 
-interface Hertz {
-	from: string; //Stockholm
-	to: string; //Göteborg
-}
-async function HandleHertz(request: RequestHandler, params: Hertz): Promise<Response> {
 
-
-	// const sent: boolean = await sendEmail("Hertz Freerider", "marti.pa.jakobsson@icloud.com", "new_booking_time");
-	// console.log("Sent: " + sent);
-
-	// if (sent) {
-	// 	return new Response('200', { status: 200 });
-	// } else {
-	// 	return new Response('400', { status: 400 });
-	// }
-	return new Response('OK', { status: 200 });
-
+async function updatePingTimestamp(id: string, unixTimestamp: number): Promise<boolean> {
+	const updated: boolean = await DatabaseManager.Scraper.updatePingTimestamp(id, unixTimestamp);
+	return updated;
 }
 
 export const POST = (async ({ request }) => {
@@ -174,18 +160,20 @@ export const POST = (async ({ request }) => {
 	const service: string = data.service; // "Stockholms Studentbostäder" | "Hertz Freerider"
 	console.log(data);
 
-	if (service == "Stockholms Studentbostäder") {
-		let params = data.params as Sssb;
-		if (params == undefined) {
+	if (service === "Stockholms Studentbostäder") {
+		const params = data.params as Sssb;
+		const updated: boolean = await updatePingTimestamp(params.area, new Date().getTime());
+
+		if (params === undefined) {
 			console.log("[!] Missing params");
 			return new Response('Missing params', { status: 400 });
-		} else if (params.area == undefined) {
+		} else if (params.area === undefined) {
 			console.log("[!] Missing area");
 			return new Response('Missing area', { status: 400 });
-		} else if (params.date == undefined) {
+		} else if (params.date === undefined) {
 			console.log("[!] Missing date");
 			return new Response('Missing date', { status: 400 });
-		} else if (params.time == undefined) {
+		} else if (params.time === undefined) {
 			console.log("[!] Missing time");
 			return new Response('Missing time', { status: 400 });
 		}
@@ -193,12 +181,12 @@ export const POST = (async ({ request }) => {
 		const response: Response = await HandleSssb(request, params as Sssb);
 		return response;
 
-	} else if (service == "Hertz Freerider") {
-		let params = data.params as Hertz;
-		const response: Response = await HandleHertz(request, params as Hertz);
-		return response;
+	} else if (service === "Hertz Freerider") {
+		//const params = data.params as Hertz;
+		//const response: Response = await HandleHertz(request, params as Hertz);
+		//return response;
 	} else {
-		console.log("[!] Unknown service: " + service);
+		console.log(`[!] Unknown service: ${service}`);
 		return new Response('Unknown service', { status: 400 });
 	}
 

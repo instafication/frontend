@@ -36,9 +36,10 @@ model services {
 }
 
 model scraper {
-  id          String  @unique // Example medicinaren
+  id          String  @id // Example medicinaren
   company     String? // Example Stockholms Studentbostäder
-  last_update BigInt? // Example 1620000000
+  last_update BigInt? // Example 1620000000, latest booking time found
+  last_ping BigInt? // Example 1620000000, latest callback from scraper
 
   @@schema("public")
 }

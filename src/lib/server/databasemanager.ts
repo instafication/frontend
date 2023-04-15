@@ -17,23 +17,32 @@ export class DatabaseManager {
 
   public static Scraper = class {
 
+      public static async updatePingTimestamp(id: string, unixTimestamp: number): Promise<boolean> {
+          const updated: boolean = !!(await prisma.scraper.update({
+              where: { id: id },
+              data: { last_ping: unixTimestamp },
+          }));
+          return updated;
+      }
+
     public static async idExists(id: string) {
-      // e.x. id : string = "medicinaren"
+      // e.x. id : string = "Medicinaren"
       const scraper = await prisma.scraper.findUnique({
         where: { id },
       });
       return scraper !== null;
     }
 
-    public static async createArea(id: string, last_update: number) {
-      // e.x. id : string = "medicinaren"
-      await prisma.scraper.create({
-        data: {
-          id: id,
-          last_update: last_update,
-        },
-      });
-    }
+      public static async createScraper(id: string, last_update: number, company: string) {
+          // e.x. id : string = "Medicinaren"
+          await prisma.scraper.create({
+              data: {
+                  id: id,
+                  last_update: last_update,
+                  company: company,
+              },
+          });
+      }
 
     public static async updateLastUpdated(id: string, last_update: number) {
       // e.x. id : string = "medicinaren"
