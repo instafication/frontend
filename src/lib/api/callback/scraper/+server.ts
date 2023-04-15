@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { DatabaseManager } from '$lib/server/managers/databasemanager';
+import { DatabaseManager } from '$lib/server/databasemanager';
 
 export const POST = (async ({ request }) => {
 

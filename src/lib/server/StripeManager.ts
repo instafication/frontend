@@ -1,0 +1,43 @@
+import type { RequestHandler } from "@sveltejs/kit";
+//import { stripe } from "../../routes/webhook/+server"
+import { SECRET_STRIPE_SECRET_KEY } from '$env/static/private'
+import Stripe from "stripe";
+
+const stripe = new Stripe(SECRET_STRIPE_SECRET_KEY, {
+    apiVersion: "2022-11-15",
+    typescript: true,
+});
+
+
+
+
+async function createPortalByEmail(email: string): Promise<string> {
+
+    const configuration = await stripe.billingPortal.configurations.create({
+        features: {
+            customer_update: {
+                allowed_updates: ["email", "tax_id"],
+                enabled: true,
+            },
+            invoice_history: { enabled: true },
+        },
+        business_profile: {
+            privacy_policy_url: "https://example.com/privacy",
+            terms_of_service_url: "https://example.com/terms",
+        },
+    });
+
+    const customers = await stripe.customers.search({
+        query: `email:'${email}'`,
+    });
+    const customerId: string = customers.data[0].id
+    const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: "https://blinksms.se",
+    });
+
+
+    return session.url;
+}
+
+export { createPortalByEmail };

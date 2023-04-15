@@ -1,8 +1,8 @@
 import { initTRPC } from '@trpc/server';
 import type { Context } from './context';
 import { z } from 'zod';
-import { DatabaseManager } from '$lib/server/managers/databasemanager';
-
+import { DatabaseManager } from '$lib/server/databasemanager';
+import { createPortalByEmail } from '$lib/server/StripeManager';
 
 interface Service {
     id: string;
@@ -33,6 +33,15 @@ export const appRouter = t.router({
         const res = await DatabaseManager.Ping();
         return res;
     }),
+
+    create_customer_portal_session: t.procedure
+        .input(z.string())
+        .query((async ({ input }) => {
+            const portalUrl = await createPortalByEmail(input);
+            console.log(portalUrl);
+            return portalUrl;
+        })),
+
 
     getConfiguration: t.procedure
         .input(z.object({

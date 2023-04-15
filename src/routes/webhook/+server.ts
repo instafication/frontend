@@ -1,7 +1,7 @@
 import { SECRET_STRIPE_PUBLISHABLE_KEY, SECRET_STRIPE_SECRET_KEY, SECRET_STRIPE_WEBHOOK_SECRET } from '$env/static/private'
 import { signUp } from '$lib/Managers/AuthManager'
 import { SendEmailWhenUserIsCreated, sendEmail, SendEmailWhenSubscriptionProlonged } from '$lib/Managers/EmailManager'
-import { DatabaseManager } from '$lib/server/managers/databasemanager.js';
+import { DatabaseManager } from '$lib/server/databasemanager.js';
 import { json } from "@sveltejs/kit";
 import Stripe from "stripe";
 
@@ -225,3 +225,6 @@ export async function POST({ request }) {
     return json({ received: true });
 
 };
+
+
+// export stripe };

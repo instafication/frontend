@@ -17,7 +17,8 @@ const config = {
       }
     }),
   },
- //
+
+  
   plugins: {
     ServiceWorker: {
       register: false

@@ -1,4 +1,4 @@
-import { generateRandomUUID } from '../../Inbox/Utils';
+import { generateRandomUUID } from '../Inbox/Utils';
 import { supabase, signUp } from "$lib/Managers/AuthManager";
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
@@ -237,29 +237,29 @@ export class DatabaseManager {
 
     public static async RefillByEmail(email: string, credits: number): Promise<boolean> {
 
-        const user = await prisma.profiles.findUnique({
-            where: { email },
+      const user = await prisma.profiles.findUnique({
+        where: { email },
+      });
+
+      let data = {};
+
+      if (user !== null) {
+
+        if (user.credits === null) {
+          data = { credits: credits };
+        } else {
+          data = { credits: user.credits + credits };
+        }
+
+        const refilled = await prisma.profiles.update({
+          where: { email },
+          data: data,
         });
 
-        let data = {};
-
-        if (user !== null) {
-
-            if (user.credits === null) {
-                data = { credits: credits };
-            } else {
-                data = { credits: user.credits + credits };
-            }
-
-            const refilled = await prisma.profiles.update({
-                where: { email },
-                data: data,
-            });
-
-            return refilled !== null;
-        } else {
-            return false;
-        }
+        return refilled !== null;
+      } else {
+        return false;
+      }
     }
 
 

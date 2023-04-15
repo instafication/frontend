@@ -8,30 +8,32 @@
     import { showServicesModal, showProfileSettingsModal } from "$lib/sharedStore";
     import LanguageSelector from './LanguageSelector.svelte';
     import { t } from '$lib/i18n';
+    import { redirect } from '@sveltejs/kit';
+    import { goto } from '$app/navigation';
 
-  let userId: string = "";
-  let email: string = "";
-  let phone: string = "";
-  let credits: number = 0;
-  let rawUserMetaData: {} = {};
-  async function parseUserData() {
-    userId = await getUserId();    
-    email = await trpc.email.query(userId);
-    phone = await trpc.phone.query(userId);
-    credits = await trpc.credits.query(userId);
+    let userId: string = "";
+    let email: string = "";
+    let phone: string = "";
+    let credits: number = 0;
+    let rawUserMetaData: {} = {};
+    async function parseUserData() {
+        userId = await getUserId();    
+        email = await trpc.email.query(userId);
+        phone = await trpc.phone.query(userId);
+        credits = await trpc.credits.query(userId);
 
-    // console.log("[layout.svelte] User ID: " + userId);
-    // console.log("[layout.svelte] User email: " + email);
-    // console.log("[layout.svelte] User phone: " + phone);
-    // console.log("[layout.svelte] User credits: " + credits);
+        // console.log("[layout.svelte] User ID: " + userId);
+        // console.log("[layout.svelte] User email: " + email);
+        // console.log("[layout.svelte] User phone: " + phone);
+        // console.log("[layout.svelte] User credits: " + credits);
 
-    rawUserMetaData = await trpc.raw_user_meta_data.query(userId);
-    console.log(rawUserMetaData);
+        rawUserMetaData = await trpc.raw_user_meta_data.query(userId);
+        console.log(rawUserMetaData);
 
-  }
-  onMount(async () => {
-    parseUserData();
-  })
+    }
+    onMount(async () => {
+        parseUserData();
+    })
 
 </script>
 
@@ -48,7 +50,7 @@
 
         <Toolbar >
             <NotificationDropdown />
-            <Avatar id="avatar-menu" src="{rawUserMetaData.avatar_url || 'images/logo.png'}" />
+            <Avatar id="avatar-menu" src="{rawUserMetaData.avatar_url || '/images/logo.png'}" />
             <LanguageSelector/>
         </Toolbar>
 
@@ -63,13 +65,20 @@
     
                 <span class="flex text-sm">
                     <!-- <lord-icon class="flex-1" src="https://cdn.lordicon.com/qhviklyi.json" trigger="hover" style="width:32px;height:32px"></lord-icon> -->
-                    <div class="flex-1">{$t("HEADER_LOGGEDIN_I1")}</div>
+                    <div class="flex-1">
+                        {$t("HEADER_LOGGEDIN_I1")}
+                        {credits}
+                    </div>
                 </span>
 
             </DropdownHeader>
 
             <DropdownItem on:click={() => $showServicesModal = true}>{$t("HEADER_LOGGEDIN_I2")}</DropdownItem>
             <DropdownItem on:click={() => $showProfileSettingsModal = true}>{$t("HEADER_LOGGEDIN_I3")}</DropdownItem>
+            <DropdownItem on:click={async() => {
+                const url = await trpc.create_customer_portal_session.query(email)
+                goto(url);
+                }}>Prenumeration</DropdownItem>
             <DropdownDivider />
             <DropdownItem on:click={async() => {await signOut()}}>{$t("HEADER_LOGGEDIN_I4")}</DropdownItem>
         </Dropdown>
