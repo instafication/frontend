@@ -9,6 +9,7 @@
     import PriceSection from '$lib/Components/PriceSection.svelte';
     import HeaderPhone from '$lib/Components/HeaderPhone.svelte';
 
+
 </script>
 
 <div class="bg-white">
