@@ -15,7 +15,7 @@
           {$t("header_body")}
         </p>
         <div class="mt-10 flex items-center gap-x-6">
-          <a href="https://checkout.stripe.com/c/pay/cs_test_b1ODY1qGhISduSEh8BVqy33zv6BKKEbnfWAzYDfSq9P8BL8ohaYjNkPvi4#fidkdWxOYHwnPyd1blpxYHZxWjA0SHIzMT1CaXw8SDxMNUxjYzZSaUdpdnZTfVBgN0I0Ml9OQkB9ZnMyMHFUUWZRSEZrSWJHaUhwMXB3N0FjTGYxNzEwMEJTR290YFx%2FbUQ2c25AVDV3VzFSNTVWXWlRQW0wcycpJ3VpbGtuQH11anZgYUxhJz8ncWB2cVpmSzdmVFFgfUM8bW5gPFIzanQneCUl" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-lg">
+          <a href="https://checkout.stripe.com/c/pay/cs_test_b1wsOPoQdZcDvFjwUpXlajUqFnT9wYBrd3vPF3dKCCMkojFWmFz7zWSCbc#fidkdWxOYHwnPyd1blpxYHZxWjA0SHIzMT1CaXw8SDxMNUxjYzZSaUdpdnZTfVBgN0I0Ml9OQkB9ZnMyMHFUUWZRSEZrSWJHaUhwMXB3N0FjTGYxNzEwMEJTR290YFx%2FbUQ2c25AVDV3VzFSNTVWXWlRQW0wcycpJ3VpbGtuQH11anZgYUxhJz8ncWB2cVpmSzdmVFFgfUM8bW5gPFIzanQnKSd3YGNgd3dgd0p3bGJsayc%2FJ21xcXV2PyoqZ2lsa252aHYrdmAqJ3gl" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-lg">
             {$t("header_button1")}
           </a>
           <a href="#readmore" class="text-sm font-semibold leading-6 text-gray-900">{$t("header_button2")} <span aria-hidden="true">→</span></a>
