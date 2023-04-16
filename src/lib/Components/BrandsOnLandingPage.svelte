@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 
 	import { Card, Listgroup, Avatar, Badge } from "flowbite-svelte";
 	import { showServicesModal, showLoginModal, userLoggedIn } from "$lib/sharedStore";
@@ -6,7 +6,7 @@
 	import { t } from "$lib/i18n";
 	import { onMount } from "svelte";
 	import { getMinutesDiffFromUnixTimestamp } from "$lib/Inbox/Utils";
-
+  import type { scraper, scrapers } from '@prisma/client'
 
 
    let list = [
@@ -21,18 +21,19 @@
 
   onMount(async () => {
 
-		const scrapers = await getAllScrapers();
-		list = scrapers.map((scraper) => {
+		const scraperList: scrapers[] = await getAllScrapers();
+		list = scraperList.map((scraper) => {
 
 			const diffMinutes = getMinutesDiffFromUnixTimestamp(scraper.last_ping);
-			const active = diffMinutes <= 10 ? "green" : "red";
+			const active = diffMinutes <= scraper.frequency ? "green" : "red";
+      const params: JSON = JSON.parse(scraper.params);
 
 			return {
 				img: { src: "/images/favicon-sssb.svg", alt: scraper.company },
-				name: scraper.id,
+				name: params.area,
 				status: "Senaste sökning: " + diffMinutes + " min",
 				active: active,
-				services: ["Tvättid"],
+				services: scraper.services,
 			};
 		});
 

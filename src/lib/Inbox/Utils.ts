@@ -18,10 +18,14 @@ function DateTimeStringToUnixTimeStamp(datetime: string): bigint {
 }
 
 function getMinutesDiffFromUnixTimestamp(unixTimestamp: bigint): number {
-  const currentTimestamp = BigInt(Math.floor(Date.now() / 1000));
-  const diffSeconds = Number(currentTimestamp - unixTimestamp);
-  const diffMinutes = Math.floor(diffSeconds / 60);
-  return diffMinutes;
+
+  const unixTimestamp1 = Number(unixTimestamp);
+  const unixTimestampNow = Date.now();
+  const diffMilliseconds = unixTimestampNow - unixTimestamp1;
+  const diffSeconds = diffMilliseconds / 1000;
+  const diffMinutes = diffSeconds / 60;
+  return Math.floor(diffMinutes);
+
 }
 
 

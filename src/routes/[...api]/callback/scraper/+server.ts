@@ -1,24 +1,28 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '../../../../lib/server/databasemanager';
 import { sendEmail, SendEmailWhenUserIsCreated } from '../../../../lib/Managers/EmailManager';
+import type { scrapers } from '@prisma/client';
 
-interface Template {
-	service: string; // Servicename, example: ["Stockholms Studentbostäder", "Hertz Freerider"]
-	params: {};
+
+export interface postTemplate {
+	company: string;
+	services: string[];
+	params: postParamsSssb;
+};
+export interface postParamsSssb {
+	date: string; //
+	time: string; // Unix timestamp
+	area: string; //
 }
 
-interface Sssb {
-	area: string; //[Medicinaren, Jerum], same as id
-	date: string; //2021-09-01
-	time: string; //12:00
-}
-async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response> {
+async function HandleSssb(scraper: scrapers): Promise<Response> {
 
-	console.log(data);
+	const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
+	const area = params.area;
+	console.log(`[Scraper] New data from ${area}: ${`${params.date} ${params.time}`}.`);
 
-	const area = data.area;
 	const now = new Date();
-	const dateString = `${data.date} ${data.time}`;
+	const dateString = `${params.date} ${params.time}`;
 	const currentYear = new Date().getFullYear();
 	const [, , date, monthName, startTime]: any | null = dateString.match(/([A-ZÅÄÖ]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/);
 
@@ -33,30 +37,27 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 	// console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
 	// console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
-	const storedLastUpdated: number | null = await DatabaseManager.Scraper.getLastUpdated(area);
-	console.log(`Last updated: ${storedLastUpdated?.last_update}`);
-	console.log(dateObj.getTime());
-
+	const storedLastUpdated: number = await DatabaseManager.Scraper.getLastUpdated(scraper.company || "", "area", area, Date.now());
+	console.log(`Last updated: ${storedLastUpdated}`);
 
 
 	// Check if the stored date and time is the same as the new one
-	if (storedLastUpdated?.last_update === dateObj.getTime()) {
+	if (storedLastUpdated === dateObj.getTime()) {
 		console.log("[Scraper] New data is the same as the stored data, no SMS sent.");
 		return new Response('New data is the same as the stored data, no SMS sent.', { status: 200 });
 	}
 
 	// Check if the stored date and time is the same as the new one and if dateObj is more close than 3 days from now:
-	if (storedLastUpdated.last_update !== dateObj.getTime() &&
-		Math.abs(dateObj.getTime() - now.getTime()) < 259200000) {
+	if (storedLastUpdated !== dateObj.getTime() && Math.abs(dateObj.getTime() - now.getTime()) < 259200000) {
 
 		console.log("[/api/callback/scraper] Date is not same as before and is more close then 3 days from now. SMS sent to all active users.")
-
-
-		await DatabaseManager.Scraper.updateLastUpdated(area, dateObj.getTime());
+		console.log("Ceckpoint 1: ", area);
+		const updated: boolean = await DatabaseManager.Scraper.updateLastUpdatedByCompanyAndParam(scraper.company || "", "area", area, dateObj.getTime());
+		console.log("Updated last_update: ", updated);
 
 		// Add the notification to notifications table
 		const notificationTitle: string = `Ny tid och datum i ${area}`;
-		const notificationMessage: string = `Ny tid och datum i ${area}: ${`${data.date} ${data.time}`}.`;
+		const notificationMessage: string = `Ny tid och datum i ${area}: ${`${params.date} ${params.time}`}.`;
 		const notificationArea: string = area;
 		const notificationDate: string = dateObj.toString();
 		const success = await DatabaseManager.Notifications.createNotification({
@@ -86,7 +87,7 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 
 					console.log("[/api/callback/scraper] User found and active for area with credits: ");
 					console.log(user);
-					const message = `Blinksms.se har hittat en ny tvättid i ${area}: ${`${data.date} ${data.time}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
+					const message = `Blinksms.se har hittat en ny tvättid i ${area}: ${`${params.date} ${params.time}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
 
 					// Check notification method by service
 					usersByArea.forEach(async (userInside: any) => {
@@ -145,19 +146,14 @@ async function HandleSssb(request: RequestHandler, data: Sssb): Promise<Response
 }
 
 
-async function updatePingTimestamp(id: string, unixTimestamp: number): Promise<boolean> {
-	const updated: boolean = await DatabaseManager.Scraper.updatePingTimestamp(id, unixTimestamp);
-	return updated;
-}
 
 export const POST = (async ({ request }) => {
 
-	const data: Template = await request.json();
-	const service: string = data.service; // "Stockholms Studentbostäder" | "Hertz Freerider"
-	console.log(data);
+	const scraper: scrapers = await request.json();
+	console.log(scraper);
 
-	if (service === "Stockholms Studentbostäder") {
-		const params = data.params as Sssb;
+	if (scraper.company === "Stockholms Studentbostäder") {
+		const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
 
 		if (params === undefined) {
 			console.log("[!] Missing params");
@@ -173,23 +169,27 @@ export const POST = (async ({ request }) => {
 			return new Response('Missing time', { status: 400 });
 		}
 
-		const dataExists = await DatabaseManager.Scraper.idExists(params.area);
-		if (dataExists === false) {
-			await DatabaseManager.Scraper.createScraper(params.area, new Date().getTime(), service);
+		console.log(`[+] Scraper: ${scraper.company} (${scraper.id})`);
+		console.log(scraper);
+		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue(scraper.company, "area", params.area);
+		console.log(`[+] Scraper exists: ${exists}`);
+
+		if (exists === false) {
+			await DatabaseManager.Scraper.createScraper(scraper);
+			console.log(`[+] Scraper created: ${scraper.company} (${scraper.id}) `);
 		}
 
-		const updated: boolean = await updatePingTimestamp(params.area, new Date().getTime());
-		const response: Response = await HandleSssb(request, params as Sssb);
+		const updated: boolean = await DatabaseManager.Scraper.updatePingTimestampByCompanyNameAndParamValue(scraper.company, "area", params.area, Date.now());
+		console.log(`[+] Scraper ping updated: ${updated}`);
+		const response: Response = await HandleSssb(scraper);
+		console.log(`[+] Scraper response: ${response.status} (${response.statusText})`);
 
 		return response;
 
-	} else if (service === "Hertz Freerider") {
-		//const params = data.params as Hertz;
-		//const response: Response = await HandleHertz(request, params as Hertz);
-		//return response;
 	} else {
-		console.log(`[!] Unknown service: ${service}`);
+		console.log(`[!] Unknown company: ${scraper.company}`);
 		return new Response('Unknown service', { status: 400 });
 	}
 
 }) satisfies RequestHandler;
+

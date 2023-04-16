@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { DatabaseManager } from '$lib/server/databasemanager';
 import { createPortalByEmail } from '$lib/server/StripeManager';
 import superjson from 'superjson';
+import type { scrapers } from '@prisma/client';
 
 interface Service {
     id: string;
@@ -37,9 +38,10 @@ export const appRouter = t.router({
         return res;
     }),
 
-    get_all_scrapers: t.procedure.query(async () => {
-        const scrapers = await DatabaseManager.Scrapers.getAllScrapers();
-        return scrapers;
+	get_all_scrapers: t.procedure
+		.query(async () => {
+			const scrapers: scrapers[] = await DatabaseManager.Scrapers.getAllScrapers();
+			return scrapers;
     }),
 
     create_customer_portal_session: t.procedure
