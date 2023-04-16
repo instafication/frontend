@@ -172,7 +172,7 @@ export const POST = (async ({ request }) => {
 
 		console.log(scraper.params);
 		console.log(`[+] Scraper: ${scraper.company})`);
-		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue("area", "Medicinaren");
+		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue("area", params.area);
 		console.log(`[+] Scraper exists: ${exists}`);
 
 		if (exists === false) {
