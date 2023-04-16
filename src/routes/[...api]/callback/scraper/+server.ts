@@ -1,7 +1,7 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '../../../../lib/server/databasemanager';
 import { sendEmail, SendEmailWhenUserIsCreated } from '../../../../lib/Managers/EmailManager';
-import type { scrapers } from '@prisma/client';
+import type { Prisma, scrapers } from '@prisma/client';
 
 
 export interface postTemplate {
@@ -17,7 +17,7 @@ export interface postParamsSssb {
 
 async function HandleSssb(scraper: scrapers): Promise<Response> {
 
-	const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
+	const params: Prisma.JsonArray = scraper.params;
 	const area = params.area;
 	console.log(`[Scraper] New data from ${area}: ${`${params.date} ${params.time}`}.`);
 
@@ -37,7 +37,9 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 	// console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
 	// console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
-	const storedLastUpdated: number = await DatabaseManager.Scraper.getLastUpdated(scraper.company || "", "area", area, Date.now());
+	console.log(scraper.company);
+	console.log("area", area);
+	const storedLastUpdated: number = await DatabaseManager.Scraper.getLastUpdated("area", area);
 	console.log(`Last updated: ${storedLastUpdated}`);
 
 
@@ -52,7 +54,7 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 		console.log("[/api/callback/scraper] Date is not same as before and is more close then 3 days from now. SMS sent to all active users.")
 		console.log("Ceckpoint 1: ", area);
-		const updated: boolean = await DatabaseManager.Scraper.updateLastUpdatedByCompanyAndParam(scraper.company || "", "area", area, dateObj.getTime());
+		const updated: boolean = await DatabaseManager.Scraper.updateLastUpdatedByCompanyAndParam("area", area, dateObj.getTime());
 		console.log("Updated last_update: ", updated);
 
 		// Add the notification to notifications table
@@ -150,7 +152,6 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 export const POST = (async ({ request }) => {
 
 	const scraper: scrapers = await request.json();
-	console.log(scraper);
 
 	if (scraper.company === "Stockholms Studentbostäder") {
 		const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
@@ -169,9 +170,9 @@ export const POST = (async ({ request }) => {
 			return new Response('Missing time', { status: 400 });
 		}
 
-		console.log(`[+] Scraper: ${scraper.company} (${scraper.id})`);
-		console.log(scraper);
-		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue(scraper.company, "area", params.area);
+		console.log(scraper.params);
+		console.log(`[+] Scraper: ${scraper.company})`);
+		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue("area", "Medicinaren");
 		console.log(`[+] Scraper exists: ${exists}`);
 
 		if (exists === false) {
@@ -179,11 +180,10 @@ export const POST = (async ({ request }) => {
 			console.log(`[+] Scraper created: ${scraper.company} (${scraper.id}) `);
 		}
 
-		const updated: boolean = await DatabaseManager.Scraper.updatePingTimestampByCompanyNameAndParamValue(scraper.company, "area", params.area, Date.now());
+		const updated: boolean = await DatabaseManager.Scraper.updatePingTimestampByCompanyNameAndParamValue("area", params.area, Date.now());
 		console.log(`[+] Scraper ping updated: ${updated}`);
 		const response: Response = await HandleSssb(scraper);
 		console.log(`[+] Scraper response: ${response.status} (${response.statusText})`);
-
 		return response;
 
 	} else {

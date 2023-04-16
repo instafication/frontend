@@ -6,7 +6,7 @@
 	import { t } from "$lib/i18n";
 	import { onMount } from "svelte";
 	import { getMinutesDiffFromUnixTimestamp } from "$lib/Inbox/Utils";
-  import type { scraper, scrapers } from '@prisma/client'
+  import type { Prisma, scraper, scrapers } from '@prisma/client'
 
 
    let list = [
@@ -25,13 +25,13 @@
 		list = scraperList.map((scraper) => {
 
 			const diffMinutes = getMinutesDiffFromUnixTimestamp(scraper.last_ping);
-			const active = diffMinutes <= scraper.frequency ? "green" : "red";
-      const params: JSON = JSON.parse(scraper.params);
+			const active = diffMinutes <= scraper.frequency*2 ? "green" : "red";
+      const params: Prisma.JsonArray = scraper.params;
 
 			return {
 				img: { src: "/images/favicon-sssb.svg", alt: scraper.company },
 				name: params.area,
-				status: "Senaste sökning: " + diffMinutes + " min",
+				status: "Senaste sökning: " + diffMinutes + " min sedan",
 				active: active,
 				services: scraper.services,
 			};

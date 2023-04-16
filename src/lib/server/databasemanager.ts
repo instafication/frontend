@@ -1,6 +1,6 @@
 import { generateRandomUUID } from '../Inbox/Utils';
 import { supabase, signUp } from "$lib/Managers/AuthManager";
-import { PrismaClient, type scrapers, type services } from '@prisma/client';
+import { Prisma, PrismaClient, type scrapers, type services } from '@prisma/client';
 import SuperJSON from 'superjson';
 const prisma = new PrismaClient();
 
@@ -18,70 +18,60 @@ export class DatabaseManager {
 
   public static Scraper = class {
 
-	  public static async updatePingTimestampByCompanyNameAndParamValue(companyName: string, k: string, v: any, unixTimestamp: bigint): Promise<boolean> {
+    public static async updatePingTimestampByCompanyNameAndParamValue(k: string, v: any, unixTimestamp: number): Promise<boolean> {
 
-		  console.log(`[Scraper] Updating ping timestamp for ${companyName} with ${k} = ${v} to ${unixTimestamp}`);
+      console.log(`[Scraper] Updating latest_ping with ${k} = ${v} to ${unixTimestamp}`);
 
-		  const results = await prisma.scrapers.updateMany({
+      const r = await prisma.scrapers.updateMany({
 			  where: {
 				  params: {
-					  path: [k],
-					  array_contains: v,
+            path: ['area'],
+            lte: "Medicinaren",
 				  },
 			  },
-			  data: { last_ping: unixTimestamp },
-		  });
-		  return results.count > 0;
-	  }
-
-	  public static async existsByCompanyNameAndParamValue(companyName: string, key: string, value: any): Promise<boolean> {
-		  const scrapers = await prisma.scrapers.findMany({
-			  where: {
-				  company: companyName,
-			  },
+        data: { last_ping: unixTimestamp },
 		  });
 
-		  if (scrapers.length === 0) {
-			  return false;
-		  } else {
-			  if (scrapers.length > 0) {
-				  console.log(`[!] Multiple scrapers found for ${companyName}`);
-
-				  for (const scraper of scrapers) {
-					  const p = JSON.parse(scraper.params);
-
-					  if (p[key] === value) {
-						  return true;
-					  }
-				  }
-
-
-				  return false;
-			  }
-		  }
-
+      return r.count > 0;
 	  }
+
+    public static async existsByCompanyNameAndParamValue(k: string, v: any): Promise<boolean> {
+
+      const r = await prisma.scrapers.findFirst({
+        where: {
+          params: {
+            path: [k],
+            lte: v,
+          },
+        },
+      });
+
+      return r !== null;
+
+    }
 
 
 	  public static async createScraper(scraper: scrapers): Promise<boolean> {
+
+      const json: Prisma.JsonArray = scraper.params;
 		  const created: boolean = await prisma.scrapers.create({
 			  data: {
 				  company: scraper.company,
 				  services: scraper.services,
 				  last_ping: BigInt(Date.now()),
 				  last_update: BigInt(Date.now()),
-				  params: JSON.stringify(scraper.params),
+          params: json,
 			  },
           });
 		  return created;
 	  }
 
-	  public static async updateLastUpdatedByCompanyAndParam(companyName: string, k: string, v: any, last_update: bigint): Promise<boolean> {
+    public static async updateLastUpdatedByCompanyAndParam(k: string, v: any, last_update: number): Promise<boolean> {
 		  const r = await prisma.scrapers.updateMany({
 			  where: {
 				  params: {
 					  path: [k],
-					  array_contains: v,
+            lte: v,
 				  },
 			  },
 			  data: { last_update: last_update },
@@ -89,16 +79,18 @@ export class DatabaseManager {
 		  return r.count > 0;
 	  }
 
-	  public static async getLastUpdated(companyName: string, k: string, v: any, last_update: bigint): Promise<number> {
+    public static async getLastUpdated(k: string, v: any): Promise<number> {
 		  const r = await prisma.scrapers.findFirst({
 			  where: {
 				  params: {
 					  path: [k],
-					  array_contains: v,
+            lte: v,
 				  },
 			  },
 
 		  });
+
+      console.log(`OKOKOOKOKOKOKKO: ${r}`);
 
 		  return Number(r?.last_update) || -1;
     }
