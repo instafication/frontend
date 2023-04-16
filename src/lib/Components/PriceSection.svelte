@@ -42,7 +42,7 @@
         </li> -->
 
       </ul>
-      <a href="https://buy.stripe.com/test_7sI9EHahpctwaXK4gj" aria-describedby="tier-hobby" class="mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600">
+      <a href="https://buy.stripe.com/3csaIu4N5a0l5Fe3cc" aria-describedby="tier-hobby" class="mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600">
         {$t("pricing_modal_basic_button")}
       </a>
     </div>
@@ -84,7 +84,7 @@
         </li>
 
       </ul>
-      <a href="https://buy.stripe.com/test_cN2cQTexF9hke9W6oq" aria-describedby="tier-enterprise" class="mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500">
+      <a href="https://buy.stripe.com/8wM9Eq2EX1tP2t2eUV" aria-describedby="tier-enterprise" class="mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500">
         {$t("pricing_modal_premium_button")}
       </a>
     </div>
