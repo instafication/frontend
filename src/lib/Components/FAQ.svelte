@@ -6,7 +6,7 @@
 
 </script>
 
-<p class="mt-2 text-4xl font-bold text-left md:text-center tracking-tight text-gray-900 sm:text-5xl py-14">{$t("FAQ_TITLE")}</p>
+<p id="readmore" class="mt-2 text-4xl font-bold text-left md:text-center tracking-tight text-gray-900 sm:text-5xl py-14">{$t("FAQ_TITLE")}</p>
 
 <Accordion>
 
