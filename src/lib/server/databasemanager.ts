@@ -25,8 +25,8 @@ export class DatabaseManager {
       const r = await prisma.scrapers.updateMany({
 			  where: {
 				  params: {
-            path: ['area'],
-            lte: "Medicinaren",
+            path: [k],
+            equals: v,
 				  },
 			  },
         data: { last_ping: unixTimestamp },
@@ -41,7 +41,7 @@ export class DatabaseManager {
         where: {
           params: {
             path: [k],
-            lte: v,
+            equals: v,
           },
         },
       });
@@ -71,7 +71,7 @@ export class DatabaseManager {
 			  where: {
 				  params: {
 					  path: [k],
-            lte: v,
+            equals: v,
 				  },
 			  },
 			  data: { last_update: last_update },
@@ -84,13 +84,11 @@ export class DatabaseManager {
 			  where: {
 				  params: {
 					  path: [k],
-            lte: v,
+            equals: v,
 				  },
 			  },
 
 		  });
-
-      console.log(`OKOKOOKOKOKOKKO: ${r}`);
 
 		  return Number(r?.last_update) || -1;
     }
