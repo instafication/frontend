@@ -18,7 +18,7 @@ export default {
         // FAQ
         "FAQ_TITLE": "Vanliga frågor",
         "FAQ_Q1": "Vad är Blinksms?",
-        "FAQ_Q2": "Vilka företags stöds av Blinksms?",
+        "FAQ_Q2": "Vilka företag stöds av Blinksms?",
         "FAQ_Q3": "Hur använder jag tjänsten?",
         "FAQ_Q4": "Vad kostar det?",
         "FAQ_Q5": "Hur kontaktar jag er?",
@@ -88,7 +88,7 @@ export default {
         "get_started_steps_step2": "2. Invänta notifikationer",
         "get_started_steps_step3": "3. Boka tiden som vanligt",
         "get_started_steps_step1_body": "Klicka uppe i högra hörnet för att registrera ett konto (eller logga in direkt med Google).",
-        "get_started_steps_step2_body": "Vi kommer att skicka ut ett email till den addressen du använde när du skapade ett konto på vår hemsida direkt när någon avbokar en tid.",
+        "get_started_steps_step2_body": "Vi kommer att skicka ut ett email till den adressen du använde när du skapade ett konto på vår hemsida direkt när någon avbokar en tid.",
         "get_started_steps_step3_body": "Logga in via företagets sida som vanligt och boka.",
         "footer": "© 2023 BlinkSMS. Beslut, kod och idéer framtagna i samarbete med ChatGPT.",
         "pulse": "Företag vi tar pulsen på",
