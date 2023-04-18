@@ -12,7 +12,8 @@
 		"dev:vercel": "vercel dev",
 		"dev:vite": "vite dev",
 		"build": "vite build",
-		"rome:format": "rome format ."
+		"rome:format": "rome format .",
+		"postinstall": "prisma generate"
 	},
 	"dependencies": {
 		"@cloudflare/workers-types": "latest",
