@@ -12,6 +12,15 @@
 
 </script>
 
+<svelte:head>
+  <script>
+    gtag('event', 'conversion', {
+      'send_to': 'AW-11152082064/1PmeCM7m_ZgYEJCJ3cUp',
+      'transaction_id': ''
+  });
+  </script>
+</svelte:head>
+
 <div class="bg-white">
 
 
