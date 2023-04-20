@@ -14,6 +14,10 @@
   import ModalRegister from "$lib/Components/Modal/ModalRegister.svelte";
   import ProfileSettingsModal from "$lib/Components/Modal/Profile/ProfileSettingsModal.svelte";
   import type { RequestEvent } from "@sveltejs/kit";
+  import { inject } from '@vercel/analytics';
+
+  // Vercel Analytics.
+  inject();
 
 
   let lastAuthStatus = "";
