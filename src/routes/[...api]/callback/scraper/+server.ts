@@ -31,14 +31,8 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 	const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	const monthNumber = monthNames.indexOf(monthName) + 1;
-
-	const timezoneOffset = 2; // GMT+2
-	const startTimeWithOffset = new Date(startTime);
-	startTimeWithOffset.setHours(startTimeWithOffset.getHours() + timezoneOffset);
-	const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTimeWithOffset.toISOString().slice(11, 16)}:00+02:00`;
-	//const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTime}:00`;
+	const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTime}:00:+02:00`;
 	const dateObj = new Date(fullDateString)
-	//dateObj.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })
 	const unixTimestamp = dateObj.getTime() / 1000;
 
 	console.log(`[/api/callback/scraper] Date string: ${fullDateString}`);
