@@ -22,6 +22,7 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 	console.log(`[Scraper] New data from ${area}: ${`${params.date} ${params.time}`}.`);
 
 	const now = new Date();
+	now.setUTCHours(now.getUTCHours() + 2);
 	const currentYear = now.getFullYear();
 	const dateString = `${params.date} ${params.time}`;
 
@@ -31,9 +32,15 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 	const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	const monthNumber = monthNames.indexOf(monthName) + 1;
-	const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTime}:00:+02:00`;
+	const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTime}:00`;
 	const dateObj = new Date(fullDateString)
+	dateObj.setUTCHours(dateObj.getUTCHours() + 2);
 	const unixTimestamp = dateObj.getTime() / 1000;
+
+	console.log("Now: ", now);
+	console.log("Laundry time: ", dateObj);
+	console.log("Now - Laundry time: ", Math.abs(dateObj.getTime() - now.getTime()));
+	console.log("Now - Laundry time: ", Math.abs(dateObj.getTime() - now.getTime()) < 259200000);
 
 	console.log(`[/api/callback/scraper] Date string: ${fullDateString}`);
 	console.log(`[/api/callback/scraper] Unix timestamp: ${unixTimestamp}`);
