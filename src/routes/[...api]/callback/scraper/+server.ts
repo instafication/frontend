@@ -22,22 +22,28 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 	console.log(`[Scraper] New data from ${area}: ${`${params.date} ${params.time}`}.`);
 
 	const now = new Date();
+	const currentYear = now.getFullYear();
 	const dateString = `${params.date} ${params.time}`;
+
 	console.log(dateString);
 	console.log(`${params.date} ${params.time}`);
-	const currentYear = new Date().getFullYear();
 	const [, , date, monthName, startTime]: any | null = dateString.match(/([A-ZÅÄÖ]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/);
 
 	const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	const monthNumber = monthNames.indexOf(monthName) + 1;
 
-	const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTime}:00`;
-	const dateObj = new Date(fullDateString);
+	const timezoneOffset = 2; // GMT+2
+	const startTimeWithOffset = new Date(startTime);
+	startTimeWithOffset.setHours(startTimeWithOffset.getHours() + timezoneOffset);
+	const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTimeWithOffset.toISOString().slice(11, 16)}:00+02:00`;
+	//const fullDateString = `${currentYear}-${monthNumber.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${startTime}:00`;
+	const dateObj = new Date(fullDateString)
+	//dateObj.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })
 	const unixTimestamp = dateObj.getTime() / 1000;
 
-	console.log("[/api/callback/scraper] Date string: " + fullDateString);
-	console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
-	console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
+	console.log(`[/api/callback/scraper] Date string: ${fullDateString}`);
+	console.log(`[/api/callback/scraper] Unix timestamp: ${unixTimestamp}`);
+	console.log(`[/api/callback/scraper] Date string: ${dateObj.toString()}`);
 
 	console.log(scraper.company);
 	console.log("area", area);
