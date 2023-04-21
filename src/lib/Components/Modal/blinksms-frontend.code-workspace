@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../../../blinksms-backend-scraper"
+		},
+		{
+			"path": "../../../../../Auto-GPT"
 		}
 	],
 	"settings": {}

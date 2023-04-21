@@ -23,6 +23,8 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 	const now = new Date();
 	const dateString = `${params.date} ${params.time}`;
+	console.log(dateString);
+	console.log(`${params.date} ${params.time}`);
 	const currentYear = new Date().getFullYear();
 	const [, , date, monthName, startTime]: any | null = dateString.match(/([A-ZÅÄÖ]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/);
 
@@ -33,9 +35,9 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 	const dateObj = new Date(fullDateString);
 	const unixTimestamp = dateObj.getTime() / 1000;
 
-	// console.log("[/api/callback/scraper] Date string: " + fullDateString);
-	// console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
-	// console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
+	console.log("[/api/callback/scraper] Date string: " + fullDateString);
+	console.log("[/api/callback/scraper] Unix timestamp: " + unixTimestamp);
+	console.log("[/api/callback/scraper] Date string: " + dateObj.toString());
 
 	console.log(scraper.company);
 	console.log("area", area);
@@ -171,7 +173,7 @@ export const POST = (async ({ request }) => {
 		}
 
 		console.log(scraper.params);
-		console.log(`[+] Scraper: ${scraper.company})`);
+		console.log(`[+] Scraper: ${scraper.company}`);
 		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue("area", params.area);
 		console.log(`[+] Scraper exists: ${exists}`);
 
