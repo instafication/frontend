@@ -19,7 +19,7 @@
       <span>{$t('your_password')}</span>
       <Input bind:value={password} type="password" name="password" placeholder="{$t('password_placeholder')}" required />
     </Label>
-    <Button on:click={async() => {await signUp(email, password)}} type="button" class="w-full1">{$t('register_your_account')}</Button>
+    <Button color="blue" on:click={async() => {await signUp(email, password)}} type="button" class="w-full1">{$t('register_your_account')}</Button>
   </form>
 </Modal>
 

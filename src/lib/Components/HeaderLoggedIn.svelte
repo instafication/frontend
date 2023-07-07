@@ -54,7 +54,7 @@
             <LanguageSelector/>
         </Toolbar>
 
-        <Dropdown class="rounded-lg" placement="bottom" triggeredBy="#avatar-menu">
+        <Dropdown placement="button" class="rounded-lg" triggeredBy="#avatar-menu">
 
             <DropdownHeader class="flex">
 
@@ -72,8 +72,10 @@
                 </span>
 
             </DropdownHeader>
-
-            <DropdownItem on:click={() => $showServicesModal = true}>{$t("HEADER_LOGGEDIN_I2")}</DropdownItem>
+             <!-- () => $showServicesModal = true -->
+            <DropdownItem on:click={
+                () => alert("OK")
+            }>{$t("HEADER_LOGGEDIN_I2")}</DropdownItem>
             <DropdownItem on:click={() => $showProfileSettingsModal = true}>{$t("HEADER_LOGGEDIN_I3")}</DropdownItem>
             <DropdownItem on:click={async() => {
                 const url = await trpc.create_customer_portal_session.query(email);

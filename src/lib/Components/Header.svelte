@@ -56,7 +56,7 @@
 
 
   <NavLi href="#" on:click="{() => $showRegisterModal = true}">
-    <Button>
+    <Button color="blue">
 			    <lord-icon
           src="https://cdn.lordicon.com/wcjauznf.json"
           trigger="hover"

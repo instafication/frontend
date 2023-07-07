@@ -22,8 +22,8 @@
         {/if}
 
     </Button>
-
-  <Dropdown triggeredBy="#trigger-button" class="transition duration-1050 ease-in-out">
+<!-- <Dropdown triggeredBy="#trigger-button" class="transition duration-0 ease-in-out" -->
+  <Dropdown triggeredBy="#trigger-button">
 
     <DropdownItem on:click={() => $selectedLanguage = "sv"} class="flex items-center transition duration-150 ease-in-out">
       <Se size=32 class="px-2"/>

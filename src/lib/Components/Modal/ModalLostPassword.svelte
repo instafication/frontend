@@ -14,6 +14,6 @@
       <span>{$t('lost_password_your_email')}</span>
       <Input bind:value={email} type="email" name="email" placeholder={$t('lost_password_email_placeholder')} required />
     </Label>
-    <Button on:click="{async() => {await resetPasswordForEmail(email)}}" type="submit" class="w-full">{$t('lost_password_reset_password_button')}</Button>
+    <Button color="blue" on:click="{async() => {await resetPasswordForEmail(email)}}" type="submit" class="w-full">{$t('lost_password_reset_password_button')}</Button>
   </form>
 </Modal>
