@@ -7,10 +7,9 @@ import Stripe from "stripe";
 
 
 const stripe = new Stripe(SECRET_STRIPE_SECRET_KEY, {
-    apiVersion: "2022-11-15",
+    apiVersion: "2025-06-30.basil",
     typescript: true,
 });
-
 
 
 class RandomEmailGenerator {

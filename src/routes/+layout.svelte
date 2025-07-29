@@ -1,57 +1,64 @@
 <script lang="ts">
-  
-  import "../app.css";
-  import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
-  import { onMount } from "svelte";
-  import { selectedLanguage, userLoggedIn } from "$lib/sharedStore";
-  import { page } from "$app/stores";
-  import HeaderLoggedIn from "$lib/Components/HeaderLoggedIn.svelte";
-  import Header from "$lib/Components/Header.svelte";
-  import Footer from "$lib/Components/Footer.svelte";
-  import ModalLogin from "$lib/Components/Modal/ModalLogin.svelte";
-  import ModalLostPassword from "$lib/Components/Modal/ModalLostPassword.svelte";
-  import ModalServices from "$lib/Components/Modal/ModalServices.svelte";
-  import ModalRegister from "$lib/Components/Modal/ModalRegister.svelte";
-  import ProfileSettingsModal from "$lib/Components/Modal/Profile/ProfileSettingsModal.svelte";
-  import type { RequestEvent } from "@sveltejs/kit";
-  import { inject } from "@vercel/analytics";
+	/* global styles */
+	import "../app.css";
 
-  // Vercel Analytics.
-  inject();
+	/* libs & utils */
+	import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
+	import { onMount } from "svelte";
+	import { userLoggedIn } from "$lib/sharedStore";
+	import { inject } from "@vercel/analytics";
 
-  let lastAuthStatus = "";
-  let lastSession = null;
+	/* layout‑level UI */
+	import HeaderLoggedIn from "$lib/Components/HeaderLoggedIn.svelte";
+	import Header from "$lib/Components/Header.svelte";
+	import Footer from "$lib/Components/Footer.svelte";
 
-  onMount(async () => {
-    //selectedLanguage.set($page.data.language);
-    $userLoggedIn = await isLoggedIn();
-  });
+	/* modals */
+	import ModalLogin from "$lib/Components/Modal/ModalLogin.svelte";
+	import ModalLostPassword from "$lib/Components/Modal/ModalLostPassword.svelte";
+	import ModalServices from "$lib/Components/Modal/ModalServices.svelte";
+	import ModalRegister from "$lib/Components/Modal/ModalRegister.svelte";
+	import ProfileSettingsModal from "$lib/Components/Modal/Profile/ProfileSettingsModal.svelte";
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    lastAuthStatus = event;
-    lastSession = session;
+	/* analytics */
+	inject();
 
-    //console.log("event", event)
-    //console.log("session", session);
+	/* ── local reactive state ───────────────────────────── */
+	let lastAuthStatus = $state<string>("");
+	let lastSession   = $state<ReturnType<typeof supabase.auth.getSession> | null>(null);
 
-    if (event == "SIGNED_OUT") {
-      $userLoggedIn = false;
-    } else if (event == "SIGNED_IN") {
-      $userLoggedIn = true;
-    }
-  });
+	/* receive the child‑content snippet that SvelteKit supplies */
+	let { children } = $props();
+
+	/* ── lifecycle & auth handling ──────────────────────── */
+	onMount(async () => {
+		// selectedLanguage.set($page.data.language); // migrate when ready
+		$userLoggedIn = await isLoggedIn();
+	});
+
+	supabase.auth.onAuthStateChange((event, session) => {
+		lastAuthStatus = event;
+		lastSession    = session;
+
+		$userLoggedIn = event === "SIGNED_IN";
+	});
 </script>
 
+<!-- global modals -->
 <ModalLogin />
 <ModalRegister />
 <ModalLostPassword />
 <ModalServices />
 <ProfileSettingsModal />
 
+<!-- header switches on authentication -->
 {#if $userLoggedIn}
-  <HeaderLoggedIn />
+	<HeaderLoggedIn />
 {:else}
-  <Header />
+	<Header />
 {/if}
-<slot></slot>
+
+<!-- route outlet (formerly <slot/>) -->
+{@render children?.()}
+
 <Footer />
