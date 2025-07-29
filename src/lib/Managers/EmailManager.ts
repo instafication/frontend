@@ -5,7 +5,7 @@ const API_URL = 'https://api.sendinblue.com/v3/smtp/email';
 
 async function SendEmailWhenSubscriptionProlonged(to: string, subject: string, body: string): Promise<boolean> {
     const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Blinksms" }],
+        to: [{ email: to, name: "Instafication" }],
             templateId: 9,
             subject: subject,
             params: {
@@ -42,7 +42,7 @@ async function SendEmailWhenSubscriptionProlonged(to: string, subject: string, b
 
 async function SendEmailWhenUserIsCreated(to: string, subject: string, body: string): Promise<boolean> {
     const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Blinksms" }],
+        to: [{ email: to, name: "Instafication" }],
         templateId: 9,
         subject: subject,
         params: {
@@ -78,11 +78,11 @@ async function SendEmailWhenUserIsCreated(to: string, subject: string, body: str
 
 async function SendEmailWhenSubscription(to: string, body: string): Promise<boolean> {
     const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Blinksms" }],
+        to: [{ email: to, name: "Instafication" }],
         templateId: 7,
-        subject: "Välkommen till BlinkSMS Premium!",
+        subject: "Välkommen till Instafication Premium!",
         params: {
-            "message": "Välkommen till BlinkSMS Premium!"
+            "message": "Välkommen till Instafication Premium!"
 
         },
     });
@@ -118,8 +118,8 @@ async function sendEmail(
     body: string,
 ): Promise<boolean> {
     const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Blinksms" }],
-        // sender: { "name": "Blinksms", "email": "Blinksms <hej@blinksms.se>" },
+        to: [{ email: to, name: "Instafication" }],
+        // sender: { "name": "Instafication", "email": "Instafication <hej@Instafication.se>" },
         templateId: 7,
         params: {
             "message": body,

@@ -52,11 +52,11 @@ async function prolong(email: string): Promise<boolean> {
 
             const prolonged: boolean = await DatabaseManager.Profiles.ProlongSubscriptionByEmail(email, 30);
             if (prolonged) {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Din prenumeration är nu förlängd! 🎉", "Hej, din prenumeration har nu förlängts med 30 dagar!");
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Din prenumeration är nu förlängd! 🎉", "Hej, din prenumeration har nu förlängts med 30 dagar!");
                 console.log("📧 [prolong]Email sent: ", emailSent);
                 console.log(`✅ [prolong] ${email} has been prolonged: ${prolonged}`);
             } else {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Din prenumeration går inte förlänga 📞", "Hej, din prenumeration går inte förlängas. Vänligen kontakta oss på: hej@blinksms.se eller i Discord-kanalen för att komma vidare.");
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Din prenumeration går inte förlänga 📞", "Hej, din prenumeration går inte förlängas. Vänligen kontakta oss på: hej@Instafication.se eller i Discord-kanalen för att komma vidare.");
                 console.log("📧 [prolong] Email sent: ", emailSent);
                 console.log("❌ [prolong] User subscription could not be prolonged: ", email);
                 return false;
@@ -64,7 +64,7 @@ async function prolong(email: string): Promise<boolean> {
 
         } else {
             console.log("✅ New premium account has been created: ", email);
-            const emailSent: boolean = await SendEmailWhenUserIsCreated(email, "Välkommen till Blinksms premium! 🎉", "Välkommen till Blinksms premium. Du kan nu logga in med samma email som du använde vid betalning. Lösenordet är detsamma som din email.");
+            const emailSent: boolean = await SendEmailWhenUserIsCreated(email, "Välkommen till Instafication premium! 🎉", "Välkommen till Instafication premium. Du kan nu logga in med samma email som du använde vid betalning. Lösenordet är detsamma som din email.");
             console.log("📧 [prolong]Email sent: ", emailSent);
         }
 
@@ -93,11 +93,11 @@ async function refill(email: string): Promise<boolean> {
 
             const refilled: boolean = await DatabaseManager.Profiles.RefillByEmail(email, 2);
             if (refilled) {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Ditt konto har laddats på! 💰", "Hej, ditt konto har nu laddats på med två krediter som du direkt kan använda för notifikationer.");
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Ditt konto har laddats på! 💰", "Hej, ditt konto har nu laddats på med två krediter som du direkt kan använda för notifikationer.");
                 console.log("📧 [refilled] Email sent: ", emailSent);
                 console.log(`✅ [refilled] ${email} has been refilled: ${refilled}`);
             } else {
-                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Blinksms – Ditt konto går inte ladda på", "Hej, ditt konto går inte ladda på med nya krediter. Vänligen kontakta oss på: hej@blinksms.se eller i Discord-kanalen för att komma vidare.");
+                const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Ditt konto går inte ladda på", "Hej, ditt konto går inte ladda på med nya krediter. Vänligen kontakta oss på: hej@Instafication.se eller i Discord-kanalen för att komma vidare.");
                 console.log("📧 [refilled] Email sent: ", emailSent);
                 console.log("❌ [refilled] User account could not be refilled: ", email);
                 return false;
@@ -105,7 +105,7 @@ async function refill(email: string): Promise<boolean> {
 
         } else {
             console.log("✅ [refilled] New account has been created and refilled: ", email);
-            const emailSent: boolean = await SendEmailWhenUserIsCreated(email, "Välkommen till Blinksms! 🎉", "Välkommen till Blinksms. Du kan nu logga in med samma email som du använde vid betalning. Lösenordet är detsamma som din email.");
+            const emailSent: boolean = await SendEmailWhenUserIsCreated(email, "Välkommen till Instafication! 🎉", "Välkommen till Instafication. Du kan nu logga in med samma email som du använde vid betalning. Lösenordet är detsamma som din email.");
             console.log("📧 [refilled] Email sent: ", emailSent);
         }
 

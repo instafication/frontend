@@ -1,12 +1,12 @@
 
-# 📱 BlinkSMS - Smart Booking Notifications
+# 📱 Instafication - Smart Booking Notifications
 
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://kit.svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://prisma.io/)
 
-BlinkSMS is a smart notification service that monitors booking systems and instantly alerts you via SMS or email when new appointment slots become available. Never miss a booking opportunity again!
+Instafication is a smart notification service that monitors booking systems and instantly alerts you via SMS or email when new appointment slots become available. Never miss a booking opportunity again!
 
 ## ✨ Features
 
@@ -32,8 +32,8 @@ BlinkSMS is a smart notification service that monitors booking systems and insta
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/blinksms-labs/blinksms-frontend.git
-   cd blinksms-frontend
+   git clone https://github.com/Instafication-labs/Instafication-frontend.git
+   cd Instafication-frontend
    ```
 
 2. **Install dependencies**
@@ -171,7 +171,7 @@ Administrators can configure:
 
 ## 💰 Pricing Model
 
-BlinkSMS offers two pricing tiers:
+Instafication offers two pricing tiers:
 
 1. **Pay-per-notification**: 9 SEK for 2 notifications
 2. **Monthly subscription**: 19 SEK/month for unlimited notifications (30-day free trial)
@@ -224,7 +224,7 @@ The application uses tRPC for type-safe API communication. Key endpoints:
 
 ## 📞 Support
 
-- **Email**: [hej@blinksms.se](mailto:hej@blinksms.se)
+- **Email**: [hej@Instafication.se](mailto:hej@Instafication.se)
 - **Discord**: [Join our community](https://discord.gg/SvWJAc4RNB)
 
 ## 📄 License
@@ -241,4 +241,4 @@ This project is proprietary software. All rights reserved.
 
 ---
 
-Made with ❤️ by the BlinkSMS team
+Made with ❤️ by the Instafication team
