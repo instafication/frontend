@@ -33,7 +33,7 @@ Instafication is a smart notification service that monitors booking systems and 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/instafication/frontend.git
-   cd Instafication-frontend
+   cd frontend
    ```
 
 2. **Install dependencies**
@@ -221,11 +221,6 @@ The application uses tRPC for type-safe API communication. Key endpoints:
 - Sensitive data is encrypted
 - CORS properly configured
 - Rate limiting on API endpoints
-
-## 📞 Support
-
-- **Email**: [Hello@instafication.dev](mailto:Hello@instafication.se)
-- **Discord**: [Join our community](https://discord.gg/SvWJAc4RNB)
 
 ## 📄 License
 
