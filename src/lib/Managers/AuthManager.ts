@@ -28,10 +28,10 @@ async function isLoggedIn(): Promise<boolean> {
 async function signUp(email: string, password: string, isPremium: boolean = false): Promise<boolean> {
 
 	let params = {};
-	let mailSubject: string = "Välkommen till Blinksms! 👋";
+	let mailSubject: string = "Välkommen till Instafication! 👋";
 
 	if (isPremium) {
-		mailSubject = "Välkommen till Blinksms Premium! 👋";
+		mailSubject = "Välkommen till Instafication Premium! 👋";
 		params = {
 			credits: 500,
 			subscription_expiration_date: Date.now().toString(),

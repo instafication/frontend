@@ -34,8 +34,8 @@
     Du kan även skapa en profil för att se dina krediter via vår hemsida. Har du redan ett konto så kan du enkelt logga in via knappen nedan.
     </p>
   <svelte:fragment slot='footer'>
-    <Button on:click={() => $showRegisterModal = true}>{$t("get_started_modal_create_account")}</Button>
-    <Button on:click={() => $showLoginModal = true} color="alternative">{$t("get_started_modal_login")}</Button>
+    <Button onclick={() => $showRegisterModal = true}>{$t("get_started_modal_create_account")}</Button>
+    <Button onclick={() => $showLoginModal = true} color="alternative">{$t("get_started_modal_login")}</Button>
   </svelte:fragment>
 </Modal>
 

@@ -40,7 +40,7 @@ async function createPortalByEmail(email: string): Promise<string> {
         const customerId: string = customers.data[0].id;
         const session = await stripe.billingPortal.sessions.create({
             customer: customerId,
-            return_url: "https://blinksms.se",
+            return_url: "https://Instafication.se",
         });
 
         return session.url;

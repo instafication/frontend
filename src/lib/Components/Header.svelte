@@ -30,8 +30,8 @@
 </lord-icon> -->
 
 
-    <img src="/images/logo.png" class="mr-3 h-6 sm:h-9" alt="BlinkSMS Logo"/>
-    <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">BlinkSMS</span>
+    <img src="/images/logo.png" class="mr-3 h-6 sm:h-9" alt="Instafication Logo"/>
+    <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Instafication</span>
   </NavBrand>
 
     <NavHamburger on:click={toggle} />

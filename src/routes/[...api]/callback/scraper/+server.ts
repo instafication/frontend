@@ -98,7 +98,7 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 					console.log("[/api/callback/scraper] User found and active for area with credits: ");
 					console.log(user);
-					const message = `Blinksms.se har hittat en ny tvättid i ${area}: ${`${params.date} ${params.time}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
+					const message = `Instafication.se har hittat en ny tvättid i ${area}: ${`${params.date} ${params.time}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
 
 					// Check notification method by service
 					usersByArea.forEach(async (userInside: any) => {

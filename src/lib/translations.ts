@@ -17,17 +17,17 @@ export default {
 
         // FAQ
         "FAQ_TITLE": "Vanliga frågor",
-        "FAQ_Q1": "Vad är Blinksms?",
-        "FAQ_Q2": "Vilka företag stöds av Blinksms?",
+        "FAQ_Q1": "Vad är Instafication?",
+        "FAQ_Q2": "Vilka företag stöds av Instafication?",
         "FAQ_Q3": "Hur använder jag tjänsten?",
         "FAQ_Q4": "Vad kostar det?",
         "FAQ_Q5": "Hur kontaktar jag er?",
 
-        "FAQ_A1": "Blinksms är en tjänst som skickar notiser via e-post när en tvättid blir tillgänglig. Vi bevakar ständigt tvättider åt dig och meddelar dig så snart en tid blir tillgänglig.",
+        "FAQ_A1": "Instafication är en tjänst som skickar notiser via e-post när en tvättid blir tillgänglig. Vi bevakar ständigt tvättider åt dig och meddelar dig så snart en tid blir tillgänglig.",
         "FAQ_A2": "För nuvarande så söker vi endast hos Stockholms Studentbostäder (SSSB) efter tvättider.",
         "FAQ_A3": "Genom att klicka på 'Kom igång' högst upp. Då får du 30 dagar test gratis. Det går alltid avbryta innan 30 dagar har passerat.",
         "FAQ_A4": "Alternativ 1: Gratis i 30 dagar. Därefter betalning på 19kr/månad för att få oändligt antal notiser. Alternativ 2: 9kr för att köpa 2 notiser. Du kan helt kostnadsfritt skapa ett konto via knappen uppe i menyraden 'Skapa ett konto', eller direkt logga in med ditt Google-konto genom att klicka på Logga in i högra hörnet i menyraden.",
-        "FAQ_A5": "Ni kan kontakta oss via email hej@blinksms.se eller gå med i vår Discord-kanal via: https://discord.gg/SvWJAc4RNB.",
+        "FAQ_A5": "Ni kan kontakta oss via email hej@Instafication.se eller gå med i vår Discord-kanal via: https://discord.gg/SvWJAc4RNB.",
 
 
         // Overall:
@@ -90,7 +90,7 @@ export default {
         "get_started_steps_step1_body": "Klicka uppe i högra hörnet för att registrera ett konto (eller logga in direkt med Google).",
         "get_started_steps_step2_body": "Vi kommer att skicka ut ett email till den adressen du använde när du skapade ett konto på vår hemsida direkt när någon avbokar en tid.",
         "get_started_steps_step3_body": "Logga in via företagets sida som vanligt och boka.",
-        "footer": "© 2023 BlinkSMS. Beslut, kod och idéer framtagna i samarbete med ChatGPT.",
+        "footer": "© 2023 Instafication. Beslut, kod och idéer framtagna i samarbete med ChatGPT.",
         "pulse": "Företag vi tar pulsen på",
         "rental_cars": "Biluthyrning",
         "laundry": "Tvättid",
@@ -146,17 +146,17 @@ export default {
 
         // FAQ
         "FAQ_TITLE": "Frequently asked questions",
-        "FAQ_Q1": "What is Blinksms?",
-        "FAQ_Q2": "Which companies are supported by Blinksms?",
+        "FAQ_Q1": "What is Instafication?",
+        "FAQ_Q2": "Which companies are supported by Instafication?",
         "FAQ_Q3": "How do I use the service?",
         "FAQ_Q4": "What does it cost?",
         "FAQ_Q5": "How do I contact you?",
 
-        "FAQ_A1": "Blinksms is a service that sends notifications via email when a laundry time becomes available. We constantly monitor laundry times for you and notify you as soon as a time becomes available.",
+        "FAQ_A1": "Instafication is a service that sends notifications via email when a laundry time becomes available. We constantly monitor laundry times for you and notify you as soon as a time becomes available.",
         "FAQ_A2": "Currently, we only search for laundry times at Stockholm Student Housing (SSSB).",
         "FAQ_A3": "By clicking 'Get started' at the top. Then you get 30 days of free testing. It's always possible to cancel before 30 days have passed.",
         "FAQ_A4": "Option 1: Free for 30 days. Then payment of 19 SEK/month for unlimited notifications. Option 2: 9 SEK to buy 2 notifications. You can create an account for free via the 'Create an account' button in the menu bar, or log in directly with your Google account by clicking on 'Log in' in the upper right corner of the menu bar.",
-        "FAQ_A5": "You can contact us via email at hej@blinksms.se or join our Discord channel at: https://discord.gg/SvWJAc4RNB.",
+        "FAQ_A5": "You can contact us via email at hej@Instafication.se or join our Discord channel at: https://discord.gg/SvWJAc4RNB.",
 
 
         // Overall:
@@ -220,7 +220,7 @@ export default {
         "get_started_steps_step1_body": "Click in the upper right corner to register an account (or directly with Google).",
         "get_started_steps_step2_body": "We will send an email to the address you used when you created an account on our website as soon as someone cancels an appointment.",
         "get_started_steps_step3_body": "Log in through the company's page as usual and book.",
-        "footer": "© 2023 BlinkSMS. Decisions, code, and ideas developed in collaboration with ChatGPT.",
+        "footer": "© 2023 Instafication. Decisions, code, and ideas developed in collaboration with ChatGPT.",
         "pulse": "Companies we follow",
         "rental_cars": "Car rental",
         "laundry": "Laundry time",
