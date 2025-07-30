@@ -6,10 +6,13 @@ export default defineConfig({
     out: './src/drizzle',
     schema: './src/drizzle/schema.ts',
     dbCredentials: {
-        url: process.env.SECRET_DATABASE_URL!,
+        url: process.env.DATABASE_URL!,
+        host: "db.dkavcpubobbtovqtobkv.supabase.co",
+        port: 5432,
+        user: "postgres",
+        password: process.env.DB_PASSWORD,   // emx1hmd6pek3wzw@BAT!
+        ssl: { rejectUnauthorized: false },  // or the proper CA object
     },
     // Print all statements
     verbose: true,
-    // Always ask for confirmation
-    strict: true,
 });
