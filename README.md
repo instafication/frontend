@@ -53,8 +53,8 @@ Instafication is a smart notification service that monitors booking systems and 
 
 4. **Set up the database**
    ```bash
-   npx prisma generate
-   npx prisma db push
+   bunx prisma generate
+   bunx prisma db push
    ```
 
 5. **Configure Supabase triggers**
@@ -154,17 +154,11 @@ Administrators can configure:
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
-
-1. Install Vercel CLI: `bun i -g vercel`
-2. Run: `vercel`
-3. Follow the prompts
-
-### Cloudflare Workers
+### Cloudflare
 
 1. Install Wrangler: `bun i -g wrangler`
 2. Configure `wrangler.toml`
-3. Run: `bun run dev:cloudflare`
+3. Run: `bun run deploy`
 
 ## 💰 Pricing Model
 
