@@ -2,7 +2,7 @@ import * as trpc from '@trpc/server';
 import type { Context } from './context';
 import { z } from 'zod';
 import { DatabaseManager } from '$lib/server/databasemanager';
-import { createPortalByEmail } from '$lib/server/StripeManager';
+// import { createPortalByEmail } from '$lib/server/StripeManager';
 import superjson from 'superjson';
 import type { scrapers } from '@prisma/client';
 

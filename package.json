@@ -4,10 +4,12 @@
 	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
-		"dev": "vite dev",
-		"dev:cloudflare": "bunx wrangler pages dev --persist --compatibility-date=2025-07-29 -- bun run dev:vite",
-		"deploy": "wrangler types && wrangler pages deploy"
+    "dev": "vite dev",
+    "build": "vite build",
+	"deploy": "bun run build && wrangler pages deploy .svelte-kit/cloudflare --env production",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "prepare": "svelte-kit sync || echo ''",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"dependencies": {
 		"@cloudflare/workers-types": "^4.20250726.0",
