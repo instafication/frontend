@@ -13,7 +13,7 @@
 </script>
 
 
-<Modal title={$t("get_started_modal_title")} bind:open={$showInformationModal} autoclose>
+<Modal title={$t("get_started_modal_title")} bind:open={$showInformationModal} placement="center" autoclose>
   <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
     {$t("get_started_in_30_seconds")}
 

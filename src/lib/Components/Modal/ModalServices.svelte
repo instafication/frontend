@@ -68,7 +68,7 @@
   }
 </script>
 
-<Modal bind:open={$showServicesModal} size="md">
+<Modal bind:open={$showServicesModal} size="md" placement="center">
   <!-- header -->
   <h3 class="text-xl font-medium text-gray-900 dark:text-white">
     {$t('SERVICES_TITLE')}

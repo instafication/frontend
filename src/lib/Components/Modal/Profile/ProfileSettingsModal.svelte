@@ -36,6 +36,7 @@
 
 <Modal bind:open={$showProfileSettingsModal}
        size="xs"
+       placement="center"
        autoclose>
   <form class="flex flex-col space-y-6"
         onsubmit={handleSave}>
