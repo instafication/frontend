@@ -38,7 +38,7 @@
   }
 </script>
 
-<Modal bind:open={$showLoginModal} size="xs" autoclose class="w-full">
+<Modal bind:open={$showLoginModal} size="xs" autoclose>
   <!-- onsubmit ⟹ prevents default for us -->
   <form class="flex flex-col space-y-6"
         onsubmit={handlePasswordLogin}>
@@ -67,11 +67,12 @@
 
     <div class="flex items-start">
       <Checkbox>{$t('remember_me')}</Checkbox>
-      <a role="button"
+      <button
+      tabindex="-1"
          class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
          onclick={openLostPassword}>
         {$t('lost_password')}
-      </a>
+    </button>
     </div>
 
     <!-- submit = password login -->
@@ -96,11 +97,11 @@
 
     <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
       {$t('not_registered')}
-      <a role="button"
+      <button
          class="text-blue-700 hover:underline dark:text-blue-500"
          onclick={openRegister}>
         {$t('create_an_account')}
-      </a>
+    </button>
     </div>
   </form>
 </Modal>

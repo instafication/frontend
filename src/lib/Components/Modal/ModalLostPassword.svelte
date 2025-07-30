@@ -20,11 +20,10 @@
 
 <Modal bind:open={$showLostPasswordModal}
        size="xs"
-       autoclose
-       class="w-full">
+       autoclose>
 
   <form class="flex flex-col space-y-6"
-        on:submit|preventDefault={handleReset}>
+        onsubmit={handleReset}>
 
     <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">
       {$t('lost_password_reset_password')}

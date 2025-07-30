@@ -21,11 +21,10 @@
 
 <Modal bind:open={$showRegisterModal}
        size="xs"
-       autoclose
-       class="w-full">
+       autoclose>
 
   <form class="flex flex-col space-y-6"
-        on:submit|preventDefault={register}>
+        onsubmit={register}>
 
     <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">
       {$t('register_new_account_title')}
