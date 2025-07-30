@@ -27,8 +27,8 @@
       <Dialog.Title>{$t("register_new_account_title")}</Dialog.Title>
     </Dialog.Header>
 
-    <!-- on:submit|preventDefault avoids page reload -->
-    <form class="flex flex-col space-y-6" on:submit|preventDefault={register}>
+    <!-- onsubmit|preventDefault avoids page reload -->
+    <form class="flex flex-col space-y-6" onsubmit={register}>
       <Label class="space-y-2">
         <span>{$t("your_email")}</span>
         <Input

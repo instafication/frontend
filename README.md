@@ -44,11 +44,13 @@ Instafication is a smart notification service that monitors booking systems and 
 3. **Set up environment variables**
    Create a `.env` file in the root directory:
    ```env
-   PUBLIC_DATABASE_URL=your_postgresql_connection_string
-   PUBLIC_DIRECT_URL=your_postgresql_direct_connection_string
+   SECRET_DATABASE_URL=your_postgresql_connection_string
+   SECRET_DIRECT_URL=your_postgresql_direct_connection_string
    PUBLIC_SUPABASE_URL=your_supabase_project_url
    PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   STRIPE_SECRET_KEY=your_stripe_secret_key
+   SECRET_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   SECRET_STRIPE_SECRET_KEY=your_stripe_secret_key
+   SECRET_STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
    ```
 
 4. **Set up the database**

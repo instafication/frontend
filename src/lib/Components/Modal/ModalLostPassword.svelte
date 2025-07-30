@@ -27,7 +27,7 @@
 
     <form
       class="flex flex-col space-y-6"
-      on:submit|preventDefault={handleReset}
+      onsubmit={handleReset}
     >
       <Label class="space-y-2">
         <span>{$t("lost_password_your_email")}</span>
