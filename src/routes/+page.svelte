@@ -81,7 +81,7 @@
 
             <Timeline>  
             <TimelineItem customDiv={"animate-ping bg-sky-200"} title={$t("checking_pulse_searching_new_times")}>
-                <!-- <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button> -->
+                <!-- <Button  onclick={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button> -->
             </TimelineItem>
 
                 {#await getLatestNotifications(3) then notifications}
@@ -96,7 +96,7 @@
 
         <!-- <Timeline>  
             <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
-                <Button  on:click={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
+                <Button  onclick={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
             </TimelineItem>
 
                 {#await getLatestNotifications(3) then notifications}

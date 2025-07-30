@@ -1,8 +1,7 @@
-<script>
-
+<script lang="ts">
     import { t } from "$lib/i18n";
-
 </script>
+
 <div class="bg-white">
 
   <div class="relative isolate pt-0">
