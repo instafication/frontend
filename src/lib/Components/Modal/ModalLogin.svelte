@@ -49,10 +49,10 @@
       <Dialog.Title>{$t("log_in_to_your_profile")}</Dialog.Title>
     </Dialog.Header>
 
-    <!-- on:submit|preventDefault avoids page reload -->
+    <!-- onsubmit|preventDefault avoids page reload -->
     <form
       class="flex flex-col space-y-6"
-      on:submit|preventDefault={handlePasswordLogin}
+      onsubmit={handlePasswordLogin}
     >
       <Label class="space-y-2">
         <span>{$t("your_email")}</span>
