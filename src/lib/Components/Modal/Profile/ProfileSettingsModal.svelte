@@ -36,10 +36,9 @@
 
 <Modal bind:open={$showProfileSettingsModal}
        size="xs"
-       autoclose
-       class="w-full">
+       autoclose>
   <form class="flex flex-col space-y-6"
-        on:submit|preventDefault={handleSave}>
+        onsubmit={handleSave}>
     <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">
       {$t('profile_settings')}
     </h3>

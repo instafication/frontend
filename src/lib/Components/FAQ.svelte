@@ -187,6 +187,8 @@
         /></svg
       >
     </span>
-    <p class="mb-2 text-gray-500 dark:text-gray-400">$t("FAQ_A5")</p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400">
+      {$t("FAQ_A5")}
+    </p>
   </AccordionItem>
 </Accordion>
