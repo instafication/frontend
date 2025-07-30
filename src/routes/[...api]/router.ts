@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { DatabaseManager } from '$lib/server/databasemanager';
 // import { createPortalByEmail } from '$lib/server/StripeManager';
 import superjson from 'superjson';
-import type { scrapers } from '@prisma/client';
+import type { Scraper } from '$lib/drizzle/types';
 
 interface Service {
     id: string;
@@ -40,17 +40,17 @@ export const appRouter = t.router({
 
 	get_all_scrapers: t.procedure
 		.query(async () => {
-			const scrapers: scrapers[] = await DatabaseManager.Scrapers.getAllScrapers();
+			const scrapers: Scraper[] = await DatabaseManager.Scrapers.getAllScrapers();
 			return scrapers;
-    }),
+	   }),
 
-    create_customer_portal_session: t.procedure
-        .input(z.string())
-        .output(z.string())
-		.query(async ({ input }) => {
-            const portalUrl: string = await createPortalByEmail(input);
-            return portalUrl;
-		}),
+    // create_customer_portal_session: t.procedure
+    //     .input(z.string())
+    //     .output(z.string())
+ // 	.query(async ({ input }) => {
+    //         const portalUrl: string = await createPortalByEmail(input);
+    //         return portalUrl;
+ // 	}),
 
     getConfiguration: t.procedure
 		.input(
@@ -80,26 +80,26 @@ export const appRouter = t.router({
 		}),
 
     createService: t.procedure
-		.input(
-			z.object({
-				user: z.string(),
-				name: z.string(),
-				notification: z.string(),
-				notificationWithin: z.string(),
-				options: z.record(z.unknown()),
-			}),
-		)
-		.query(async ({ input }) => {
+  .input(
+   z.object({
+    user: z.string(),
+    name: z.string(),
+    notification: z.string(),
+    notificationWithin: z.string(),
+    options: z.record(z.string(), z.unknown()),
+   }),
+  )
+  .query(async ({ input }) => {
             const { user, name, notification, notificationWithin, options } = input;
-			await DatabaseManager.Services.createService(
-				user,
-				name,
-				notification,
-				notificationWithin,
-				options,
-			);
+   await DatabaseManager.Services.createService(
+    user,
+    name,
+    notification,
+    parseInt(notificationWithin),
+    options,
+   );
             return true;
-		}),
+  }),
 
     raw_user_meta_data: t.procedure
         .input(z.string())

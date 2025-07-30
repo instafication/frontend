@@ -15,8 +15,9 @@
   import { t } from '$lib/i18n';
   import { onMount } from 'svelte';
 
-  /* prisma types -------------------------------------------------------- */
-  import type { Prisma, scrapers } from '@prisma/client';
+  /* drizzle types -------------------------------------------------------- */
+  import type { Scraper } from '$lib/drizzle/types';
+  import type { JsonValue } from 'type-fest';
 
   /* ---------- list item model ----------------------------------------- */
   interface ListItem {
@@ -26,32 +27,41 @@
     active: 'green' | 'red';
     services: string[];
   }
+  
+  /* ---------- scraper type -------------------------------------------- */
+  type Scrapers = Scraper[];
 
   /* ---------- reactive state ------------------------------------------ */
   let list = $state<ListItem[]>([]);
+  
+  /* ---------- json helper --------------------------------------------- */
+  function getAreaFromParams(params: JsonValue): string {
+    if (params && typeof params === 'object' && 'area' in params) {
+      return (params as { area: string }).area || '';
+    }
+    return '';
+  }
 
   /* ---------- pull data on mount -------------------------------------- */
   onMount(async () => {
-    const scraperList: scrapers[] = await getAllScrapers();
+    const scraperList: Scrapers = await getAllScrapers();
 
     list = scraperList.map((scraper) => {
-      const diffMinutes = getMinutesDiffFromUnixTimestamp(scraper.last_ping);
+      const diffMinutes = getMinutesDiffFromUnixTimestamp(Number(scraper.last_ping));
       const active: 'green' | 'red' =
-        diffMinutes <= scraper.frequency * 2 ? 'green' : 'red';
+        diffMinutes <= (scraper.frequency || 0) * 2 ? 'green' : 'red';
 
-      const params = scraper.params as Prisma.JsonArray;
-      // @ts-expect-error  — params content is user-defined JSON
-      const area = params?.area ?? '';
+      const area = getAreaFromParams(scraper.params);
 
       return {
         img: {
           src: '/images/favicon-sssb.svg',
-          alt: scraper.company
+          alt: scraper.company || ''
         },
         name: area,
         status: `${t('pulse_last_search')} ${diffMinutes} ${t('minutes_ago')}`,
         active,
-        services: scraper.services
+        services: scraper.services || []
       };
     });
   });
