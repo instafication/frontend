@@ -90,7 +90,7 @@ export default {
         "get_started_steps_step1_body": "Klicka uppe i högra hörnet för att registrera ett konto (eller logga in direkt med Google).",
         "get_started_steps_step2_body": "Vi kommer att skicka ut ett email till den adressen du använde när du skapade ett konto på vår hemsida direkt när någon avbokar en tid.",
         "get_started_steps_step3_body": "Logga in via företagets sida som vanligt och boka.",
-        "footer": "© 2023 Instafication. Beslut, kod och idéer framtagna i samarbete med ChatGPT.",
+        "footer": "© 2023 - 2025 Instafication.",
         "pulse": "Företag vi tar pulsen på",
         "rental_cars": "Biluthyrning",
         "laundry": "Tvättid",

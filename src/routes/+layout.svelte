@@ -4,9 +4,8 @@
 
 	/* libs & utils */
 	import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
-	import { onMount } from "svelte";
+	import { onMountimport } from "$lib/sharedStore";
 	import { userLoggedIn } from "$lib/sharedStore";
-	import { inject } from "@vercel/analytics";
 
 	/* layout‑level UI */
 	import HeaderLoggedIn from "$lib/Components/HeaderLoggedIn.svelte";
@@ -19,9 +18,7 @@
 	import ModalServices from "$lib/Components/Modal/ModalServices.svelte";
 	import ModalRegister from "$lib/Components/Modal/ModalRegister.svelte";
 	import ProfileSettingsModal from "$lib/Components/Modal/Profile/ProfileSettingsModal.svelte";
-
-	/* analytics */
-	inject();
+    import { onMount } from "svelte";
 
 	/* ── local reactive state ───────────────────────────── */
 	let lastAuthStatus = $state<string>("");
@@ -58,7 +55,6 @@
 	<Header />
 {/if}
 
-<!-- route outlet (formerly <slot/>) -->
 {@render children?.()}
 
 <Footer />
