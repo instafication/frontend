@@ -14,11 +14,11 @@
 <div class="flex items-center">
     {#if $selectedLanguage == "sv"}
         <Button onclick={() => $selectedLanguage = "en"} color="alternative" class="p-2">
-          <Us size=24/>
+          <Se size=24/>
         </Button>
     {:else}
         <Button onclick={() => $selectedLanguage = "sv"} color="alternative" class="p-2">
-          <Se size=24/>
+          <Us size=24/>
         </Button>
     {/if}
 </div>

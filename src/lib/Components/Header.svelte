@@ -17,8 +17,8 @@
   import { t } from '$lib/i18n';
 </script>
 
-<Navbar>
-  <div class="flex items-center justify-between w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+<Navbar class="px-0">
+  <div class="flex items-center justify-between w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     <!-- logo / brand -->
     <NavBrand href="/">
       <img src="/images/logo.png" class="mr-3 h-6 sm:h-9" alt="Instafication Logo" />
@@ -27,14 +27,14 @@
       </span>
     </NavBrand>
 
-    <div class="flex items-center space-x-3 md:space-x-0 rtl:space-x-reverse">
+    <div class="flex items-center space-x-4 md:space-x-4 rtl:space-x-reverse">
       <!-- language selector -->
       <div class="flex items-center">
         <LanguageSelector />
       </div>
       
       <!-- log-in -->
-      <Button onclick={() => ($showLoginModal = true)} color="alternative" class="mr-2">
+      <Button onclick={() => ($showLoginModal = true)} color="alternative">
         <lord-icon
           src="https://cdn.lordicon.com/rqqkvjqf.json"
           trigger="hover"
@@ -43,7 +43,7 @@
           scale="40"
           style="width:24px;height:24px"
         ></lord-icon>
-        {$t('log_in')}
+        <span class="ml-2">{$t('log_in')}</span>
       </Button>
 
       <!-- register -->
@@ -56,7 +56,7 @@
           scale="40"
           style="width:24px;height:24px"
         ></lord-icon>
-        {$t('register')}
+        <span class="ml-2">{$t('register')}</span>
       </Button>
       
       <!-- mobile hamburger -->
