@@ -144,7 +144,7 @@
   </section>
 
   <!-- actions -->
-  <Button class="mt-6" on:click={handleSave}>
+  <Button class="mt-6" onclick={handleSave}>
     {$t('SERVICES_BUTTON1')}
   </Button>
 </Modal>

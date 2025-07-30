@@ -87,7 +87,7 @@
     items={list}
     let:item
     class="border-1 p-2 dark:!bg-transparent"
-    on:click={handleItemClick}>
+    onclick={handleItemClick}>
 
     <div class="flex items-center space-x-4">
       <!-- avatar + status dot -->

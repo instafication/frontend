@@ -4,7 +4,6 @@
 
 	/* libs & utils */
 	import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
-	import { onMountimport } from "$lib/sharedStore";
 	import { userLoggedIn } from "$lib/sharedStore";
 
 	/* layout‑level UI */
