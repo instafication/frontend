@@ -38,7 +38,7 @@ Instafication is a smart notification service that monitors booking systems and 
 
 2. **Install dependencies**
    ```bash
-   npm install
+   bun install
    ```
 
 3. **Set up environment variables**
@@ -81,7 +81,7 @@ Instafication is a smart notification service that monitors booking systems and 
 
 6. **Start the development server**
    ```bash
-   npm run dev
+   bun run dev
    ```
 
 Visit `http://localhost:5173` to see the application running!
@@ -90,12 +90,9 @@ Visit `http://localhost:5173` to see the application running!
 
 ### Available Scripts
 
-- `npm run dev` - Start development server (Vercel)
-- `npm run dev:vite` - Start Vite development server
-- `npm run dev:cloudflare` - Start Cloudflare Pages development
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run rome:format` - Format code with Rome
+- `bun run build` - Build for production
+- `bun run dev` - Start development server
+- `bun run deploy` - Deploy project to Cloudflare
 
 ### Project Structure
 
@@ -159,15 +156,15 @@ Administrators can configure:
 
 ### Vercel (Recommended)
 
-1. Install Vercel CLI: `npm i -g vercel`
+1. Install Vercel CLI: `bun i -g vercel`
 2. Run: `vercel`
 3. Follow the prompts
 
 ### Cloudflare Workers
 
-1. Install Wrangler: `npm i -g wrangler`
+1. Install Wrangler: `bun i -g wrangler`
 2. Configure `wrangler.toml`
-3. Run: `npm run dev:cloudflare`
+3. Run: `bun run dev:cloudflare`
 
 ## 💰 Pricing Model
 
