@@ -6,7 +6,7 @@
 	"scripts": {
     "dev": "vite dev",
     "build": "vite build",
-	"deploy": "bun run build && wrangler pages deploy .svelte-kit/cloudflare --env production",
+	"deploy": "bun run build && wrangler types && wrangler pages deploy .svelte-kit/cloudflare",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "prepare": "svelte-kit sync || echo ''",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

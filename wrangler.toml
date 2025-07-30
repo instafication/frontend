@@ -1,6 +1,7 @@
 name = "instafication-frontend"
 main = ".svelte-kit/cloudflare/_worker.js"
-compatibility_date = "2025-07-29"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2025-07-24"
 
 [assets]
 directory = ".svelte-kit/cloudflare"
@@ -10,5 +11,5 @@ binding = "ASSETS"
 mode = "smart"
 
 [vars]
-NODE_VERSION="24.4.1"
+NODE_VERSION = "24.4.1"
 ENVIRONMENT = "production"

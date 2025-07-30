@@ -1,18 +1,25 @@
-import adapter from '@sveltejs/adapter-auto';
-// import adapter from '@sveltejs/adapter-cloudflare';
-// import adapter from '@sveltejs/adapter-vercel';
-
+import adapter from '@sveltejs/adapter-cloudflare';
 
 export default {
   compilerOptions: {
     runes: true
   },
   kit: {
-    alias: { 'lib/': './src/routes/lib/' }
-  },  
-  plugins: {
-    ServiceWorker: {
-      register: false
-    }
-  },
+    adapter: adapter({
+      config: undefined,
+      platformProxy: {
+        configPath: undefined,
+        environment: undefined,
+        persist: undefined
+      },
+      fallback: 'plaintext',
+      routes: {
+        include: ['/*'],
+        exclude: ['<all>']
+      }
+    }),
+    alias: {
+      "@/*": "./src/lib/*",
+    },
+  }
 };
