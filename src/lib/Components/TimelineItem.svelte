@@ -8,6 +8,9 @@
     date?: string;
     customDiv?: string;
     customTimeClass?: string;
+    /* snippets */
+    children?: () => unknown;   // default content
+    icon?: () => unknown;       // named slot “icon”
   }
 
   // runes-mode prop declaration
@@ -15,7 +18,9 @@
     title = '',
     date = '',
     customDiv = '',
-    customTimeClass = ''
+    customTimeClass = '',
+    children,          // default slot snippet
+    icon               // named slot snippet
   } = $props<TimelineItemProps>();
 
   /* ---------- context ---------- */
@@ -95,39 +100,42 @@
 
 <li class={liClasses[order]}>
   {#if order === 'default'}
-    <div class={divClass}/>
+    <div class={divClass}></div>
     {#if date}<time class={timeClass}>{date}</time>{/if}
     {#if title}<h3 class={h3Class}>{title}</h3>{/if}
-    <slot/>
+    {@render children?.()}
+  
   {:else if order === 'vertical'}
-    <div class={divClass}/>
-    {#if $$slots.icon}
-      <slot name="icon"/>
+    <div class={divClass}></div>
+    {#if icon}
+      {@render icon()}
     {:else}
       {@html defaultIconHtml}
     {/if}
     {#if title}<h3 class={h3Class}>{title}</h3>{/if}
     {#if date}<time class={timeClass}>{date}</time>{/if}
-    <slot/>
+    {@render children?.()}
+  
   {:else if order === 'horizontal'}
-    <div class={divClass}/>
-    {#if $$slots.icon}
-      <slot name="icon"/>
+    <div class={divClass}></div>
+    {#if icon}
+      {@render icon()}
     {:else}
       {@html defaultIconHtml}
     {/if}
     {#if title}<h3 class={h3Class}>{title}</h3>{/if}
     {#if date}<time class={timeClass}>{date}</time>{/if}
-    <slot/>
+    {@render children?.()}
+  
   {:else}
-    <div class={divClass}/>
-    {#if $$slots.icon}
-      <slot name="icon"/>
+    <div class={divClass}></div>
+    {#if icon}
+      {@render icon()}
     {:else}
       {@html defaultIconHtml}
     {/if}
     {#if title}<h3 class={h3Class}>{title}</h3>{/if}
     {#if date}<time class={timeClass}>{date}</time>{/if}
-    <slot/>
+    {@render children?.()}
   {/if}
 </li>
