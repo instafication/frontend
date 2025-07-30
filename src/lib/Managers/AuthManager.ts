@@ -42,6 +42,8 @@ async function signUp(email: string, password: string, isPremium: boolean = fals
 		};
 	}
 
+	console.log(email, password, isPremium);
+	console.log(params);
 
 	const { data, error } = await supabase.auth.signUp({
 		email: email,

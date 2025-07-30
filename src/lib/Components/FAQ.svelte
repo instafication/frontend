@@ -1,6 +1,7 @@
 <script lang="ts">
   import { t } from "$lib/i18n";
-  import { Accordion, AccordionItem } from "flowbite-svelte";
+  /* Radix‑style accordion re‑export */
+  import * as Accordion from "$lib/components/ui/accordion/index.js";
 </script>
 
 <p
@@ -10,185 +11,77 @@
   {$t("FAQ_TITLE")}
 </p>
 
-<Accordion>
-  <AccordionItem>
-    {#snippet header()}{$t("FAQ_Q1")}{/snippet}
-    <div slot="arrowup">
-      <svg
-        class="w-6 h-6 shrink-0 rotate-180"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </div>
-    <span slot="arrowdown">
-      <svg
-        class="w-6 h-6 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </span>
-    <p class="mb-2 text-gray-500 dark:text-gray-400">{$t("FAQ_A1")}</p>
-  </AccordionItem>
+<!-- one‑at‑a‑time accordion -->
+<Accordion.Root type="single" collapsible class="w-full max-w-3xl mx-auto">
+  <!-- Q1 -->
+  <Accordion.Item value="q1" class="border-b last:border-b-0">
+    <Accordion.Trigger
+      class="flex w-full items-center justify-between py-4 text-left font-medium text-gray-900 hover:underline focus:outline-none"
+    >
+      {$t("FAQ_Q1")}
+    </Accordion.Trigger>
 
-  <AccordionItem>
-    {#snippet header()}{$t("FAQ_Q2")}{/snippet}
-    <div slot="arrowup">
-      <svg
-        class="w-6 h-6 shrink-0 rotate-180"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </div>
-    <span slot="arrowdown">
-      <svg
-        class="w-6 h-6 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </span>
-    <p class="mb-2 text-gray-500 dark:text-gray-400">{$t("FAQ_A2")}</p>
-  </AccordionItem>
+    <Accordion.Content class="pb-4 pr-2 pl-1">
+      <p class="text-gray-500 dark:text-gray-400">{$t("FAQ_A1")}</p>
+    </Accordion.Content>
+  </Accordion.Item>
 
-  <AccordionItem>
-    {#snippet header()}{$t("FAQ_Q3")}{/snippet}
-    <div slot="arrowup">
-      <svg
-        class="w-6 h-6 shrink-0 rotate-180"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </div>
-    <span slot="arrowdown">
-      <svg
-        class="w-6 h-6 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </span>
-    <p class="mb-2 text-gray-500 dark:text-gray-400">
-      {$t("FAQ_A3")}
-    </p>
-  </AccordionItem>
+  <!-- Q2 -->
+  <Accordion.Item value="q2" class="border-b last:border-b-0">
+    <Accordion.Trigger
+      class="flex w-full items-center justify-between py-4 text-left font-medium text-gray-900 hover:underline focus:outline-none"
+    >
+      {$t("FAQ_Q2")}
+    </Accordion.Trigger>
 
-  <AccordionItem>
-    {#snippet header()}{$t("FAQ_Q4")}{/snippet}
-    <div slot="arrowup">
-      <svg
-        class="w-6 h-6 shrink-0 rotate-180"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </div>
-    <span slot="arrowdown">
-      <svg
-        class="w-6 h-6 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </span>
-    <p class="mb-2 text-gray-500 dark:text-gray-400">
-      {$t("FAQ_A4")}
-    </p>
-  </AccordionItem>
+    <Accordion.Content class="pb-4 pr-2 pl-1">
+      <p class="text-gray-500 dark:text-gray-400">{$t("FAQ_A2")}</p>
+    </Accordion.Content>
+  </Accordion.Item>
 
-  <AccordionItem>
-    {#snippet header()}{$t("FAQ_Q5")}{/snippet}
-    <div slot="arrowup">
-      <svg
-        class="w-6 h-6 shrink-0 rotate-180"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </div>
-    <span slot="arrowdown">
-      <svg
-        class="w-6 h-6 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-        /></svg
-      >
-    </span>
-        <p class="mb-2 text-gray-500 dark:text-gray-400">
-      {$t("FAQ_A5")}
-    </p>
-  </AccordionItem>
-</Accordion>
+  <!-- Q3 -->
+  <Accordion.Item value="q3" class="border-b last:border-b-0">
+    <Accordion.Trigger
+      class="flex w-full items-center justify-between py-4 text-left font-medium text-gray-900 hover:underline focus:outline-none"
+    >
+      {$t("FAQ_Q3")}
+    </Accordion.Trigger>
+
+    <Accordion.Content class="pb-4 pr-2 pl-1">
+      <p class="text-gray-500 dark:text-gray-400">{$t("FAQ_A3")}</p>
+    </Accordion.Content>
+  </Accordion.Item>
+
+  <!-- Q4 -->
+  <Accordion.Item value="q4" class="border-b last:border-b-0">
+    <Accordion.Trigger
+      class="flex w-full items-center justify-between py-4 text-left font-medium text-gray-900 hover:underline focus:outline-none"
+    >
+      {$t("FAQ_Q4")}
+    </Accordion.Trigger>
+
+    <Accordion.Content class="pb-4 pr-2 pl-1">
+      <p class="text-gray-500 dark:text-gray-400">{$t("FAQ_A4")}</p>
+    </Accordion.Content>
+  </Accordion.Item>
+
+  <!-- Q5 -->
+  <Accordion.Item value="q5">
+    <Accordion.Trigger
+      class="flex w-full items-center justify-between py-4 text-left font-medium text-gray-900 hover:underline focus:outline-none"
+    >
+      {$t("FAQ_Q5")}
+    </Accordion.Trigger>
+
+    <Accordion.Content class="pb-4 pr-2 pl-1">
+      <p class="text-gray-500 dark:text-gray-400">{$t("FAQ_A5")}</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>
+
+<style>
+  /* rotate chevron when panel is open */
+  [data-state="open"] .accordion-chevron {
+    transform: rotate(180deg);
+  }
+</style>
