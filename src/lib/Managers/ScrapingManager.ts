@@ -1,10 +1,10 @@
 import { trpc } from '$lib/trpc/client';
-import type { scrapers } from '@prisma/client';
+import type { Scraper } from '$lib/drizzle/types';
 
 
 
 
-async function getAllScrapers(): Promise<scrapers[]> {
+async function getAllScrapers(): Promise<Scraper[]> {
     const scrapers = await trpc.get_all_scrapers.query();
     return scrapers
 }

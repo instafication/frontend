@@ -1,7 +1,8 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '../../../../lib/server/databasemanager';
 import { sendEmail, SendEmailWhenUserIsCreated } from '../../../../lib/Managers/EmailManager';
-import type { Prisma, scrapers } from '@prisma/client';
+import type { Scraper } from '$lib/drizzle/types';
+import type { JsonValue } from 'type-fest';
 
 
 export interface postTemplate {
@@ -15,19 +16,21 @@ export interface postParamsSssb {
 	area: string; //
 }
 
-async function HandleSssb(scraper: scrapers): Promise<Response> {
+async function HandleSssb(scraper: Scraper): Promise<Response> {
 
-	const params: Prisma.JsonArray = scraper.params;
-	const area = params.area;
-	console.log(`[Scraper] New data from ${area}: ${`${params.date} ${params.time}`}.`);
+	const params = scraper.params as JsonValue;
+	const area = (params && typeof params === 'object' && 'area' in params) ? (params as { area: string }).area : '';
+	const paramDate = (params && typeof params === 'object' && 'date' in params) ? (params as { date: string }).date : '';
+	const paramTime = (params && typeof params === 'object' && 'time' in params) ? (params as { time: string }).time : '';
+	console.log(`[Scraper] New data from ${area}: ${`${paramDate} ${paramTime}`}.`);
 
 	const now = new Date();
 	now.setUTCHours(now.getUTCHours() + 2);
 	const currentYear = now.getFullYear();
-	const dateString = `${params.date} ${params.time}`;
+	const dateString = `${paramDate} ${paramTime}`;
 
 	console.log(dateString);
-	console.log(`${params.date} ${params.time}`);
+	console.log(`${paramDate} ${paramTime}`);
 	const [, , date, monthName, startTime]: any | null = dateString.match(/([A-ZÅÄÖ]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/);
 
 	const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -68,7 +71,7 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 		// Add the notification to notifications table
 		const notificationTitle: string = `Ny tid och datum i ${area}`;
-		const notificationMessage: string = `Ny tid och datum i ${area}: ${`${params.date} ${params.time}`}.`;
+		const notificationMessage: string = `Ny tid och datum i ${area}: ${`${paramDate} ${paramTime}`}.`;
 		const notificationArea: string = area;
 		const notificationDate: string = dateObj.toString();
 		const success = await DatabaseManager.Notifications.createNotification({
@@ -98,7 +101,7 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 					console.log("[/api/callback/scraper] User found and active for area with credits: ");
 					console.log(user);
-					const message = `Instafication.se har hittat en ny tvättid i ${area}: ${`${params.date} ${params.time}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
+					const message = `Instafication.se har hittat en ny tvättid i ${area}: ${`${paramDate} ${paramTime}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
 
 					// Check notification method by service
 					usersByArea.forEach(async (userInside: any) => {
@@ -160,7 +163,7 @@ async function HandleSssb(scraper: scrapers): Promise<Response> {
 
 export const POST = (async ({ request }) => {
 
-	const scraper: scrapers = await request.json();
+	const scraper: Scraper = await request.json();
 
 	if (scraper.company === "Stockholms Studentbostäder") {
 		const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
