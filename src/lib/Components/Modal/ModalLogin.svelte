@@ -38,7 +38,7 @@
   }
 </script>
 
-<Modal bind:open={$showLoginModal} size="xs" placement="center" autoclose>
+<Modal bind:open={$showLoginModal} size="xs" autoclose>
   <!-- onsubmit ⟹ prevents default for us -->
   <form class="flex flex-col space-y-6"
         onsubmit={handlePasswordLogin}>
