@@ -4,16 +4,10 @@
 	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
-		"wd": "bunx wrangler pages dev --experimental-local -- bun run dev",
-		"dx": "bunx wrangler pages dev --local --persist -- bun run dev",
-		"preview": "vite preview",
-		"dev": "bun run dev:vercel",
-		"dev:cloudflare": "bunx wrangler pages dev --persist --compatibility-date=2025-07-29 -- bun run dev:vite",
-		"dev:vercel": "vercel dev",
-		"dev:vite": "vite dev",
 		"build": "vite build",
-		"rome:format": "rome format .",
-		"postinstall": "prisma generate"
+		"dev": "vite dev",
+		"dev:cloudflare": "bunx wrangler pages dev --persist --compatibility-date=2025-07-29 -- bun run dev:vite",
+		"deploy": "wrangler types && wrangler pages deploy"
 	},
 	"dependencies": {
 		"@cloudflare/workers-types": "^4.20250726.0",

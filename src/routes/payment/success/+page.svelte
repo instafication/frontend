@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-  <script>
+  <script lang="ts">
     gtag('event', 'conversion', {
       'send_to': 'AW-11152082064/1PmeCM7m_ZgYEJCJ3cUp',
       'transaction_id': ''

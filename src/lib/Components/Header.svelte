@@ -27,7 +27,7 @@
   </NavBrand>
 
   <!-- mobile hamburger -->
-  <NavHamburger />
+  <!-- <NavHamburger /> -->
 
   <!-- main nav links -->
   <NavUl class="order-1">
@@ -65,5 +65,6 @@
     <NavLi class="divide-y">
       <LanguageSelector />
     </NavLi>
+    
   </NavUl>
 </Navbar>
