@@ -18,7 +18,7 @@
 </script>
 
 <Navbar>
-  <div class="flex items-center justify-between w-full">
+  <div class="flex items-center justify-between w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- logo / brand -->
     <NavBrand href="/">
       <img src="/images/logo.png" class="mr-3 h-6 sm:h-9" alt="Instafication Logo" />
