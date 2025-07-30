@@ -105,7 +105,7 @@
             ></span>
           </span>
 
-          <Avatar src="/images/favicon-sssb.svg" alt="Logo" />
+          <Avatar src="/images/favicon-sssb.svg" alt="Logo" size="xs" />
 
           <p class="text-xl font-normal text-gray-900 dark:text-white">
             Stockholms Studentbostäder
