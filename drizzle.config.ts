@@ -1,18 +1,13 @@
-import 'dotenv/config'; // make sure to install dotenv package
+import 'dotenv/config';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
     dialect: 'postgresql',
-    out: './src/drizzle',
     schema: './src/drizzle/schema.ts',
+    out: './src/drizzle',
+    /* ── use the Supabase Session pooler URL (IPv4 compatible) ── */
     dbCredentials: {
-        url: process.env.DATABASE_URL!,
-        host: "db.dkavcpubobbtovqtobkv.supabase.co",
-        port: 5432,
-        user: "postgres",
-        password: process.env.DB_PASSWORD,   // emx1hmd6pek3wzw@BAT!
-        ssl: { rejectUnauthorized: false },  // or the proper CA object
+        url: process.env.DATABASE_URL!, // e.g. "postgresql://postgres.<project_ref>:<pw>@aws-0-eu-north-1.pooler.supabase.com:5432/postgres?sslmode=no-verify"
     },
-    // Print all statements
     verbose: true,
 });
