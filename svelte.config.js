@@ -21,5 +21,8 @@ export default {
     alias: {
       "@/*": "./src/lib/*",
     },
+    paths: {
+      relative: false
+    }
   }
 };

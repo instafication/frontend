@@ -21,7 +21,8 @@
 
 <Modal bind:open={$showRegisterModal}
        size="xs"
-       autoclose>
+       autoclose
+       placement="center">
 
   <form class="flex flex-col space-y-6"
         onsubmit={register}>
