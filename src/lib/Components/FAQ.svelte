@@ -78,10 +78,3 @@
     </Accordion.Content>
   </Accordion.Item>
 </Accordion.Root>
-
-<style>
-  /* rotate chevron when panel is open */
-  [data-state="open"] .accordion-chevron {
-    transform: rotate(180deg);
-  }
-</style>

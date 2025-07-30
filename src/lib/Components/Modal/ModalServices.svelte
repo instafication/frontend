@@ -175,7 +175,7 @@
 
     <!-- actions -->
     <div class="mt-6">
-      <Button on:click={handleSave}>{$t("SERVICES_BUTTON1")}</Button>
+      <Button onclick={handleSave}>{$t("SERVICES_BUTTON1")}</Button>
     </div>
   </Dialog.Content>
 </Dialog.Root>
