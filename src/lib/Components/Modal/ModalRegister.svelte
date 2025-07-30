@@ -21,7 +21,6 @@
 
 <Modal bind:open={$showRegisterModal}
        size="xs"
-       placement="center"
        autoclose>
 
   <form class="flex flex-col space-y-6"
