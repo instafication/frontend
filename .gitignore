@@ -18,4 +18,4 @@ vite.config.js.timestamp-*
 .vercel
 .test-tmp
 symlink-from
-.bun.lock
+bun.lock
