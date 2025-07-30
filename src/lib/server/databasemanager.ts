@@ -1,7 +1,7 @@
 import { generateRandomUUID } from '../Inbox/Utils';
 import { supabase, signUp } from "$lib/Managers/AuthManager";
 import { Prisma, PrismaClient, type scrapers, type services } from '@prisma/client';
-import SuperJSON from 'superjson';
+
 const prisma = new PrismaClient();
 
 export class DatabaseManager {

@@ -77,7 +77,7 @@
       src="https://cdn.lordicon.com/hdiorcun.json"
       trigger="loop"
       delay="4000"
-      style="width:64px;height:64px" />
+      style="width:64px;height:64px"></lord-icon>
     <h5 class="ml-4 text-xl font-bold leading-none text-gray-900 dark:text-white">
       {$t('pulse')}
     </h5>
