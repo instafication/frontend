@@ -11,8 +11,13 @@ function translate(selectedLanguage: string, key: string, vars) {
     if (!selectedLanguage) throw new Error(`no translation for key "${key}"`);
 
     // Grab the translation from the translations object.
-    let text = translations[selectedLanguage][key];
+    // Fix: Add type safety for dynamic key access
+    const langTranslations = translations[selectedLanguage];
+    if (!langTranslations) {
+        throw new Error(`No translations found for language "${selectedLanguage}"`);
+    }
 
+    const text = langTranslations[key as keyof typeof langTranslations];
     if (!text) throw new Error(`no translation found for ${selectedLanguage}.${key}`);
 
     // Replace any passed in variables in the translation string.

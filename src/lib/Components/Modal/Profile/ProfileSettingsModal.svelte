@@ -1,69 +1,80 @@
 <script lang="ts">
-  /* UI kit -------------------------------------------------------------- */
-  import { Button, Modal, Label, Input } from 'flowbite-svelte';
+  /* -------- UI kit -------- */
+  import * as Dialog from "$lib/components/ui/dialog/index.js";
+  import { Button, Label, Input } from "flowbite-svelte";
 
-  /* managers & stores --------------------------------------------------- */
-  import { getUserId } from '$lib/Managers/AuthManager';
-  import { updateProfileById } from '$lib/Managers/ProfileManager';
-  import { trpc } from '$lib/trpc/client';
-  import { showProfileSettingsModal } from '$lib/sharedStore';
+  /* managers & stores ----------------------------------------------- */
+  import { getUserId } from "$lib/Managers/AuthManager";
+  import { updateProfileById } from "$lib/Managers/ProfileManager";
+  import { trpc } from "$lib/trpc/client";
+  import { showProfileSettingsModal } from "$lib/sharedStore";
 
-  /* svelte internals & i18n -------------------------------------------- */
-  import { onMount } from 'svelte';
-  import { t } from '$lib/i18n';
+  /* svelte internals & i18n ----------------------------------------- */
+  import { onMount } from "svelte";
+  import { t } from "$lib/i18n";
 
-  /* ---------- local state (reactive & bind-able) ----------------------- */
-  let id   = $state('');   // not user-editable but set later
-  let email = $state('');
-  let phone = $state('');
+  /* ---------- local state (reactive & bind-able) -------------------- */
+  let id = $state("");
+  let email = $state("");
+  let phone = $state("");
 
-  /* ---------- lifecycle ------------------------------------------------ */
+  /* ---------- lifecycle -------------------------------------------- */
   async function loadUserData() {
     id = await getUserId();
     [email, phone] = await Promise.all([
       trpc.email.query(id),
-      trpc.phone.query(id)
+      trpc.phone.query(id),
     ]);
   }
 
   onMount(loadUserData);
 
-  /* ---------- actions -------------------------------------------------- */
+  /* ---------- actions ---------------------------------------------- */
   const handleSave = async () => {
     await updateProfileById(id, email, phone);
+    // close dialog after saving
+    showProfileSettingsModal.set(false);
   };
 </script>
 
-<Modal bind:open={$showProfileSettingsModal}
-       size="xs"
-       placement="center"
-       autoclose>
-  <form class="flex flex-col space-y-6"
-        onsubmit={handleSave}>
-    <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">
-      {$t('profile_settings')}
-    </h3>
+<!-- Dialog ----------------------------------------------------------- -->
+<Dialog.Root bind:open={$showProfileSettingsModal}>
+  <!-- optional invisible trigger if you ever need imperative open() -->
+  <Dialog.Trigger class="hidden" />
 
-    <Label class="space-y-2">
-      <span>{$t('profile_your_email')}</span>
-      <Input bind:value={email}
-             type="email"
-             name="email"
-             placeholder={$t('profile_email_placeholder')}
-             required />
-    </Label>
+  <Dialog.Content class="w-full max-w-xs">
+    <Dialog.Header>
+      <Dialog.Title>{$t("profile_settings")}</Dialog.Title>
+    </Dialog.Header>
 
-    <Label class="space-y-2">
-      <span>{$t('profile_your_phone_number')}</span>
-      <Input bind:value={phone}
-             type="tel"
-             name="phoneNumber"
-             placeholder="+46707749377"
-             required />
-    </Label>
+    <form class="flex flex-col space-y-6" onsubmit={handleSave}>
+      <Label class="space-y-2">
+        <span>{$t("profile_your_email")}</span>
+        <Input
+          bind:value={email}
+          type="email"
+          name="email"
+          placeholder={$t("profile_email_placeholder")}
+          required
+        />
+      </Label>
 
-    <Button type="submit" class="w-full">
-      {$t('profile_save_changes')}
-    </Button>
-  </form>
-</Modal>
+      <Label class="space-y-2">
+        <span>{$t("profile_your_phone_number")}</span>
+        <Input
+          bind:value={phone}
+          type="tel"
+          name="phoneNumber"
+          placeholder="+46707749377"
+          required
+        />
+      </Label>
+
+      <Dialog.Footer>
+        <Button type="submit" class="w-full">
+          {$t("profile_save_changes")}
+        </Button>
+      </Dialog.Footer>
+    </form>
+  </Dialog.Content>
+</Dialog.Root>

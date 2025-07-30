@@ -3,7 +3,10 @@ import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/publi
 import { SendEmailWhenUserIsCreated } from './EmailManager';
 
 
-const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY)
+const supabase = createClient(
+	PUBLIC_SUPABASE_URL.trim(),
+	PUBLIC_SUPABASE_ANON_KEY.replace(/[\r\n]+/g, '').trim()
+)
 
 async function getUserId(): Promise<string> {
 	const { data: { user } } = await supabase.auth.getUser()
@@ -28,10 +31,7 @@ async function isLoggedIn(): Promise<boolean> {
 async function signUp(email: string, password: string, isPremium: boolean = false): Promise<boolean> {
 
 	let params = {};
-	let mailSubject: string = "Välkommen till Instafication! 👋";
-
 	if (isPremium) {
-		mailSubject = "Välkommen till Instafication Premium! 👋";
 		params = {
 			credits: 500,
 			subscription_expiration_date: Date.now().toString(),
@@ -46,17 +46,16 @@ async function signUp(email: string, password: string, isPremium: boolean = fals
 	console.log(params);
 
 	const { data, error } = await supabase.auth.signUp({
-		email: email,
-		password: password,
+		email,
+		password,
 		options: {
 			"data": params
 		},
 	});
 
+	console.log(data, error);
 	if (error) return false;
-
 	return true;
-
 };
 
 async function signInWithPassword(email: string, password: string) {
@@ -99,7 +98,7 @@ async function signOut() {
 		console.log(error);
 		alert(error);
 	}
-}	
+}
 
 
 

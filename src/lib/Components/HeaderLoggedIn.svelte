@@ -1,45 +1,60 @@
 <script lang="ts">
-	import { trpc } from '$lib/trpc/client';
+	/* ——— imports ——— */
 	import { onMount } from 'svelte';
 	import {
 		Navbar,
 		NavBrand,
 		Toolbar,
-		Avatar,
-		Dropdown,
-		DropdownItem,
-		DropdownHeader,
-		DropdownDivider
+		Avatar
 	} from 'flowbite-svelte';
 
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+
+	import { trpc } from '$lib/trpc/client';
 	import { getUserId, signOut } from '$lib/Managers/AuthManager';
 	import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
-	import { showServicesModal, showProfileSettingsModal } from '$lib/sharedStore';
+	import { showProfileSettingsModal, showServicesModal } from '$lib/sharedStore';
 	import LanguageSelector from './LanguageSelector.svelte';
-	import { t } from '$lib/i18n';
 	import { goto } from '$app/navigation';
+	import { t } from '$lib/i18n';
 
-	// ▸ reactive state ---------------------------------------------------------
-	let userId          = $state<string>('');
-	let email           = $state<string>('');
-	let phone           = $state<string>('');
-	let credits         = $state<number>(0);
-	let rawUserMetaData = $state<Record<string, unknown>>({});
+	/* ——— state ——— */
+	const uid      = $state<string>('');
+	const email    = $state<string>('');
+	const phone    = $state<string>('');
+	const credits  = $state<number>(0);
+	const userMeta = $state<Record<string, unknown>>({});
 
-	async function parseUserData() {
-		userId          = await getUserId();
-		email           = await trpc.email.query(userId);
-		phone           = await trpc.phone.query(userId);
-		credits         = await trpc.credits.query(userId);
-		rawUserMetaData = await trpc.raw_user_meta_data.query(userId);
-	}
+	/* derived avatar URL */
+	// const avatarUrl = $derived(() =>
+	// 	userMeta()?.avatar_url ?? '/images/logo.png'
+	// );
 
-	onMount(parseUserData);          // runs once after mount
+	/* fetch user-data once */
+	onMount(async () => {
+		const id = await getUserId();
+		if (!id) return;
+
+		uid(id);
+
+		const [e, p, c, meta] = await Promise.all([
+			trpc.email.query(id),
+			trpc.phone.query(id),
+			trpc.credits.query(id)
+		]);
+
+		console.log(e, p, c, meta);
+
+		email(e);
+		phone(p);
+		credits(c);
+		userMeta(meta);
+	});
 </script>
 
-<!-- ----------------------------------------------------------------------- -->
-
-<Navbar let:hidden let:toggle>
+<!-- ——— markup ——— -->
+<Navbar>
+	<!-- brand / logo -->
 	<NavBrand href="/">
 		<img src="/images/logo.png" class="mr-3 h-6 sm:h-9" alt="Instafication logo" />
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
@@ -47,48 +62,50 @@
 		</span>
 	</NavBrand>
 
+	<!-- right-hand tools -->
 	<div class="flex items-center md:order-1">
 		<Toolbar>
 			<NotificationDropdown />
-			<Avatar
-				id="avatar-menu"
-				src={rawUserMetaData.avatar_url ?? '/images/logo.png'}
-			/>
+
+			<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger>
+					<Avatar size="xs" alt="User avatar" class="pr-4" />
+				</DropdownMenu.Trigger>
+
+				<DropdownMenu.Content class="w-56">
+					<DropdownMenu.Label class="px-3 py-2 text-sm font-medium">
+						<!-- {$t('HEADER_LOGGEDIN_I1')} {credits()} -->
+					</DropdownMenu.Label>
+
+					<DropdownMenu.Separator />
+
+					<DropdownMenu.Item onselect={() => showServicesModal.set(true)}>
+						{$t('HEADER_LOGGEDIN_I2')}
+					</DropdownMenu.Item>
+
+					<DropdownMenu.Item onselect={() => showProfileSettingsModal.set(true)}>
+						{$t('HEADER_LOGGEDIN_I3')}
+					</DropdownMenu.Item>
+
+					<DropdownMenu.Item
+						onselect={async () => {
+							const url = await trpc.create_customer_portal_session.query(email());
+							goto(url ?? 'https://buy.stripe.com/test_cN2cQTexF9hke9W6oq');
+						}}
+					>
+						Prenumeration
+					</DropdownMenu.Item>
+
+					<DropdownMenu.Separator />
+
+					<DropdownMenu.Item class="text-red-600" onselect={signOut}>
+						{$t('HEADER_LOGGEDIN_I4')}
+					</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+
 			<LanguageSelector />
 		</Toolbar>
-
-		<Dropdown placement="button" class="rounded-lg" triggeredBy="#avatar-menu">
-			<DropdownHeader class="flex">
-				<span class="flex text-sm flex-1">
-					{t('HEADER_LOGGEDIN_I1')} {credits}
-				</span>
-			</DropdownHeader>
-
-			<!-- your own click handler -->
-			<DropdownItem onclick={() => alert('OK')}>
-				{t('HEADER_LOGGEDIN_I2')}
-			</DropdownItem>
-
-			<!-- toggling a Svelte store -->
-			<DropdownItem onclick={() => ($showProfileSettingsModal = true)}>
-				{t('HEADER_LOGGEDIN_I3')}
-			</DropdownItem>
-
-			<!-- async navigation -->
-			<DropdownItem
-				onclick={async () => {
-					const url = await trpc.create_customer_portal_session.query(email);
-					goto(url || 'https://buy.stripe.com/test_cN2cQTexF9hke9W6oq');
-				}}
-			>
-				Prenumeration
-			</DropdownItem>
-
-			<DropdownDivider />
-
-			<DropdownItem onclick={async () => signOut()}>
-				{t('HEADER_LOGGEDIN_I4')}
-			</DropdownItem>
-		</Dropdown>
 	</div>
 </Navbar>
