@@ -24,6 +24,8 @@
     "classnames": "^2.5.1",
     "flowbite": "^3.1.2",
     "flowbite-svelte": "^1.10.21",
+    "posthog-js": "^1.258.3",
+    "posthog-node": "^5.6.0",
     "stripe": "^18.3.0",
     "superjson": "^2.2.2",
     "svelte": "^5.37.1",
