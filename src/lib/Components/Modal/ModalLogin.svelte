@@ -81,7 +81,7 @@
         <button
           tabindex="-1"
           class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
-          on:click={openLostPassword}
+          onclick={openLostPassword}
           type="button"
         >
           {$t("lost_password")}
@@ -98,7 +98,7 @@
         color="blue"
         type="button"
         class="w-full"
-        on:click={handleGoogleLogin}
+        onclick={handleGoogleLogin}
       >
         <svg
           class="w-4 h-4 mr-2 -ml-1"
@@ -118,7 +118,7 @@
         {$t("not_registered")}
         <button
           class="text-blue-700 hover:underline dark:text-blue-500"
-          on:click={openRegister}
+          onclick={openRegister}
           type="button"
         >
           {$t("create_an_account")}
