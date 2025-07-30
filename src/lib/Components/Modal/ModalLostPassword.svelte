@@ -20,6 +20,7 @@
 
 <Modal bind:open={$showLostPasswordModal}
        size="xs"
+       placement="center"
        autoclose>
 
   <form class="flex flex-col space-y-6"
