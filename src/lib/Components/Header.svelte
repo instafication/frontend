@@ -32,7 +32,7 @@
   <!-- main nav links -->
   <NavUl class="order-1">
     <!-- log-in -->
-    <NavLi href="#" on:click={() => ($showLoginModal = true)}>
+    <NavLi href="#" onclick={() => ($showLoginModal = true)}>
       <Button color="alternative">
         <lord-icon
           src="https://cdn.lordicon.com/rqqkvjqf.json"
@@ -41,13 +41,13 @@
           stroke="40"
           scale="40"
           style="width:32px;height:32px"
-        />
+        ></lord-icon>
         {$t('log_in')}
       </Button>
     </NavLi>
 
     <!-- register -->
-    <NavLi href="#" on:click={() => ($showRegisterModal = true)}>
+    <NavLi href="#" onclick={() => ($showRegisterModal = true)}>
       <Button color="blue">
         <lord-icon
           src="https://cdn.lordicon.com/wcjauznf.json"
@@ -56,7 +56,7 @@
           stroke="50"
           scale="40"
           style="width:32px;height:32px"
-        />
+        ></lord-icon>
         {$t('register')}
       </Button>
     </NavLi>
