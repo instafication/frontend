@@ -1,16 +1,17 @@
 <script lang="ts">
-  /* UI kit */
-  import { Button, Modal, Label, Input } from 'flowbite-svelte';
+  /* ───── UI kit ───── */
+  import * as Dialog from "$lib/components/ui/dialog/index.js";
+  import { Button, Label, Input } from "flowbite-svelte";
 
   /* managers & stores */
-  import { resetPasswordForEmail } from '$lib/Managers/AuthManager';
-  import { showLostPasswordModal } from '$lib/sharedStore';
+  import { resetPasswordForEmail } from "$lib/Managers/AuthManager";
+  import { showLostPasswordModal } from "$lib/sharedStore";
 
   /* i18n */
-  import { t } from '$lib/i18n';
+  import { t } from "$lib/i18n";
 
   /* ───────── reactive state ───────── */
-  let email = $state('');
+  let email = $state("");
 
   /* ───────── actions ───────── */
   const handleReset = async () => {
@@ -18,29 +19,30 @@
   };
 </script>
 
-<Modal bind:open={$showLostPasswordModal}
-       size="xs"
-       placement="center"
-       autoclose>
+<Dialog.Root bind:open={$showLostPasswordModal}>
+  <Dialog.Content class="w-full max-w-xs" placement="center">
+    <Dialog.Header>
+      <Dialog.Title>{$t("lost_password_reset_password")}</Dialog.Title>
+    </Dialog.Header>
 
-  <form class="flex flex-col space-y-6"
-        onsubmit={handleReset}>
+    <form
+      class="flex flex-col space-y-6"
+      on:submit|preventDefault={handleReset}
+    >
+      <Label class="space-y-2">
+        <span>{$t("lost_password_your_email")}</span>
+        <Input
+          bind:value={email}
+          type="email"
+          name="email"
+          placeholder={$t("lost_password_email_placeholder")}
+          required
+        />
+      </Label>
 
-    <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">
-      {$t('lost_password_reset_password')}
-    </h3>
-
-    <Label class="space-y-2">
-      <span>{$t('lost_password_your_email')}</span>
-      <Input bind:value={email}
-             type="email"
-             name="email"
-             placeholder={$t('lost_password_email_placeholder')}
-             required />
-    </Label>
-
-    <Button type="submit" color="blue" class="w-full">
-      {$t('lost_password_reset_password_button')}
-    </Button>
-  </form>
-</Modal>
+      <Button type="submit" color="blue" class="w-full">
+        {$t("lost_password_reset_password_button")}
+      </Button>
+    </form>
+  </Dialog.Content>
+</Dialog.Root>

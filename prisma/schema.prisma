@@ -1,7 +1,7 @@
 datasource db {
   provider  = "postgresql"
-  url       = env("PUBLIC_DATABASE_URL")
-  directUrl = env("PUBLIC_DIRECT_URL")
+  url       = env("SECRET_DATABASE_URL")
+  directUrl = env("SECRET_DIRECT_URL")
   schemas   = ["public"]
 }
 
