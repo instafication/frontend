@@ -65,7 +65,7 @@
         />
       </Label>
 
-      <Button type="submit" color="blue" class="w-full inline-flex items-center justify-center gap-2" disabled={loading}>
+      <Button type="submit" color="blue" class="w-full inline-flex items-center justify-center gap-2 cursor-pointer" disabled={loading}>
         {#if loading}
           <Loader2 class="w-4 h-4 animate-spin" />
         {/if}
