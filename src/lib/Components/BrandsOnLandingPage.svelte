@@ -1,83 +1,9 @@
 <script lang="ts">
-  /* UI kit -------------------------------------------------------------- */
-  import { Card, Listgroup, Avatar, Badge } from 'flowbite-svelte';
-
-  /* stores & managers --------------------------------------------------- */
-  import {
-    showServicesModal,
-    showLoginModal,
-    userLoggedIn
-  } from '$lib/sharedStore';
-  import { getAllScrapers } from '$lib/Managers/ScrapingManager';
-
-  /* utilities & i18n ---------------------------------------------------- */
-  import { getMinutesDiffFromUnixTimestamp } from '$lib/Inbox/Utils';
+  import { Card, Avatar, Badge } from 'flowbite-svelte';
   import { t } from '$lib/i18n';
-  import { onMount } from 'svelte';
-
-  /* drizzle types -------------------------------------------------------- */
-  import type { Scraper } from '$lib/drizzle/types';
-  import type { JsonValue } from 'type-fest';
-
-  /* ---------- list item model ----------------------------------------- */
-  interface ListItem {
-    img: { src: string; alt: string };
-    name: string;
-    status: string;
-    active: 'green' | 'red';
-    services: string[];
-  }
-  
-  /* ---------- scraper type -------------------------------------------- */
-  type Scrapers = Scraper[];
-
-  /* ---------- reactive state ------------------------------------------ */
-  let list = $state<ListItem[]>([]);
-  
-  /* ---------- json helper --------------------------------------------- */
-  function getAreaFromParams(params: JsonValue): string {
-    if (params && typeof params === 'object' && 'area' in params) {
-      return (params as { area: string }).area || '';
-    }
-    return '';
-  }
-
-  /* ---------- pull data on mount -------------------------------------- */
-  onMount(async () => {
-    const scraperList: Scrapers = await getAllScrapers();
-
-    list = scraperList.map((scraper) => {
-      const diffMinutes = getMinutesDiffFromUnixTimestamp(Number(scraper.last_ping));
-      const active: 'green' | 'red' =
-        diffMinutes <= (scraper.frequency || 0) * 2 ? 'green' : 'red';
-
-      const area = getAreaFromParams(scraper.params);
-
-      return {
-        img: {
-          src: '/images/favicon-sssb.svg',
-          alt: scraper.company || ''
-        },
-        name: area,
-        status: `${t('pulse_last_search')} ${diffMinutes} ${t('minutes_ago')}`,
-        active,
-        services: scraper.services || []
-      };
-    });
-  });
-
-  /* ---------- click handler ------------------------------------------- */
-  function handleItemClick() {
-    if ($userLoggedIn) {
-      $showServicesModal = true;
-    } else {
-      $showLoginModal = true;
-    }
-  }
 </script>
 
 <Card
-  padding="xl"
   size="sm"
   class="border-1 rounded-3xl shadow-none bg-slate-0 dark:bg-gray-900
          border-gray-200">
@@ -93,53 +19,50 @@
     </h5>
   </div>
 
-  <Listgroup
-    items={list}
-    let:item
-    class="border-1 p-2 dark:!bg-transparent"
-    onclick={handleItemClick}>
 
-    <div class="flex items-center space-x-4">
-      <!-- avatar + status dot -->
-      <Avatar
-        size="md"
-        src={item.img.src}
-        alt={item.img.alt}
-        rounded
-        class="flex-shrink-0 bg-transparent"
-        dot={{ color: item.active }} />
+      <section
+      class="bg-white dark:bg-gray-900 grid md:grid-cols-auto gap-4 py-8 px-8 mx-auto max-w-screen-xl"
+    >
+      <section
+        id="sssb"
+        class="border-2 rounded-md py-6 px-6 grid gap-4 bg-slate-0 dark:bg-gray-900 border-gray-200"
+      >
+        <div class="flex items-center gap-4">
+          <span class="relative flex h-3 w-3">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+            ></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
+            ></span>
+          </span>
+          <Avatar src="/images/favicon-sssb.svg" alt="Logo" size="xs" />
+          <p class="text-xl font-normal text-gray-900 dark:text-white">
+            Stockholms Studentbostäder
+          </p>
+        </div>
 
-      <div class="flex-1 min-w-0 py-2">
-        <!-- name -->
-        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-          {item.name}
-        </p>
-
-        <!-- last search -->
-        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-          <Badge rounded color={item.active}>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          <Badge rounded color="green">
             <svg
               aria-hidden="true"
-              class="w-3 h-3 mr-1"
+              class="w-3 h-3 mr-1 inline"
               fill="currentColor"
               viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
+            >
               <path
                 fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                clip-rule="evenodd" />
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 
+                   10-2 0v4a1 1 0 
+                   00.293.707l2.828 2.829a1 1 0 
+                   101.415-1.415L11 9.586V6z"
+                clip-rule="evenodd"
+              />
             </svg>
-            {item.status}
+            Aktiv: 5 minuter sedan
           </Badge>
         </p>
 
-        <!-- services -->
-        <div class="flex items-center flex-wrap gap-1">
-          {#each item.services as service}
-            <Badge rounded>{service}</Badge>
-          {/each}
-        </div>
-      </div>
-    </div>
-  </Listgroup>
+      </section>
+    </section>
+
 </Card>
