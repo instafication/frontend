@@ -92,7 +92,7 @@
 
             <Timeline>
                 <TimelineItem
-                    customDiv={"animate-ping bg-sky-200"}
+                    customDiv={"bg-sky-200"}
                     title={$t("checking_pulse_searching_new_times")}
                 >
                     <!-- <Button  onclick={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button> -->
