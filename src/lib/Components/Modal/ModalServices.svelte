@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
-  import * as Select from "$lib/components/ui/select/index.js";
-  import { Button } from "$lib/components/ui/button/index.js";
+  import * as Select from "$lib/Components/ui/select/index.js";
+  import { Button } from "$lib/Components/ui/button/index.js";
   import { Avatar, Badge, Label } from "flowbite-svelte";
-  import { Save } from "@lucide/svelte";
+  import Save from "@lucide/svelte/icons/save";
+  import { Loader2 } from "@lucide/svelte";
 
   import {
     createService,
@@ -36,6 +37,7 @@
   let selectedNotificationMethod = $state<string>("");
   let selectedWithinTime = $state<string>("");
   let selectedArea = $state<string>("");
+  let loading = $state<boolean>(false);
 
   // const triggerContent = $derived(
   //   notifications.find((f) => f.value === selectedNotification)?.label ?? "Välj...",
@@ -64,13 +66,19 @@
       toast.error("Du måste fylla i alla fält innan du sparar.");
       return;
     }
-    await createService(
-      "Stockholms Studentbostäder",
-      selectedNotificationMethod,
-      Number(selectedWithinTime),
-      { area: selectedArea },
-    );
-    toast.success("Ändringarna har sparats.");
+    
+    loading = true;
+    try {
+      await createService(
+        "Stockholms Studentbostäder",
+        selectedNotificationMethod,
+        Number(selectedWithinTime),
+        { area: selectedArea },
+      );
+      toast.success("Ändringarna har sparats.");
+    } finally {
+      loading = false;
+    }
   }
 </script>
 
@@ -193,8 +201,12 @@
     </section>
 
     <div class="mt-6 text-right">
-      <Button variant="outline" onclick={handleSave}>
-        <Save class="inline mr-1" />
+      <Button variant="outline" onclick={handleSave} disabled={loading}>
+        {#if loading}
+          <Loader2 class="w-4 h-4 mr-1 animate-spin" />
+        {:else}
+          <Save class="w-4 h-4 mr-1" />
+        {/if}
         {$t("SERVICES_BUTTON1")}
       </Button>
     </div>
