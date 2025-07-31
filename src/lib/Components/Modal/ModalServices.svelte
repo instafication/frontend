@@ -47,15 +47,15 @@
       "Stockholms Studentbostäder",
     );
     if (cfg) {
-      selectedNotification = cfg.notificationMethod ?? "";
-      selectedWithin = String(cfg.notificationWithinTime ?? "");
+      selectedNotificationMethod = cfg.notificationMethod ?? "";
+      selectedWithinTime = String(cfg.notificationWithinTime ?? "");
       selectedArea = cfg.options?.area ?? "";
     }
   }
   onMount(loadServiceData);
 
   function validateForm() {
-    return selectedNotification && selectedWithin && selectedArea;
+    return selectedNotificationMethod && selectedWithinTime && selectedArea;
   }
 
   async function handleSave() {
@@ -65,8 +65,8 @@
     }
     await createService(
       "Stockholms Studentbostäder",
-      selectedNotification,
-      Number(selectedWithin),
+      selectedNotificationMethod,
+      Number(selectedWithinTime),
       { area: selectedArea },
     );
     alert("Ändringarna har sparats.");
@@ -131,7 +131,7 @@
             <Label>{$t("SERVICES_OPTION1_TITLE")}</Label>
             <Select.Root type="single" bind:value={selectedNotificationMethod}>
               <Select.Trigger class="mt-2 w-full">
-                {selectedNotification || placeholder}
+                {selectedNotificationMethod || placeholder}
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
@@ -182,7 +182,6 @@
                     label={item.label}
                   >
                     {item.label}
-                  </Select.Item>
                   </Select.Item>
                 {/each}
               </Select.Content>

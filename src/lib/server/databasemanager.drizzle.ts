@@ -1,5 +1,5 @@
 import { generateRandomUUID } from '../Inbox/Utils';
-import { supabase, signUp } from "$lib/Managers/AuthManager";
+import { DATABASE_URL } from '$env/static/private';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import {
@@ -11,12 +11,12 @@ import {
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 
 // Create the database connection
-const client = postgres(process.env.SECRET_DATABASE_URL!);
+const client = postgres(DATABASE_URL);
 const db = drizzle(client);
 
 export class DatabaseManager {
   public static Ping = async () => {
-    const res = await db.select().from(profiles).where(eq(profiles.email, "test@test.com")).limit(1);
+    const res = await db.select().from(profiles).where(eq(profiles.email, "hello@deploya.dev")).limit(1);
     return res[0] || null;
   }
 
@@ -335,7 +335,10 @@ export class DatabaseManager {
       return result;
     }
 
-    public static async createService(user: string, name: string, notification: string, notificationWithin: number, options: {}) {
+    public static async createService(user: string, name: string, notificationMethod: string, notificationWithinTime: number, options: {}) {
+
+      console.log(user, name, notificationMethod, notificationWithinTime, options);
+
       // Check if a record with the same user and name combination exists
       const existingService = await db.select()
         .from(services)
@@ -345,6 +348,8 @@ export class DatabaseManager {
         ))
         .limit(1);
       
+      console.log("existingService: ", existingService.length);
+
       let result;
       
       if (existingService.length === 0) {
@@ -352,8 +357,8 @@ export class DatabaseManager {
         result = await db.insert(services).values({
           user: user,
           name: name,
-          notification: notification,
-          notificationWithin: notificationWithin.toString(),
+          notificationMethod: notificationMethod,
+          notificationWithinTime: notificationWithinTime.toString(),
           options: options
         });
         console.log("[Databasemanager] Created service: " + result.count);
@@ -361,8 +366,8 @@ export class DatabaseManager {
         // If the record exists, update it
         result = await db.update(services)
           .set({
-            notification: notification,
-            notificationWithin: notificationWithin.toString(),
+            notificationMethod: notificationMethod,
+            notificationWithinTime: notificationWithinTime.toString(),
             options: options
           })
           .where(eq(services.id, existingService[0].id));

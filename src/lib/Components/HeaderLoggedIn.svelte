@@ -1,7 +1,8 @@
 <script lang="ts">
 	/* ——— imports ——— */
 	import { onMount } from "svelte";
-	import { Navbar, NavBrand, Toolbar, Avatar } from "flowbite-svelte";
+	import { Navbar, NavBrand, Toolbar } from "flowbite-svelte";
+	import * as Avatar from "$lib/components/ui/avatar/index.js";
 
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 
@@ -15,7 +16,6 @@
 	import LanguageSelector from "./LanguageSelector.svelte";
 	import { goto } from "$app/navigation";
 	import { t } from "$lib/i18n";
-	import { Trigger } from "./ui/accordion";
 
 	/* ——— state ——— */
 	const uid = $state<string>("");
@@ -75,7 +75,13 @@
 			<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
-					<Avatar size="xs" alt="User avatar" class="pr-4" />
+					<Avatar.Root>
+						<Avatar.Image
+							src="https://github.com/shadcn.png"
+							alt="Logo"
+						/>
+						<Avatar.Fallback>CN</Avatar.Fallback>
+					</Avatar.Root>
 				</DropdownMenu.Trigger>
 
 				<DropdownMenu.Content class="w-56">
