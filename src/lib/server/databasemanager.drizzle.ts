@@ -83,6 +83,16 @@ export class DatabaseManager {
       
       return Number(r[0]?.last_update) || -1;
     }
+
+    public static async getLastUpdatedByCompany(company: string): Promise<number> {
+      // Get the most recent last_update time for all scrapers of a company
+      const r = await db.select({ last_update: scrapers.last_update }).from(scrapers)
+        .where(eq(scrapers.company, company))
+        .orderBy(desc(scrapers.last_update))
+        .limit(1);
+      
+      return Number(r[0]?.last_update) || -1;
+    }
   }
 
   public static Profiles = class {

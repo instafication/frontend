@@ -156,6 +156,14 @@ export const appRouter = t.router({
                 await DatabaseManager.Notifications.getLatestNotifications(input);
             return notifications;
         }),
+    
+    getLastUpdateByCompany: t.procedure
+        .input(z.string())
+        .query(async ({ input }) => {
+            const company = input;
+            const lastUpdate = await DatabaseManager.Scraper.getLastUpdatedByCompany(company);
+            return { lastUpdate };
+        }),
 });
 
 
