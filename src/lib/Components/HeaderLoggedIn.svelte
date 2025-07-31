@@ -86,7 +86,7 @@
 						{$t("HEADER_LOGGEDIN_I3")}
 					</DropdownMenu.Item>
 
-					<DropdownMenu.Item
+					<!-- <DropdownMenu.Item
 						onSelect={async () => {
 							const url =
 								await trpc.create_customer_portal_session.query(
@@ -99,7 +99,7 @@
 						}}
 					>
 						Prenumeration
-					</DropdownMenu.Item>
+					</DropdownMenu.Item> -->
 
 					<DropdownMenu.Separator />
 
