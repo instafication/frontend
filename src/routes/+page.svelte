@@ -66,10 +66,6 @@
         class=" bg-slate-0 dark:bg-gray-900 border-gray-200 grid grid-rows-1 md:grid-rows-2 gap-4 place-items-start justify-self-center md:justify-self-end"
     >
         <CardWithList></CardWithList>
-        <div class="max-w-screen-md lg:mb-16">
-            <img src="/images/sssb-logo.svg" alt="logo" width="200px" />
-            Status: Söker efter nya tider...
-        </div>
 
         <!-- <div class="max-w-screen-md lg:mb-16 bg-slate-100">
                 <img src="/images/hertz-logo.svg" alt="logo" width="200px"/>
