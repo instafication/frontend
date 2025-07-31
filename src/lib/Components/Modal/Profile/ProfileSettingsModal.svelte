@@ -1,8 +1,8 @@
 <script lang="ts">
   /* -------- UI kit -------- */
-  import * as Dialog from "$lib/components/ui/dialog/index.js";
+  import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import { Label, Input } from "flowbite-svelte";
-  import { Button } from "$lib/components/ui/button/index.js";
+  import { Button } from "$lib/Components/ui/button/index.js";
 
   /* managers & stores ----------------------------------------------- */
   import { getUserId } from "$lib/Managers/AuthManager";

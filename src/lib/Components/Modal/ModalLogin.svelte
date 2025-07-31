@@ -50,10 +50,10 @@
       <Dialog.Title>{$t("log_in_to_your_profile")}</Dialog.Title>
     </Dialog.Header>
 
-    <!-- onsubmit|preventDefault avoids page reload -->
+    <!-- onsubmit prevents page reload via preventDefault in handler -->
     <form
       class="flex flex-col space-y-6"
-      onsubmit={handlePasswordLogin}
+      onsubmit={(e) => { e.preventDefault(); handlePasswordLogin(); }}
     >
       <Label class="space-y-2">
         <span>{$t("your_email")}</span>
@@ -78,7 +78,9 @@
       </Label>
 
       <div class="flex items-start">
-        <Checkbox>{$t("remember_me")}</Checkbox>
+        <Checkbox class="" value="remember">
+          {$t("remember_me")}
+        </Checkbox>
         <button
           tabindex="-1"
           class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"

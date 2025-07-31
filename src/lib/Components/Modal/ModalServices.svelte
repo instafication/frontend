@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import * as Dialog from "$lib/components/ui/dialog/index.js";
+  import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Avatar, Badge, Label } from "flowbite-svelte";
@@ -75,7 +75,7 @@
 </script>
 
 <Dialog.Root bind:open={$showServicesModal}>
-  <Dialog.Content class="w-full max-w-md" placement="center">
+  <Dialog.Content class="w-full max-w-md">
     <Dialog.Header>
       <Dialog.Title>{$t("SERVICES_TITLE")}</Dialog.Title>
     </Dialog.Header>
