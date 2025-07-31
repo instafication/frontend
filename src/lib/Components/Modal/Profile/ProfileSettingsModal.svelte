@@ -1,7 +1,8 @@
 <script lang="ts">
   /* -------- UI kit -------- */
   import * as Dialog from "$lib/components/ui/dialog/index.js";
-  import { Button, Label, Input } from "flowbite-svelte";
+  import { Label, Input } from "flowbite-svelte";
+  import { Button } from "$lib/components/ui/button/index.js";
 
   /* managers & stores ----------------------------------------------- */
   import { getUserId } from "$lib/Managers/AuthManager";
@@ -71,7 +72,7 @@
       </Label>
 
       <Dialog.Footer>
-        <Button type="submit" class="w-full">
+        <Button variant="outline" type="submit" class="w-full">
           {$t("profile_save_changes")}
         </Button>
       </Dialog.Footer>

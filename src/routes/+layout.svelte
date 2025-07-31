@@ -1,8 +1,5 @@
 <script lang="ts">
 	import "../app.css";
-	/* global styles */
-	import "../app.css";
-	/* libs & utils */
 	import { isLoggedIn, supabase } from "$lib/Managers/AuthManager";
 	import { userLoggedIn } from "$lib/sharedStore";
 	/* layout-level UI */
@@ -19,6 +16,7 @@
 	import { browser } from '$app/environment';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import posthog from 'posthog-js';
+	import { Toaster } from "$lib/components/ui/sonner/index.js";
 	
 	/* ── local reactive state ───────────────────────────── */
 	let lastAuthStatus = $state<string>("");
@@ -44,6 +42,8 @@
 	
 	supabase.auth.onAuthStateChange((event, session) => {
 		lastAuthStatus = event;
+		// Ensure lastSession is set to the correct type: getSession() returns a Promise, but here we have a Session | null
+		// So, we should store the session directly, or refactor lastSession's type if needed.
 		lastSession = session;
 		$userLoggedIn = event === "SIGNED_IN";
 	});
@@ -62,6 +62,8 @@
 {:else}
 	<Header />
 {/if}
+
+<Toaster />
 
 {@render children?.()}
 
