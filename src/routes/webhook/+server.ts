@@ -1,4 +1,4 @@
-import { STRIPE_PUBLISHABLE_KEY, SECRET_STRIPE_SECRET_KEY, SECRET_STRIPE_WEBHOOK_SECRET } from '$env/static/private'
+import { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from '$env/static/private'
 import { signUp } from '$lib/Managers/AuthManager'
 import { SendEmailWhenUserIsCreated, sendEmail, SendEmailWhenSubscriptionProlonged } from '$lib/Managers/EmailManager'
 import { DatabaseManager } from '$lib/server/databasemanager.js';
@@ -6,7 +6,7 @@ import { json } from "@sveltejs/kit";
 import Stripe from "stripe";
 
 
-const stripe = new Stripe(SECRET_STRIPE_SECRET_KEY, {
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
     apiVersion: "2025-07-30.basil",
     typescript: true,
 });
@@ -127,13 +127,13 @@ export async function POST({ request }) {
 
     // console.log('Raw body:', req);
     // console.log('Stripe signature header:', request.headers.get('stripe-signature'));
-    // console.log('Webhook secret:', SECRET_STRIPE_WEBHOOK_SECRET);
+    // console.log('Webhook secret:', STRIPE_WEBHOOK_SECRET);
 
     try {
         event = stripe.webhooks.constructEvent(
             rawBody,
             signature,
-            SECRET_STRIPE_WEBHOOK_SECRET
+            STRIPE_WEBHOOK_SECRET
         );
     } catch (err) {
         console.log("⚠️ Webhook signature verification failed.");
