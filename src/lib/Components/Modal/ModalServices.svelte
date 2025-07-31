@@ -3,9 +3,9 @@
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import * as Select from "$lib/Components/ui/select/index.js";
   import { Button } from "$lib/Components/ui/button/index.js";
-  import { Avatar, Badge, Label } from "flowbite-svelte";
+  import { Avatar, Label } from "flowbite-svelte";
   import Save from "@lucide/svelte/icons/save";
-  import Loader from "@lucide/svelte/icons/loader";
+  import Loader from "@lucide/svelte/icons";
 
   import {
     createService,
@@ -85,7 +85,9 @@
 <Dialog.Root bind:open={$showServicesModal} onOpenChange={(open) => console.log("Services modal open:", open)}>
   <Dialog.Content class="w-full max-w-md">
     <Dialog.Header>
-      <Dialog.Title>{$t("SERVICES_TITLE")}</Dialog.Title>
+      <Dialog.Title>
+        {$t("SERVICES_TITLE")}
+      </Dialog.Title>
     </Dialog.Header>
 
     <section
