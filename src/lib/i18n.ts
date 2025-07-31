@@ -17,7 +17,7 @@ function translate(selectedLanguage: string, key: string, vars) {
         throw new Error(`No translations found for language "${selectedLanguage}"`);
     }
 
-    const text = langTranslations[key as keyof typeof langTranslations];
+    let text = langTranslations[key as keyof typeof langTranslations];
     if (!text) throw new Error(`no translation found for ${selectedLanguage}.${key}`);
 
     // Replace any passed in variables in the translation string.
