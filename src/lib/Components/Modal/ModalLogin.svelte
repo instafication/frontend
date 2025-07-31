@@ -42,7 +42,7 @@
   }
 </script>
 
-<Dialog.Root bind:open={$showLoginModal}>
+<Dialog.Root bind:open={$showLoginModal} onOpenChange={(open) => console.log("Login modal open:", open)}>
   <!-- Optional trigger elsewhere; Dialog.Trigger omitted here -->
 
   <Dialog.Content class="w-full max-w-md">
