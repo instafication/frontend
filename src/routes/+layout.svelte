@@ -39,14 +39,15 @@
 		// selectedLanguage.set($page.data.language); // migrate when ready
 		$userLoggedIn = await isLoggedIn();
 	});
-	
-	supabase.auth.onAuthStateChange((event, session) => {
-		lastAuthStatus = event;
-		// Ensure lastSession is set to the correct type: getSession() returns a Promise, but here we have a Session | null
-		// So, we should store the session directly, or refactor lastSession's type if needed.
-		lastSession = session;
-		$userLoggedIn = event === "SIGNED_IN";
-	});
+
+	if (supabase) {
+		supabase.auth.onAuthStateChange((event, session) => {
+			lastAuthStatus = event;
+			// Store the session directly, since lastSession is typed as ReturnType<typeof supabase.auth.getSession> | null
+			lastSession = session ? Promise.resolve({ data: { session }, error: null }) : Promise.resolve({ data: { session: null }, error: null });
+			$userLoggedIn = event === "SIGNED_IN";
+		})
+	}
 </script>
 
 <!-- global modals -->
