@@ -25,7 +25,8 @@
     </NavBrand>
 
     <!-- right-hand tools -->
-    <div class="flex items-center">
+    <div class="flex items-center gap-2">
+      <LanguageSelector />
       <!-- log-in -->
       <Button
         variant="outline"
@@ -34,7 +35,7 @@
           $showLoginModal = true;
         }}
         color="alternative"
-        class="cursor-pointer mr-2"
+        class="cursor-pointer"
       >
         <lord-icon
           src="https://cdn.lordicon.com/rqqkvjqf.json"
@@ -52,7 +53,7 @@
         onclick={() => {
           $showRegisterModal = true;
         }}
-        class="cursor-pointer mr-2 bg-blue-700 hover:bg-blue-800"
+        class="cursor-pointer bg-blue-700 hover:bg-blue-800"
       >
         <lord-icon
           src="https://cdn.lordicon.com/wcjauznf.json"
@@ -65,7 +66,6 @@
         {$t("register")}
       </Button>
 
-      <LanguageSelector />
     </div>
 
     <!-- mobile hamburger -->
