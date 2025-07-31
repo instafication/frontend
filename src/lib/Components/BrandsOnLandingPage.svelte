@@ -5,8 +5,8 @@
   import { onMount } from 'svelte';
   import { trpc } from '$lib/trpc/client';
   
-  let lastSearchedMinutes = 0;
-  let loading = true;
+  let lastSearchedMinutes = $state(0);
+  let loading = $state(true);
   
   // Function to calculate minutes since last search
   function calculateMinutesSince(timestamp: number): number {
@@ -22,9 +22,7 @@
       loading = true;
       const data = await trpc.getLastUpdateByCompany.query('Stockholms Studentbostäder');
       lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
-      console.log(lastSearchedMinutes);
     } catch (error) {
-      console.error('Error fetching last update time:', error);
       lastSearchedMinutes = 0;
     } finally {
       loading = false;
@@ -34,13 +32,6 @@
   // Fetch the last update time when component mounts
   onMount(() => {
     fetchLastUpdateTime();
-    
-    // Update every minute
-    const interval = setInterval(() => {
-      fetchLastUpdateTime();
-    }, 60000);
-    
-    return () => clearInterval(interval);
   });
 </script>
 
