@@ -115,7 +115,7 @@
       </Button>
 
       <!-- google login -->
-      <Button
+      <!-- <Button
         color="blue"
         type="button"
         class="w-full inline-flex items-center justify-center gap-2"
@@ -138,7 +138,7 @@
           </svg>
         {/if}
         <span>{$t("log_in_with_google")}</span>
-      </Button>
+      </Button> -->
 
       <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
         {$t("not_registered")}
