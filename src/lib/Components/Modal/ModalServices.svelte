@@ -5,7 +5,7 @@
   import { Button } from "$lib/Components/ui/button/index.js";
   import { Avatar, Badge, Label } from "flowbite-svelte";
   import Save from "@lucide/svelte/icons/save";
-  import { Loader2 } from "@lucide/svelte";
+  import Loader from "@lucide/svelte/icons/loader";
 
   import {
     createService,
@@ -203,7 +203,7 @@
     <div class="mt-6 text-right">
       <Button variant="outline" onclick={handleSave} disabled={loading}>
         {#if loading}
-          <Loader2 class="w-4 h-4 mr-1 animate-spin" />
+          <Loader class="w-4 h-4 mr-1 animate-spin" />
         {:else}
           <Save class="w-4 h-4 mr-1" />
         {/if}
