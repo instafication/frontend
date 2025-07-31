@@ -63,7 +63,7 @@
 				class="hover:cursor-pointer"
 				onclick={() => showServicesModal.set(true)}
 			>
-				<BellRing />Alarm
+				<Settings />Alarm
 			</Button>
 
 			<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->
