@@ -12,6 +12,7 @@
   } from "$lib/Managers/ServiceManager";
   import { showServicesModal } from "$lib/sharedStore";
   import { t } from "$lib/i18n";
+    import { toast } from "svelte-sonner";
 
   const AREA_LIST = [
     { value: "medicinaren", label: "Medicinaren" },
@@ -60,7 +61,7 @@
 
   async function handleSave() {
     if (!validateForm()) {
-      alert("Du måste fylla i alla fält innan du sparar.");
+      toast.error("Du måste fylla i alla fält innan du sparar.");
       return;
     }
     await createService(
@@ -69,7 +70,7 @@
       Number(selectedWithinTime),
       { area: selectedArea },
     );
-    alert("Ändringarna har sparats.");
+    toast.success("Ändringarna har sparats.");
   }
 </script>
 
