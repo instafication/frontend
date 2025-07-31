@@ -11,14 +11,25 @@ async function parseUserDataById(id: string): Promise<{ email: string, phone: st
     // return { email, phone, credits };
 }
 
-
 async function updateProfileById(id: string, email: string, phone: string): Promise<void> {
-  await trpc.updateprofileById.query({
-      id: id,
-      email: email,
-      phone: phone
-  });
-  toast.success("Profile has been updated!")
+  // Check if user ID is provided
+  if (!id) {
+    toast.error("User ID is required to update profile");
+    throw new Error("User ID is required");
+  }
+  
+  try {
+    await trpc.updateprofileById.query({
+        id: id,
+        email: email,
+        phone: phone
+    });
+    toast.success("Profile has been updated!");
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    toast.error("Failed to update profile");
+    throw error;
+  }
 }
 
 export { updateProfileById, parseUserDataById }

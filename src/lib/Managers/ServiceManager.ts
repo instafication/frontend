@@ -1,5 +1,6 @@
 import { trpc } from '$lib/trpc/client';
 import { getUserId } from './AuthManager';
+import { toast } from "svelte-sonner";
 
 
 async function parseUserDataById(id: string): Promise<{ email: string, phone: string, credits: number }> {
@@ -53,25 +54,44 @@ model services {
   */
 
 
-
 async function createService(name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<void> {
     const UUID = await getUserId();
+    
+    // Check if user is logged in
+    if (!UUID) {
+        toast.error("You must be logged in to create a service");
+        throw new Error("User not authenticated");
+    }
 
     console.log(UUID, name, notificationMethod, notificationWithinTime, options);
 
-    const response = await trpc.createService.query({
-        user: UUID,
-        name: name,
-        notificationMethod: notificationMethod,
-        notificationWithinTime: notificationWithinTime,
-        options: options
-    });
+    try {
+        const response = await trpc.createService.query({
+            user: UUID,
+            name: name,
+            notificationMethod: notificationMethod,
+            notificationWithinTime: notificationWithinTime,
+            options: options
+        });
 
-    console.log(response);
+        console.log(response);
+        toast.success("Service created successfully!");
+    } catch (error) {
+        console.error("Error creating service:", error);
+        toast.error("Failed to create service");
+        throw error;
+    }
 }
 
 async function getServiceConfiguration(serviceName: string): Promise<any> {
-    const UUID: string = await getUserId();   // "5736f6cb-f2ad-4424-9baf-2891d58f9c7a";
+    const UUID: string = await getUserId();
+    
+    // Check if user is logged in
+    if (!UUID) {
+        toast.error("You must be logged in to access service configuration");
+        return null;
+    }
+    
     try {
         const serviceConfiguration = await trpc.getConfiguration.query({
             user: UUID,
@@ -81,16 +101,17 @@ async function getServiceConfiguration(serviceName: string): Promise<any> {
         console.log(serviceConfiguration);
 
         if (serviceConfiguration == null) {
+            toast.error("Service configuration not found");
             return null;
         } else {
             return serviceConfiguration;
         }
 
     } catch (error) {
-        console.log("Error: " + error);
+        console.error("Error getting service configuration:", error);
+        toast.error("Failed to get service configuration");
+        return null;
     }
-
-
 }
 
 export { createService, getServiceConfiguration }

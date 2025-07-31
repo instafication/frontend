@@ -1,24 +1,27 @@
 import { trpc } from '$lib/trpc/client';
 import { getUserId } from './AuthManager';
+import { toast } from "svelte-sonner";
 
 async function getAllNotifications() {
-    const notifications = await trpc.getAllNotifications.query()
-    return notifications;
+    try {
+        const notifications = await trpc.getAllNotifications.query();
+        return notifications;
+    } catch (error) {
+        console.error("Error getting all notifications:", error);
+        toast.error("Failed to get notifications");
+        return [];
+    }
 }
 
 async function getLatestNotifications(count: number = 5) {
-    const notifications = await trpc.getLatestNotifications.query(count)
-    return notifications;
-}
-
-
-async function updateProfileById(id: string, email: string, phone: string): Promise<void> {
-    await trpc.updateprofileById.query({
-        id: id,
-        email: email,
-        phone: phone
-    });
-    console.log("Profile updated successfully!");
+    try {
+        const notifications = await trpc.getLatestNotifications.query(count);
+        return notifications;
+    } catch (error) {
+        console.error("Error getting latest notifications:", error);
+        toast.error("Failed to get notifications");
+        return [];
+    }
 }
 
 export { getAllNotifications, getLatestNotifications }

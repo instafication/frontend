@@ -324,6 +324,12 @@ export class DatabaseManager {
 
   public static Services = class {
     public static async getServiceConfiguration(uuid: string, name: string): Promise<any> {
+      // Check if uuid is provided
+      if (!uuid) {
+        console.log("No user ID provided for getServiceConfiguration");
+        return null;
+      }
+      
       const result = await db.select()
         .from(services)
         .where(and(
@@ -350,6 +356,11 @@ export class DatabaseManager {
     }
 
     public static async createService(user: string, name: string, notificationMethod: string, notificationWithinTime: number, options: {}) {
+      // Check if user ID is provided
+      if (!user) {
+        console.log("No user ID provided for createService");
+        return false;
+      }
 
       console.log(user, name, notificationMethod, notificationWithinTime, options);
 

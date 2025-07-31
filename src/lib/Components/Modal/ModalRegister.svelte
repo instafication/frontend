@@ -24,7 +24,7 @@
     loading = true;
     try {
       await signUp(email, password);
-      toast.success("Account created, we have sent you an confirmation email.");
+      toast.success("We have sent you a confirmation email, click the link in your email to activate account.");
     } catch (err: any) {
       toast.error("Error, can't create account. Try again.");
     } finally {

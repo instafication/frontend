@@ -4,6 +4,7 @@
   import { t } from '$lib/i18n';
   import { onMount } from 'svelte';
   import { trpc } from '$lib/trpc/client';
+  import { Activity } from '@lucide/svelte';
   
   let lastSearchedMinutes = $state(0);
   let loading = $state(true);
@@ -82,7 +83,7 @@
             </Badge>
           {:else}
             <Badge variant="default">
-              Last searched: {lastSearchedMinutes} minutes ago
+              <Activity/>Last searched: {lastSearchedMinutes} minutes ago
             </Badge>
           {/if}
         </p>
