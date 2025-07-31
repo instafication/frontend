@@ -11,7 +11,7 @@ export default {
 
         // HEADER LOGGED IN
         "HEADER_LOGGEDIN_I1": "Krediter: ",
-        "HEADER_LOGGEDIN_I2": "Tjänster",
+        "HEADER_LOGGEDIN_I2": "Alarm",
         "HEADER_LOGGEDIN_I3": "Inställningar",
         "HEADER_LOGGEDIN_I4": "Logga ut",
 
