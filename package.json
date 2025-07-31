@@ -28,7 +28,6 @@
     "flowbite-svelte": "^1.10.22",
     "postgres": "^3.4.7",
     "posthog-js": "^1.258.3",
-    "posthog-node": "^5.6.0",
     "stripe": "^18.4.0",
     "superjson": "^2.2.2",
     "svelte": "^5.37.1",
