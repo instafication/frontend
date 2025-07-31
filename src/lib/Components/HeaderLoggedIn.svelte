@@ -17,7 +17,7 @@
 	import { t } from "$lib/i18n";
 
 	/* ——— state ——— */
-	let uid = $state<string>("");
+	let id = $state("");
 	let email = $state<string>("");
 	let phone = $state<string>("");
 	let credits = $state<number>(0);
@@ -25,22 +25,12 @@
 
 	/* fetch user-data once */
 	onMount(async () => {
-		const id = await getUserId();
-		if (!id) return;
-
-		uid(id);
-
-		const [e, p, c] = await Promise.all([
+		id = await getUserId();
+		[email, phone, credits] = await Promise.all([
 			trpc.email.query(id),
 			trpc.phone.query(id),
 			trpc.credits.query(id),
 		]);
-
-		console.log(e, p, c);
-
-		email = e;
-		phone = p;
-		credits = c;
 	});
 </script>
 
