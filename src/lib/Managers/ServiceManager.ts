@@ -75,9 +75,7 @@ async function createService(name: string, notificationMethod: string, notificat
         });
 
         console.log(response);
-        toast.success("Service created successfully!");
     } catch (error) {
-        console.error("Error creating service:", error);
         toast.error("Failed to create service");
         throw error;
     }
