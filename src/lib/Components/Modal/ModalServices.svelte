@@ -5,7 +5,7 @@
   import { Button } from "$lib/Components/ui/button/index.js";
   import { Avatar, Label } from "flowbite-svelte";
   import Save from "@lucide/svelte/icons/save";
-  import Loader from "@lucide/svelte/icons";
+  import { Loader } from "@lucide/svelte";
 
   import {
     createService,
