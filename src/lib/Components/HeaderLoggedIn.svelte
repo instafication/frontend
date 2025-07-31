@@ -3,7 +3,6 @@
 	import { onMount } from "svelte";
 	import { Navbar, NavBrand, Toolbar } from "flowbite-svelte";
 	import * as Avatar from "$lib/components/ui/avatar/index.js";
-
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 
 	import { trpc } from "$lib/trpc/client";
@@ -18,16 +17,11 @@
 	import { t } from "$lib/i18n";
 
 	/* ——— state ——— */
-	const uid = $state<string>("");
-	const email = $state<string>("");
-	const phone = $state<string>("");
-	const credits = $state<number>(0);
-	const userMeta = $state<Record<string, unknown>>({});
-
-	/* derived avatar URL */
-	// const avatarUrl = $derived(() =>
-	// 	userMeta()?.avatar_url ?? '/images/logo.png'
-	// );
+	let uid = $state<string>("");
+	let email = $state<string>("");
+	let phone = $state<string>("");
+	let credits = $state<number>(0);
+	// let userMeta = $state<Record<string, unknown>>({});
 
 	/* fetch user-data once */
 	onMount(async () => {
@@ -36,18 +30,17 @@
 
 		uid(id);
 
-		const [e, p, c, meta] = await Promise.all([
+		const [e, p, c] = await Promise.all([
 			trpc.email.query(id),
 			trpc.phone.query(id),
 			trpc.credits.query(id),
 		]);
 
-		console.log(e, p, c, meta);
+		console.log(e, p, c);
 
-		email(e);
-		phone(p);
-		credits(c);
-		userMeta(meta);
+		email = e;
+		phone = p;
+		credits = c;
 	});
 </script>
 
@@ -85,8 +78,8 @@
 				</DropdownMenu.Trigger>
 
 				<DropdownMenu.Content class="w-56">
-					<DropdownMenu.Label class="px-3 py-2 text-sm font-medium">
-						{$t("HEADER_LOGGEDIN_I1")} test
+					<DropdownMenu.Label class="px-3 py-2">
+						{$t("HEADER_LOGGEDIN_I1")} {credits}
 					</DropdownMenu.Label>
 
 					<DropdownMenu.Separator />
