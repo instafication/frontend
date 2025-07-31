@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { getLatestNotifications } from '$lib/Managers/NotificationManager';
+	import { BellRing } from "@lucide/svelte";
+	import { Button } from "$lib/Components/ui/button/index.js";
 
 	// plain reactive variables
 	let loading = $state(true);
@@ -17,13 +19,11 @@
 </script>
 
 <DropdownMenu.Root>
-	<!-- trigger: three-dots icon -->
-	<DropdownMenu.Trigger class="dots-menu inline-flex items-center justify-center rounded-full p-2 hover:bg-muted">
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-			<circle cx="10" cy="3.5" r="1.5" />
-			<circle cx="10" cy="10"  r="1.5" />
-			<circle cx="10" cy="16.5" r="1.5" />
-		</svg>
+	<!-- trigger: bell icon -->
+	<DropdownMenu.Trigger asChild>
+		<Button variant="outline" class="hover:cursor-pointer">
+			<BellRing />Notifikationer
+		</Button>
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Content class="w-64">

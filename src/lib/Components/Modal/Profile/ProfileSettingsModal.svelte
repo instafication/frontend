@@ -3,6 +3,7 @@
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import { Label, Input } from "flowbite-svelte";
   import { Button } from "$lib/Components/ui/button/index.js";
+  import { Save } from "@lucide/svelte";
 
   /* managers & stores ----------------------------------------------- */
   import { getUserId } from "$lib/Managers/AuthManager";
@@ -72,8 +73,8 @@
       </Label>
 
       <Dialog.Footer>
-        <Button variant="outline" type="submit" class="w-full">
-          {$t("profile_save_changes")}
+        <Button variant="outline" type="submit" class="hover:cursor-pointer w-full">
+          <Save/>{$t("profile_save_changes")}
         </Button>
       </Dialog.Footer>
     </form>

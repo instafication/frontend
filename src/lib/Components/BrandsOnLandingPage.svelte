@@ -78,11 +78,11 @@
 
         <p class="text-sm text-gray-500 dark:text-gray-400">
           {#if loading}
-            <Badge variant="default">
+            <Badge variant="secondary">
               Loading...
             </Badge>
           {:else}
-            <Badge variant="default">
+            <Badge variant="secondary">
               <Activity/>Last searched: {lastSearchedMinutes} minutes ago
             </Badge>
           {/if}
