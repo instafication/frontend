@@ -62,11 +62,11 @@
 
 	<!-- right-hand tools -->
 	<div class="flex items-center md:order-1">
-		<Toolbar>
-			<NotificationDropdown />
+		<Toolbar class="flex items-center">
+			<NotificationDropdown class="px-4" />
 
 			<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->
-			<DropdownMenu.Root>
+			<DropdownMenu.Root class="px-4">
 				<DropdownMenu.Trigger>
 					<Avatar.Root>
 						<Avatar.Image
@@ -119,7 +119,9 @@
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 
-			<LanguageSelector />
+			<div class="px-2">
+				<LanguageSelector />
+			</div>
 		</Toolbar>
 	</div>
 </Navbar>
