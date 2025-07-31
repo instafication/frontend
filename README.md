@@ -124,8 +124,8 @@ src/
 - **Authentication**: Supabase Auth
 - **API**: tRPC for type-safe APIs
 - **Payments**: Stripe integration
-- **Deployment**: Vercel, Cloudflare Workers support
-- **Email**: Sendinblue integration
+- **Deployment**: Cloudflare Workers support
+- **Email**: Resend integration
 
 ## 📊 Database Schema
 
@@ -141,7 +141,7 @@ The application uses four main database tables:
 ### Service Configuration
 
 Users can configure:
-- Notification method (SMS/Email)
+- Notification method (Email)
 - Notification timing (1 hour, 1 day, 2 days in advance)
 - Service areas (e.g., specific housing areas)
 - Service types (laundry, parking, rentals)

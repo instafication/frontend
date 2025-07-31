@@ -1,6 +1,47 @@
 <script lang="ts">
-  import { Card, Avatar, Badge } from 'flowbite-svelte';
+  import { Card, Avatar } from 'flowbite-svelte';
+  import { Badge } from '$lib/Components/ui/badge';
   import { t } from '$lib/i18n';
+  import { onMount } from 'svelte';
+  import { trpc } from '$lib/trpc/client';
+  
+  let lastSearchedMinutes = 0;
+  let loading = true;
+  
+  // Function to calculate minutes since last search
+  function calculateMinutesSince(timestamp: number): number {
+    if (timestamp <= 0) return 0;
+    const now = Date.now();
+    const diffMs = now - timestamp;
+    return Math.floor(diffMs / 60000);
+  }
+  
+  // Function to fetch last update time from database
+  async function fetchLastUpdateTime() {
+    try {
+      loading = true;
+      const data = await trpc.getLastUpdateByCompany.query('Stockholms Studentbostäder');
+      lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
+      console.log(lastSearchedMinutes);
+    } catch (error) {
+      console.error('Error fetching last update time:', error);
+      lastSearchedMinutes = 0;
+    } finally {
+      loading = false;
+    }
+  }
+  
+  // Fetch the last update time when component mounts
+  onMount(() => {
+    fetchLastUpdateTime();
+    
+    // Update every minute
+    const interval = setInterval(() => {
+      fetchLastUpdateTime();
+    }, 60000);
+    
+    return () => clearInterval(interval);
+  });
 </script>
 
 <Card
@@ -35,31 +76,22 @@
             <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
             ></span>
           </span>
-          <Avatar src="/images/favicon-sssb.svg" alt="Logo" size="xs" />
+          <Avatar src="/images/favicon-sssb.svg" alt="Logo" size="sm" />
           <p class="text-xl font-normal text-gray-900 dark:text-white">
             Stockholms Studentbostäder
           </p>
         </div>
 
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          <!-- <Badge rounded color="green">
-            <svg
-              aria-hidden="true"
-              class="w-3 h-3 mr-1 inline"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 
-                   10-2 0v4a1 1 0 
-                   00.293.707l2.828 2.829a1 1 0 
-                   101.415-1.415L11 9.586V6z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            Aktiv: 5 minuter sedan
-          </Badge> -->
+          {#if loading}
+            <Badge variant="default">
+              Loading...
+            </Badge>
+          {:else}
+            <Badge variant="default">
+              Last searched: {lastSearchedMinutes} minutes ago
+            </Badge>
+          {/if}
         </p>
 
       </section>

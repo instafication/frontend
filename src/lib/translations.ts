@@ -94,7 +94,7 @@ export default {
         "pulse": "Företag vi tar pulsen på",
         "rental_cars": "Biluthyrning",
         "laundry": "Tvättid",
-        "taking_pulse": "Tar pulsen och söker efter nya tider...",
+        "taking_pulse": "Söker efter nya tider...",
         "register": "Skapa ett konto",
         "status_inactive": "Inaktiv: Kommer inom kort",
 
