@@ -33,8 +33,8 @@ export const services = pgTable(
     user: varchar('user', { length: 255 }).notNull(),
     name: varchar('name', { length: 255 }).notNull(),
 
-    notification: varchar('notification', { length: 255 }).notNull(),
-    notificationWithin: varchar('notification_within', { length: 255 }).notNull(),
+    notificationMethod: varchar('notification_method', { length: 255 }).notNull(),
+    notificationWithinTime: varchar('notification_within_time', { length: 255 }).notNull(),
     options: json('options').default({}),
   },
   (t) => ({

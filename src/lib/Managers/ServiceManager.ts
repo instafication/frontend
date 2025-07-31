@@ -54,15 +54,20 @@ model services {
 
 
 
-async function createService(name: string, notification: string, notificationWithin: number, options: {}): Promise<void> {
+async function createService(name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<void> {
     const UUID = await getUserId();
-    await trpc.createService.query({
+
+    console.log(UUID, name, notificationMethod, notificationWithinTime, options);
+
+    const response = await trpc.createService.query({
         user: UUID,
         name: name,
-        notification: notification,
-        notificationWithin: notificationWithin,
+        notificationMethod: notificationMethod,
+        notificationWithinTime: notificationWithinTime,
         options: options
     });
+
+    console.log(response);
 }
 
 async function getServiceConfiguration(serviceName: string): Promise<any> {
