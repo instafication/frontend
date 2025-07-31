@@ -37,7 +37,7 @@
       </div>
 
       <!-- log-in -->
-      <Button onclick={() => ($showLoginModal = true)} color="alternative">
+      <Button onclick={() => ($showLoginModal = true)} color="alternative" class="cursor-pointer">
         <lord-icon
           src="https://cdn.lordicon.com/rqqkvjqf.json"
           trigger="hover"
@@ -50,7 +50,7 @@
       </Button>
 
       <!-- register -->
-      <Button onclick={() => ($showRegisterModal = true)} color="blue">
+      <Button onclick={() => ($showRegisterModal = true)} color="blue" class="cursor-pointer">
         <lord-icon
           src="https://cdn.lordicon.com/wcjauznf.json"
           trigger="hover"

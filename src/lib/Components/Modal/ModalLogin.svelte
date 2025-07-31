@@ -1,7 +1,8 @@
 <script lang="ts">
   /* ───── UI kit ───── */
-  import * as Dialog from "$lib/components/ui/dialog/index.js";
-  import { Button, Label, Input, Checkbox } from "flowbite-svelte";
+  import * as Dialog from "$lib/Components/ui/dialog/index.js";
+  import { Button, Label, Input } from "flowbite-svelte";
+  import Checkbox from "$lib/Components/Custom/Checkbox.svelte";
 
   /* auth + stores */
   import {

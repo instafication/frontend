@@ -11,13 +11,13 @@
 
 
 <!-- <div class="flex gap-4 px-0"></div> -->
-<div class="flex items-center">
+<div class="flex items-center cursor-pointer">
     {#if $selectedLanguage == "sv"}
-        <Button onclick={() => $selectedLanguage = "en"} color="alternative" class="p-2">
+        <Button onclick={() => $selectedLanguage = "en"} color="alternative" class="p-2 cursor-pointer">
           <Se size=24/>
         </Button>
     {:else}
-        <Button onclick={() => $selectedLanguage = "sv"} color="alternative" class="p-2">
+        <Button onclick={() => $selectedLanguage = "sv"} color="alternative" class="p-2 cursor-pointer">
           <Us size=24/>
         </Button>
     {/if}
