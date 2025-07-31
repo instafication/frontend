@@ -55,8 +55,8 @@
 	<div class="flex items-center md:order-1 gap-1">
 		<LanguageSelector />
 		<NotificationDropdown />
-		<Button variant="outline">
-			<Settings />Alarm
+		<Button variant="outline" class="hover:cursor-pointer" on:click={() => showServicesModal.set(true)}>
+			<BellRing />Alarm
 		</Button>
 
 		<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->
