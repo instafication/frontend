@@ -6,6 +6,7 @@ export default {
   },
   kit: {
     adapter: adapter({
+      // See below for an explanation of these options
       config: undefined,
       platformProxy: {
         configPath: undefined,
@@ -21,8 +22,5 @@ export default {
     alias: {
       "@/*": "./src/lib/*",
     },
-    paths: {
-      relative: false
-    }
   }
 };
