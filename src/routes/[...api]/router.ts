@@ -61,6 +61,15 @@ export const appRouter = t.router({
         )
         .query(async ({ input }) => {
             const { user, name } = input;
+            
+            // Check if user ID is provided
+            if (!user) {
+                throw new trpc.TRPCError({
+                    code: 'BAD_REQUEST',
+                    message: 'User ID is required',
+                });
+            }
+            
             const serviceConfiguration: Service =
                 await DatabaseManager.Services.getServiceConfiguration(user, name);
             console.log("[Router] getServiceConfiguration: ");
@@ -91,6 +100,15 @@ export const appRouter = t.router({
         )
         .query(async ({ input }) => {
             const { user, name, notificationMethod, notificationWithinTime, options } = input;
+            
+            // Check if user ID is provided
+            if (!user) {
+                throw new trpc.TRPCError({
+                    code: 'BAD_REQUEST',
+                    message: 'User ID is required',
+                });
+            }
+            
             await DatabaseManager.Services.createService(
                 user,
                 name,
@@ -165,6 +183,5 @@ export const appRouter = t.router({
             return { lastUpdate };
         }),
 });
-
 
 export type AppRouter = typeof appRouter;
