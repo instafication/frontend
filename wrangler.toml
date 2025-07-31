@@ -16,3 +16,15 @@ mode = "smart"
 [vars]
 NODE_VERSION = "24.4.1"
 ENVIRONMENT = "production"
+
+PUBLIC_POSTHOG_KEY="phc_HLDbWoUxDBzdI73yrjji2OWu6rLTzlVfThdLuh7wtYH"
+PUBLIC_POSTHOG_HOST="https://eu.i.posthog.com"
+
+PUBLIC_SUPABASE_URL="https://dkavcpubobbtovqtobkv.supabase.co"
+PUBLIC_SUPABASE_ANON_KEY="sb_publishable_5-XfVjKYK6cWiV6s9K8M-g_kmze62xn"
+DATABASE_URL="postgresql://postgres.dkavcpubobbtovqtobkv:hqD0xjNboPDubDqx@aws-0-eu-north-1.pooler.supabase.com:5432/postgres?sslmode=no-verify"
+DB_PASSWORD="hqD0xjNboPDubDqx"
+
+STRIPE_PUBLISHABLE_KEY=""
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""

@@ -1,7 +1,4 @@
-
-const API_URL = 'https://api.sendinblue.com/v3/smtp/email';
-
-
+const API_URL: string = 'https://api.sendinblue.com/v3/smtp/email';
 
 async function SendEmailWhenSubscriptionProlonged(to: string, subject: string, body: string): Promise<boolean> {
     const requestBody = JSON.stringify({
