@@ -82,7 +82,7 @@
   }
 </script>
 
-<Dialog.Root bind:open={$showServicesModal}>
+<Dialog.Root bind:open={$showServicesModal} onOpenChange={(open) => console.log("Services modal open:", open)}>
   <Dialog.Content class="w-full max-w-md">
     <Dialog.Header>
       <Dialog.Title>{$t("SERVICES_TITLE")}</Dialog.Title>
