@@ -42,7 +42,7 @@
         </div>
 
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          <Badge rounded color="green">
+          <!-- <Badge rounded color="green">
             <svg
               aria-hidden="true"
               class="w-3 h-3 mr-1 inline"
@@ -59,7 +59,7 @@
               />
             </svg>
             Aktiv: 5 minuter sedan
-          </Badge>
+          </Badge> -->
         </p>
 
       </section>

@@ -1,12 +1,6 @@
 <script lang="ts">
-  import {
-    Navbar,
-    NavBrand,
-    NavHamburger,
-    NavUl,
-    NavLi,
-    Button,
-  } from "flowbite-svelte";
+  import { Navbar, NavBrand, NavUl } from "flowbite-svelte";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { showLoginModal, showRegisterModal } from "$lib/sharedStore";
   import LanguageSelector from "./LanguageSelector.svelte";
   import { t } from "$lib/i18n";
@@ -30,41 +24,50 @@
       </span>
     </NavBrand>
 
-    <div class="flex items-center space-x-4 md:space-x-4 rtl:space-x-reverse">
-      <!-- language selector -->
-      <div class="flex items-center">
-        <LanguageSelector />
-      </div>
+    <!-- log-in -->
+    <Button
+      variant="outline"
+      onclick={() => {
+        console.log("Login button clicked");
+        $showLoginModal = true;
+      }}
+      color="alternative"
+      class="cursor-pointer"
+    >
+      <lord-icon
+        src="https://cdn.lordicon.com/rqqkvjqf.json"
+        trigger="hover"
+        colors="primary:#121331"
+        stroke="48"
+        scale="48"
+        style="width:24px;height:24px"
+      ></lord-icon>
+      <span>{$t("log_in")}</span>
+    </Button>
 
-      <!-- log-in -->
-      <Button onclick={() => { console.log("Login button clicked"); $showLoginModal = true; }} color="alternative" class="cursor-pointer">
-        <lord-icon
-          src="https://cdn.lordicon.com/rqqkvjqf.json"
-          trigger="hover"
-          colors="primary:#121331"
-          stroke="40"
-          scale="40"
-          style="width:24px;height:24px"
-        ></lord-icon>
-        <span class="ml-2">{$t("log_in")}</span>
-      </Button>
+    <!-- register -->
+    <Button
+      onclick={() => {
+        $showRegisterModal = true;
+      }}
+      color="blue"
+      class="cursor-pointer"
+    >
+      <lord-icon
+        src="https://cdn.lordicon.com/wcjauznf.json"
+        trigger="hover"
+        colors="primary:#FFF"
+        stroke="48"
+        scale="48"
+        style="width:24px;height:24px"
+      ></lord-icon>
+      {$t("register")}
+    </Button>
 
-      <!-- register -->
-      <Button onclick={() => { console.log("Register button clicked"); $showRegisterModal = true; }} color="blue" class="cursor-pointer">
-        <lord-icon
-          src="https://cdn.lordicon.com/wcjauznf.json"
-          trigger="hover"
-          colors="primary:#FFF"
-          stroke="50"
-          scale="40"
-          style="width:24px;height:24px"
-        ></lord-icon>
-        <span class="ml-2">{$t("register")}</span>
-      </Button>
+    <LanguageSelector />
 
-      <!-- mobile hamburger -->
-      <!-- <NavHamburger /> -->
-    </div>
+    <!-- mobile hamburger -->
+    <!-- <NavHamburger /> -->
   </div>
 
   <!-- main nav links -->

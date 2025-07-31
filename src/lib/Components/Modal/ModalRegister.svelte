@@ -23,9 +23,8 @@
     if (loading) return;
     loading = true;
     try {
-      // signUp throws on failure; no structured object is returned here
       await signUp(email, password);
-      toast.success("Account created successfully");
+      toast.success("Account created, we have sent you an confirmation email.");
     } catch (err: any) {
       toast.error("Error, can't create account. Try again.");
     } finally {
