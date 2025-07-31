@@ -59,13 +59,15 @@ async function signUp(email: string, password: string, isPremium: boolean = fals
 	return true;
 };
 
-async function signInWithPassword(email: string, password: string) {
+async function signInWithPassword(email: string, password: string): Promise<boolean> {
 
 	const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 	if (!error) {
-		toast.success(data.user);
+		toast.success("Login successful");
+		return true;
 	} else {
 		toast.error(error.message);
+		return false;
 	}
 
 }

@@ -30,7 +30,10 @@
     if (loading) return;
     loading = true;
     try {
-      await signInWithPassword(email, password);
+      const success = await signInWithPassword(email, password);
+      if (success) {
+        $showLoginModal = false;
+      }
     } finally {
       loading = false;
     }
