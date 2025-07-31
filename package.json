@@ -32,6 +32,7 @@
     "superjson": "^2.2.2",
     "svelte": "^5.37.1",
     "svelte-check": "^4.3.0",
+    "svelte-lucide-icons": "^0.6.0",
     "typescript": "^5.8.3",
     "vite": "^7.0.6",
     "wrangler": "^4.27.0",
