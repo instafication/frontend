@@ -20,13 +20,13 @@
 
 <DropdownMenu.Root>
 	<!-- trigger: bell icon -->
-	<DropdownMenu.Trigger asChild>
+	<DropdownMenu.Trigger>
 		<Button variant="outline" class="hover:cursor-pointer">
 			<BellRing />Notifikationer
 		</Button>
 	</DropdownMenu.Trigger>
 
-	<DropdownMenu.Content class="w-64">
+	<DropdownMenu.Content>
 		{#if loading}
 			<DropdownMenu.Item disabled>Loading …</DropdownMenu.Item>
 		{:else if notifications.length === 0}

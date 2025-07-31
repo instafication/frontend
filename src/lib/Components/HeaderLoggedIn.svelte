@@ -33,6 +33,7 @@
 			trpc.credits.query(id),
 		]);
 	});
+	
 </script>
 
 <!-- ——— markup ——— -->
@@ -55,7 +56,7 @@
 	<div class="flex items-center md:order-1 gap-1">
 		<LanguageSelector />
 		<NotificationDropdown />
-		<Button variant="outline" class="hover:cursor-pointer" on:click={() => showServicesModal.set(true)}>
+		<Button variant="outline" class="hover:cursor-pointer" onclick={() => showServicesModal.set(true)}>
 			<BellRing />Alarm
 		</Button>
 
