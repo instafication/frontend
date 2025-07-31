@@ -1,6 +1,7 @@
 import { createClient, type Provider } from '@supabase/supabase-js';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
-import { SendEmailWhenUserIsCreated } from './EmailManager';
+import { toast } from "svelte-sonner";
+// import { SendEmailWhenUserIsCreated } from './EmailManager';
 
 
 const supabase = createClient(
@@ -62,10 +63,9 @@ async function signInWithPassword(email: string, password: string) {
 
 	const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
 	if (!error) {
-
-		console.log(data.user);
+		toast.success(data.user);
 	} else {
-		alert(error.message);
+		toast.error(error.message);
 	}
 
 }
@@ -74,29 +74,28 @@ async function signInWithOAuth(provider: Provider = "google") {
 	try {
 		console.log(`Started login with provider: ${provider}`);
 		const r = await supabase.auth.signInWithOAuth({ provider: provider });
-		console.log(`Logged in: ${r}`);
+		toast.success(`Logged in: ${r}`);
 	} catch (error) {
-		alert(error);
+		toast.error(error);
 	}
 }
 
 async function resetPasswordForEmail(email: string) {
 	try {
 		const r = await supabase.auth.resetPasswordForEmail(email);
-		alert("Kolla din mail för att återställa lösenordet.");
+		toast.info("Kolla din mail för att återställa lösenordet.");
 	} catch (error) {
-		console.log(error);
-		alert(error);
+		toast.error(error);
 	}
 }
 
 async function signOut() {
 	try {
 		const r = await supabase.auth.signOut();
-		console.log(r);
+		toast.info(r);
 	} catch (error) {
 		console.log(error);
-		alert(error);
+		toast.error(error);
 	}
 }
 

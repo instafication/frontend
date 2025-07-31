@@ -192,7 +192,7 @@
     </section>
 
     <div class="mt-6 text-right">
-      <Button variant="outline" size="sm" onclick={handleSave}>
+      <Button variant="outline" onclick={handleSave}>
         <Save class="inline mr-1" />
         {$t("SERVICES_BUTTON1")}
       </Button>

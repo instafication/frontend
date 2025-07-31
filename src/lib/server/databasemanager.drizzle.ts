@@ -11,7 +11,11 @@ import {
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 
 // Create the database connection
-const client = postgres(DATABASE_URL);
+const client = postgres(DATABASE_URL, {
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 const db = drizzle(client);
 
 export class DatabaseManager {

@@ -1,6 +1,6 @@
 import { trpc } from '$lib/trpc/client';
 import { getUserId } from './AuthManager';
-import { page } from '$app/stores';
+import { toast } from "svelte-sonner";
 
 async function parseUserDataById(id: string): Promise<{ email: string, phone: string, credits: number }> {
   // const userId = await getUserId();    
@@ -18,7 +18,7 @@ async function updateProfileById(id: string, email: string, phone: string): Prom
       email: email,
       phone: phone
   });
-  console.log("Profile updated successfully!");
+  toast.success("Profile has been updated!")
 }
 
 export { updateProfileById, parseUserDataById }
