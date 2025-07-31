@@ -1,10 +1,10 @@
 // import type { RequestHandler } from "@sveltejs/kit";
 // //import { stripe } from "../../routes/webhook/+server"
-// import { SECRET_STRIPE_SECRET_KEY } from '$env/static/private'
+// import { STRIPE_SECRET_KEY } from '$env/static/private'
 // import Stripe from "stripe";
 
-// const stripe = new Stripe(SECRET_STRIPE_SECRET_KEY, {
-//     apiVersion: "2025-06-30.basil",
+// const stripe = new Stripe(STRIPE_SECRET_KEY, {
+//     apiVersion: "2025-07-30.basil",
 //     typescript: true,
 // });
 
