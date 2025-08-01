@@ -17,8 +17,8 @@
 
   const AREA_LIST = [
     { value: "medicinaren", label: "medicinaren" },
-    { value: "lappkärrsberget", label: "lappkärrsberget" },
-    { value: "jerum", label: "jerum" },
+    // { value: "lappkärrsberget", label: "lappkärrsberget" },
+    // { value: "jerum", label: "jerum" },
   ] as const;
 
   const WITHIN_TIME_LIST = [
