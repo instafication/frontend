@@ -18,7 +18,7 @@
 
   const AREA_LIST = [
     { value: "medicinaren", label: "medicinaren" },
-    // { value: "lappkärrsberget", label: "lappkärrsberget" },
+    // { value: "kungshamra", label: "kungshamra" },
     // { value: "jerum", label: "jerum" },
   ] as const;
 
@@ -71,13 +71,14 @@
       const hasRemoved: boolean = await removeService("Stockholms Studentbostäder");
       if (hasRemoved) {
         toast.success("Bevakningen har tagits bort.");
+        // Update UI state immediately
+        hasActiveService = false;
+        selectedNotificationMethod = "e-post";
+        selectedWithinTime = "";
+        selectedArea = "";
       } else {
         toast.error("Det gick inte att ta bort bevakningen.");
       }
-      hasActiveService = false;
-      selectedNotificationMethod = "e-post";
-      selectedWithinTime = "";
-      selectedArea = "";
     } else {
       const hasCreated: boolean = await createService(
         "Stockholms Studentbostäder",
@@ -87,6 +88,8 @@
       )
       if (hasCreated) {
         toast.success("Bevakningen har skapats.");
+        // Update UI state immediately
+        hasActiveService = true;
       } else {
         toast.error("Det gick inte att skapa bevakningen.");
       }
