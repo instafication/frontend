@@ -93,12 +93,9 @@ async function getServiceConfiguration(serviceName: string): Promise<any> {
     
     // Check if user is logged in
     if (!UUID) {
-        toast.error("You must be logged in to access service configuration");
+        // toast.error("You must be logged in to access service configuration");
         return null;
     }
-
-    console.log("UUID", UUID);
-    console.log("Service name", serviceName);
 
     try {
         const serviceConfiguration = await trpc.getConfiguration.query({

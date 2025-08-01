@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Navbar, NavBrand, NavUl } from "flowbite-svelte";
+  import { Navbar, NavBrand } from "flowbite-svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import { showLoginModal, showRegisterModal } from "$lib/sharedStore";
   import LanguageSelector from "./LanguageSelector.svelte";
@@ -23,6 +23,10 @@
         Instafication
       </span>
     </NavBrand>
+
+    <!-- mobile hamburger -->
+    <!-- <NavHamburger /> -->
+
 
     <!-- right-hand tools -->
     <div class="flex items-center gap-2">
@@ -67,9 +71,6 @@
       </Button>
 
     </div>
-
-    <!-- mobile hamburger -->
-    <!-- <NavHamburger /> -->
   </div>
 
   <!-- main nav links -->
