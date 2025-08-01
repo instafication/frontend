@@ -1,152 +1,95 @@
-const API_URL: string = 'https://api.sendinblue.com/v3/smtp/email';
+import { Resend } from 'resend';
+import { RESEND_API_KEY } from "$env/static/private";
 
-async function SendEmailWhenSubscriptionProlonged(to: string, subject: string, body: string): Promise<boolean> {
-    const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Instafication" }],
-            templateId: 9,
-            subject: subject,
-            params: {
-                message: body,
-            },
-        });
+const resend = new Resend(RESEND_API_KEY!);
 
+async function SendEmailWhenSubscriptionProlonged(
+    to: string,
+    subject: string,
+    body: string
+): Promise<boolean> {
     try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                accept: "application/json",
-                "Content-Type": "application/json",
-                "api-key":
-                    "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",
-            },
-            body: requestBody,
+        await resend.emails.send({
+            from: 'Instafication <no-reply@instafication.shop>',
+            to,
+            subject,
+            html: body,
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(
-                `[Emailmanager, -] Error sending email: ${response.status} ${response.statusText}\n\n${errorText}`,
-            );
-            return false;
-        }
-
         return true;
-    } catch (error) {
-        console.error("[Emailmanager, -] Error sending email:", error.message);
+    } catch (err: any) {
+        console.error(
+            `[Emailmanager] Error sending 'subscription prolonged' email:`,
+            err
+        );
         return false;
     }
 }
 
-async function SendEmailWhenUserIsCreated(to: string, subject: string, body: string): Promise<boolean> {
-    const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Instafication" }],
-        templateId: 9,
-        subject: subject,
-        params: {
-            "message": body,
-        },
-    });
-
+async function SendEmailWhenUserIsCreated(
+    to: string,
+    subject: string,
+    body: string
+): Promise<boolean> {
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                "accept": "application/json",
-                "Content-Type": "application/json",
-                "api-key": "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",
-            },
-            body: requestBody,
+        await resend.emails.send({
+            from: 'Instafication <no-reply@instafication.shop>',
+            to,
+            subject,
+            html: body,
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(
-                `[Emailmanager, -] Error sending email: ${response.status} ${response.statusText}\n\n${errorText}`,
-            );
-            return false;
-        }
-
         return true;
-    } catch (error) {
-        console.error('[Emailmanager, -] Error sending email:', error.message);
+    } catch (err: any) {
+        console.error(
+            `[Emailmanager] Error sending 'user created' email:`,
+            err
+        );
         return false;
     }
 }
 
-async function SendEmailWhenSubscription(to: string, body: string): Promise<boolean> {
-    const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Instafication" }],
-        templateId: 7,
-        subject: "Välkommen till Instafication Premium!",
-        params: {
-            "message": "Välkommen till Instafication Premium!"
-
-        },
-    });
-
+async function SendEmailWhenSubscription(
+    to: string,
+    /* body param is unused here, so you can omit or repurpose it */
+    body: string
+): Promise<boolean> {
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                "accept": "application/json",
-                "Content-Type": "application/json",
-                "api-key": "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",
-            },
-            body: requestBody,
+        await resend.emails.send({
+            from: 'Instafication <no-reply@instafication.shop>',
+            to,
+            subject: 'Välkommen till Instafication Premium!',
+            html: 'Välkommen till Instafication Premium!'
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(
-                `[Emailmanager, -] Error sending email: ${response.status} ${response.statusText}\n\n${errorText}`,
-            );
-            return false;
-        }
-
         return true;
-    } catch (error) {
-        console.error('[Emailmanager, -] Error sending email:', error.message);
+    } catch (err: any) {
+        console.error(
+            `[Emailmanager] Error sending 'subscription welcome' email:`,
+            err
+        );
         return false;
     }
 }
 
 async function sendEmail(
     to: string,
-    body: string,
+    body: string
 ): Promise<boolean> {
-    const requestBody = JSON.stringify({
-        to: [{ email: to, name: "Instafication" }],
-        // sender: { "name": "Instafication", "email": "Instafication <hej@Instafication.se>" },
-        templateId: 7,
-        params: {
-            "message": body,
-        },
-    });
-
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                "accept": "application/json",
-                "Content-Type": "application/json",
-                "api-key": "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",
-            },
-            body: requestBody,
+        await resend.emails.send({
+            from: 'Instafication <no-reply@instafication.shop>',
+            to,
+            subject: 'Välkommen till Instafication Premium!',
+            html: body
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(
-                `[Emailmanager, -] Error sending email: ${response.status} ${response.statusText}\n\n${errorText}`,
-            );
-            return false;
-        }
-
         return true;
-    } catch (error) {
-        console.error('[Emailmanager, -] Error sending email:', error.message);
+    } catch (err: any) {
+        console.error(`[Emailmanager] Error sending generic email:`, err);
         return false;
     }
 }
 
-export { SendEmailWhenUserIsCreated, sendEmail, SendEmailWhenSubscription, SendEmailWhenSubscriptionProlonged };
+export {
+    SendEmailWhenUserIsCreated,
+    sendEmail,
+    SendEmailWhenSubscription,
+    SendEmailWhenSubscriptionProlonged,
+};

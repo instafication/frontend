@@ -3,6 +3,10 @@ main = ".svelte-kit/cloudflare/_worker.js"
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2025-07-31"
 
+routes = [
+  { pattern = "instafication.shop", custom_domain = true }
+]
+
 [assets]
 directory = ".svelte-kit/cloudflare"
 binding = "ASSETS"
@@ -28,3 +32,5 @@ DB_PASSWORD="hqD0xjNboPDubDqx"
 STRIPE_PUBLISHABLE_KEY=""
 STRIPE_SECRET_KEY=""
 STRIPE_WEBHOOK_SECRET=""
+
+RESEND_API_KEY="re_KECmwWaz_MW4D5qz4BotMof1nugRXnmA7"
