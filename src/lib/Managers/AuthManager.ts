@@ -2,18 +2,15 @@ import { createClient, type Provider } from '@supabase/supabase-js';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
 import { toast } from "svelte-sonner";
 import { browser } from '$app/environment';
-// import { SendEmailWhenUserIsCreated } from './EmailManager';
 
-// Create a function to initialize the Supabase client
 function createSupabaseClient() {
-  // Only initialize the client if we're in the browser
+
   if (browser) {
     return createClient(
       PUBLIC_SUPABASE_URL.trim(),
       PUBLIC_SUPABASE_ANON_KEY.replace(/[\r\n]+/g, '').trim()
     );
   }
-  // Return null or a mock client for server-side
   return null;
 }
 
@@ -155,7 +152,8 @@ async function resetPasswordForEmail(email: string) {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.info("Check your email to reset your password.");
+      // Implement i18n for this
+      toast.success("Check your email to reset your password.");
     }
   } catch (error) {
     console.error("Error resetting password:", error);
