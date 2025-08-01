@@ -88,8 +88,7 @@ async function signUp(email: string, password: string, isPremium: boolean = fals
       toast.error(error.message);
       return false;
     }
-    
-    toast.success("Account created successfully!");
+
     return true;
   } catch (error) {
     console.error("Error during signup:", error);
