@@ -10,7 +10,7 @@ async function SendEmailWhenSubscriptionProlonged(
 ): Promise<boolean> {
     try {
         await resend.emails.send({
-            from: 'Instafication <no-reply@instafication.shop>',
+            from: 'Instafication <no-reply@transactional.instafication.shop>',
             to,
             subject,
             html: body,
@@ -32,7 +32,7 @@ async function SendEmailWhenUserIsCreated(
 ): Promise<boolean> {
     try {
         await resend.emails.send({
-            from: 'Instafication <no-reply@instafication.shop>',
+            from: 'Instafication <no-reply@transactional.instafication.shop>',
             to,
             subject,
             html: body,
@@ -54,7 +54,7 @@ async function SendEmailWhenSubscription(
 ): Promise<boolean> {
     try {
         await resend.emails.send({
-            from: 'Instafication <no-reply@instafication.shop>',
+            from: 'Instafication <no-reply@transactional.instafication.shop>',
             to,
             subject: 'Välkommen till Instafication Premium!',
             html: 'Välkommen till Instafication Premium!'
@@ -75,7 +75,7 @@ async function sendEmail(
 ): Promise<boolean> {
     try {
         await resend.emails.send({
-            from: 'Instafication <no-reply@instafication.shop>',
+            from: 'Instafication <no-reply@transactional.instafication.shop>',
             to,
             subject: 'Välkommen till Instafication Premium!',
             html: body
