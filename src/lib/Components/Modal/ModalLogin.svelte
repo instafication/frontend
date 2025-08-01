@@ -2,7 +2,7 @@
   /* ───── UI kit ───── */
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import { Button, Label, Input } from "flowbite-svelte";
-  import { Loader2 } from "@lucide/svelte";
+  import { Loader2, LogIn } from "@lucide/svelte";
   import Checkbox from "$lib/Components/Custom/Checkbox.svelte";
 
   /* auth + stores */
@@ -109,10 +109,11 @@
         </button>
       </div>
 
-      <!-- submit = password login -->
       <Button color="blue" type="submit" class="w-full inline-flex items-center justify-center gap-2 hover:cursor-pointer" disabled={loading}>
         {#if loading}
           <Loader2 class="w-4 h-4 animate-spin" />
+        {:else}
+          <LogIn class="w-4 h-4" />
         {/if}
         <span>{$t("log_in_button")}</span>
       </Button>
