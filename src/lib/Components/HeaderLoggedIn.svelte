@@ -43,7 +43,7 @@
 		<!-- brand / logo -->
 		<NavBrand href="/">
 			<img
-				src="/images/logo.png"
+				src="/images/instafication-logo-symbol-1.png"
 				class="mr-3 h-6 sm:h-9"
 				alt="Instafication logo"
 			/>
