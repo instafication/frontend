@@ -1,11 +1,9 @@
 import adapter from '@sveltejs/adapter-cloudflare';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+// import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+/** @type {import('@sveltejs/kit').Config} */
 export default {
-  vitePlugin: {
-    experimental: { prebundleSvelteLibraries: false }
-  },
-  preprocess: vitePreprocess(),
+  // preprocess: vitePreprocess(),
   compilerOptions: {
     runes: true
   },

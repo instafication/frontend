@@ -4,8 +4,8 @@
   import * as Select from "$lib/Components/ui/select/index.js";
   import { Button } from "$lib/Components/ui/button/index.js";
   import { Avatar, Label } from "flowbite-svelte";
-  import Save from "@lucide/svelte/icons/save";
-  import { Loader2 } from "@lucide/svelte";
+  import Save from "@lucide/svelte/icons/save.svelte";
+  import Loader2 from "@lucide/svelte/icons/loader-2";
 
   import {
     createService,
@@ -14,7 +14,7 @@
   } from "$lib/Managers/ServiceManager";
   import { showServicesModal } from "$lib/sharedStore";
   import { t } from "$lib/i18n";
-    import { toast } from "svelte-sonner";
+  import { toast } from "svelte-sonner";
 
   const AREA_LIST = [
     { value: "medicinaren", label: "medicinaren" },
@@ -32,7 +32,7 @@
   ] as const;
 
   const NOTIFICATION_METHOD_LIST = [
-    { value: "e-post", label: "E-post" }
+    { value: "e-post", label: "E-post" },
   ] as const;
 
   let selectedNotificationMethod = $state<string>("");
@@ -68,7 +68,9 @@
 
     // Remove service from database if press inactive and also set all fields to empty
     if (hasActiveService) {
-      const hasRemoved: boolean = await removeService("Stockholms Studentbostäder");
+      const hasRemoved: boolean = await removeService(
+        "Stockholms Studentbostäder",
+      );
       if (hasRemoved) {
         toast.success("Bevakningen har tagits bort.");
         // Update UI state immediately
@@ -85,7 +87,7 @@
         selectedNotificationMethod,
         Number(selectedWithinTime),
         { area: selectedArea },
-      )
+      );
       if (hasCreated) {
         toast.success("Bevakningen har skapats.");
         // Update UI state immediately
@@ -118,11 +120,19 @@
             <Avatar src="/images/favicon-sssb.svg" alt="Logo" size="sm" />
             <span class="absolute -top-1 -right-1 flex h-3 w-3">
               {#if hasActiveService}
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
+                ></span>
               {:else}
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-3 w-3 bg-red-500"
+                ></span>
               {/if}
             </span>
           </div>
@@ -137,16 +147,16 @@
             <Label>{$t("SERVICES_OPTION1_TITLE")}</Label>
             <Select.Root type="single" bind:value={selectedNotificationMethod}>
               <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
-                {selectedNotificationMethod || placeholder}
-              </Select.Trigger >
+                {selectedNotificationMethod || placeholder}
+              </Select.Trigger>
               <Select.Content>
                 <Select.Group>
                   {#each NOTIFICATION_METHOD_LIST as item (item.value)}
                     <Select.Item
                       value={item.value}
                       label={item.label}
-                       class="hover:cursor-pointer"
-                      >
+                      class="hover:cursor-pointer"
+                    >
                       {item.label}
                     </Select.Item>
                   {/each}
@@ -198,24 +208,25 @@
           </div>
         </form>
 
-      <Button variant="outline" onclick={toggleService} disabled={loading} class="hover:cursor-pointer">
-        {#if loading}
-          <Loader2 class="w-4 h-4 mr-1 animate-spin" />
-        {:else}
+        <Button
+          variant="outline"
+          onclick={toggleService}
+          disabled={loading}
+          class="hover:cursor-pointer"
+        >
+          {#if loading}
+            <Loader2 class="w-4 h-4 mr-1 animate-spin" />
+          {:else}
             <Save class="w-4 h-4 mr-1" />
-        {/if}
+          {/if}
 
-        {#if hasActiveService}
-          {$t("SERVICES_BUTTON1_ACTIVE")}
-        {:else}
-          {$t("SERVICES_BUTTON1")}
-        {/if}
-      </Button>
-
+          {#if hasActiveService}
+            {$t("SERVICES_BUTTON1_ACTIVE")}
+          {:else}
+            {$t("SERVICES_BUTTON1")}
+          {/if}
+        </Button>
       </section>
     </section>
-
-  
-    
   </Dialog.Content>
 </Dialog.Root>
