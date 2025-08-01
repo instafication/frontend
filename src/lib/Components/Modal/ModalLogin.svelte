@@ -96,12 +96,12 @@
       </Label>
 
       <div class="flex items-start">
-        <Checkbox class="" value="remember">
+        <Checkbox class="hover:cursor-pointer" value="remember">
           {$t("remember_me")}
         </Checkbox>
         <button
           tabindex="-1"
-          class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
+          class="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500 hover:cursor-pointer"
           onclick={openLostPassword}
           type="button"
         >
@@ -110,7 +110,7 @@
       </div>
 
       <!-- submit = password login -->
-      <Button color="blue" type="submit" class="w-full inline-flex items-center justify-center gap-2" disabled={loading}>
+      <Button color="blue" type="submit" class="w-full inline-flex items-center justify-center gap-2 hover:cursor-pointer" disabled={loading}>
         {#if loading}
           <Loader2 class="w-4 h-4 animate-spin" />
         {/if}
@@ -146,7 +146,7 @@
       <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
         {$t("not_registered")}
         <button
-          class="text-blue-700 hover:underline dark:text-blue-500"
+          class="text-blue-700 hover:underline dark:text-blue-500 hover:cursor-pointer"
           onclick={openRegister}
           type="button"
         >
