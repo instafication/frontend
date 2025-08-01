@@ -99,7 +99,7 @@ async function getServiceConfiguration(serviceName: string): Promise<any> {
         console.log(serviceConfiguration);
 
         if (serviceConfiguration == null) {
-            toast.error("Service configuration not found");
+            console.log("Service configuration not found");
             return null;
         } else {
             return serviceConfiguration;
