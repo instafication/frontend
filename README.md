@@ -4,7 +4,7 @@
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://kit.svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://prisma.io/)
+[![Drizzle](https://img.shields.io/badge/Drizzle-3982CE?style=for-the-badge&logo=Drizzle&logoColor=black)]([https://Drizzle.io/](https://orm.drizzle.team/))
 
 Instafication is a smart notification service that monitors booking systems and instantly alerts you via SMS or email when new appointment slots become available. Never miss a booking opportunity again!
 
@@ -23,7 +23,7 @@ Instafication is a smart notification service that monitors booking systems and 
 
 ### Prerequisites
 
-- Node.js 18.x or higher
+- Node.js 22.x or higher
 - PostgreSQL database
 - Supabase account (for authentication)
 - Stripe account (for payments)
@@ -55,8 +55,8 @@ Instafication is a smart notification service that monitors booking systems and 
 
 4. **Set up the database**
    ```bash
-   bunx prisma generate
-   bunx prisma db push
+   bunx drizzle generate
+   bunx drizzle db push
    ```
 
 5. **Configure Supabase triggers**
