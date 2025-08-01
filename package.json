@@ -15,7 +15,8 @@
     "migrate": "bunx drizzle-kit generate && bunx drizzle-kit migrate",
     "generate": "bunx drizzle-kit generate",
     "push": "bunx drizzle-kit push",
-    "clean": "rm -rf .svelte-kit && rm -rf node_modules && rm -rf .wrangler && bun i"
+    "clean": "rm -rf .svelte-kit && rm -rf node_modules && rm -rf .wrangler && bun i",
+    "studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
@@ -24,7 +25,7 @@
     "classnames": "^2.5.1",
     "drizzle-orm": "^0.44.4",
     "flowbite": "^3.1.2",
-    "flowbite-svelte": "^1.10.22",
+    "flowbite-svelte": "^1.11.0",
     "postgres": "^3.4.7",
     "posthog-js": "^1.258.5",
     "resend": "^4.7.0",
