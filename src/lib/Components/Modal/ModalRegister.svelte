@@ -2,7 +2,7 @@
   /* ───── UI kit ───── */
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import { Button, Label, Input } from "flowbite-svelte";
-  import { Loader2, Hand } from "@lucide/svelte";
+  import { Loader2, UserRoundPlus } from "@lucide/svelte";
   import { toast } from "svelte-sonner";
 
   /* managers & stores */
@@ -67,6 +67,8 @@
       <Button type="submit" color="blue" class="w-full inline-flex items-center justify-center gap-2 cursor-pointer" disabled={loading}>
         {#if loading}
           <Loader2 class="w-4 h-4 animate-spin" />
+        {:else}
+          <UserRoundPlus class="w-4 h-4" />
         {/if}
         <span>{$t("register_your_account")}</span>
       </Button>
