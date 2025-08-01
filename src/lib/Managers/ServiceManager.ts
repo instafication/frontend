@@ -54,7 +54,7 @@ model services {
   */
 
 
-async function createService(name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<void> {
+async function createService(name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<boolean> {
     const UUID = await getUserId();
     
     // Check if user is logged in
@@ -75,10 +75,17 @@ async function createService(name: string, notificationMethod: string, notificat
         });
 
         console.log(response);
+        return response;
     } catch (error) {
         toast.error("Failed to create service");
         throw error;
     }
+}
+
+async function removeService(serviceName: string): Promise<boolean> {
+    const UUID: string = await getUserId();
+    const response = await trpc.removeService.query({ user: UUID, name: serviceName });
+    return response;
 }
 
 async function getServiceConfiguration(serviceName: string): Promise<any> {
@@ -89,7 +96,10 @@ async function getServiceConfiguration(serviceName: string): Promise<any> {
         toast.error("You must be logged in to access service configuration");
         return null;
     }
-    
+
+    console.log("UUID", UUID);
+    console.log("Service name", serviceName);
+
     try {
         const serviceConfiguration = await trpc.getConfiguration.query({
             user: UUID,
@@ -112,4 +122,4 @@ async function getServiceConfiguration(serviceName: string): Promise<any> {
     }
 }
 
-export { createService, getServiceConfiguration }
+export { createService, getServiceConfiguration, removeService }

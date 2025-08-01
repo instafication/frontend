@@ -5,10 +5,11 @@
   import { Button } from "$lib/Components/ui/button/index.js";
   import { Avatar, Label } from "flowbite-svelte";
   import Save from "@lucide/svelte/icons/save";
-  import { Loader } from "@lucide/svelte";
+  import { Loader2 } from "@lucide/svelte";
 
   import {
     createService,
+    removeService,
     getServiceConfiguration,
   } from "$lib/Managers/ServiceManager";
   import { showServicesModal } from "$lib/sharedStore";
@@ -38,14 +39,9 @@
   let selectedWithinTime = $state<string>("");
   let selectedArea = $state<string>("");
   let loading = $state<boolean>(false);
+  let hasActiveService = $state<boolean>(false);
 
-  // const triggerContent = $derived(
-  //   notifications.find((f) => f.value === selectedNotification)?.label ?? "Välj...",
-  // );
-
-  const placeholder = "Välj…";
-
-  async function loadServiceData() {
+  onMount(async () => {
     const cfg: any = await getServiceConfiguration(
       "Stockholms Studentbostäder",
     );
@@ -53,36 +49,52 @@
       selectedNotificationMethod = cfg.notificationMethod ?? "";
       selectedWithinTime = String(cfg.notificationWithinTime ?? "");
       selectedArea = cfg.options?.area ?? "";
+      hasActiveService = true;
     }
-  }
-  onMount(loadServiceData);
+  });
+
+  const placeholder = "Välj…";
 
   function validateForm() {
     return selectedNotificationMethod && selectedWithinTime && selectedArea;
   }
 
-  async function handleSave() {
+  async function toggleService() {
     if (!validateForm()) {
       toast.error("Du måste fylla i alla fält innan du sparar.");
       return;
     }
-    
     loading = true;
-    try {
-      await createService(
+
+    // Remove service from database if press inactive and also set all fields to empty
+    if (hasActiveService) {
+      const hasRemoved: boolean = await removeService("Stockholms Studentbostäder");
+      if (hasRemoved) {
+        toast.success("Bevakningen har tagits bort.");
+      } else {
+        toast.error("Det gick inte att ta bort bevakningen.");
+      }
+      hasActiveService = false;
+      selectedWithinTime = "";
+      selectedArea = "";
+    } else {
+      const hasCreated: boolean = await createService(
         "Stockholms Studentbostäder",
         selectedNotificationMethod,
         Number(selectedWithinTime),
         { area: selectedArea },
-      );
-      toast.success("Ändringarna har sparats.");
-    } finally {
-      loading = false;
+      )
+      if (hasCreated) {
+        toast.success("Bevakningen har skapats.");
+      } else {
+        toast.error("Det gick inte att skapa bevakningen.");
+      }
     }
+    loading = false;
   }
 </script>
 
-<Dialog.Root bind:open={$showServicesModal} onOpenChange={(open) => console.log("Services modal open:", open)}>
+<Dialog.Root bind:open={$showServicesModal}>
   <Dialog.Content class="w-full max-w-md">
     <Dialog.Header>
       <Dialog.Title>
@@ -91,7 +103,7 @@
     </Dialog.Header>
 
     <section
-      class="bg-white dark:bg-gray-900 grid md:grid-cols-auto gap-4 py-8 px-8 mx-auto max-w-screen-xl"
+      class="bg-white dark:bg-gray-900 grid md:grid-cols-auto gap-0 py-6 px-0 mx-auto max-w-screen-xl"
     >
       <section
         id="sssb"
@@ -101,11 +113,13 @@
           <div class="relative">
             <Avatar src="/images/favicon-sssb.svg" alt="Logo" size="sm" />
             <span class="absolute -top-1 -right-1 flex h-3 w-3">
-              <span
-                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
-              ></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
-              ></span>
+              {#if hasActiveService}
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+              {:else}
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              {/if}
             </span>
           </div>
           <p class="text-xl font-normal text-gray-900 dark:text-white">
@@ -176,18 +190,25 @@
             </Select.Root>
           </div>
         </form>
+
+      <Button variant="outline" onclick={toggleService} disabled={loading}>
+        {#if loading}
+          <Loader2 class="w-4 h-4 mr-1 animate-spin" />
+        {:else}
+            <Save class="w-4 h-4 mr-1" />
+        {/if}
+
+        {#if hasActiveService}
+          {$t("SERVICES_BUTTON1_ACTIVE")}
+        {:else}
+          {$t("SERVICES_BUTTON1")}
+        {/if}
+      </Button>
+
       </section>
     </section>
 
-    <div class="mt-6 text-right">
-      <Button variant="outline" onclick={handleSave} disabled={loading}>
-        {#if loading}
-          <Loader class="w-4 h-4 mr-1 animate-spin" />
-        {:else}
-          <Save class="w-4 h-4 mr-1" />
-        {/if}
-        {$t("SERVICES_BUTTON1")}
-      </Button>
-    </div>
+  
+    
   </Dialog.Content>
 </Dialog.Root>
