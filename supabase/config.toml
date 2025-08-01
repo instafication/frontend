@@ -25,7 +25,7 @@ file_size_limit = "50MiB"
 site_url = "http://localhost:5173"
 additional_redirect_urls = [
     "http://localhost:5173",
-    "https://frontend.instafication.workers.dev"
+    "https://instafication.shop"
 ]
 jwt_expiry = 3600
 enable_signup = true
