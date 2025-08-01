@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '$lib/server/databasemanager';
-import { sendEmail, SendEmailWhenUserIsCreated } from '$lib/Managers/EmailManager';
+import { sendEmail, SendEmailWhenUserIsCreated, sendLaundryNotification } from '$lib/Managers/EmailManager';
 import type { Scraper } from '$lib/drizzle/types';
 import type { JsonValue } from 'type-fest';
 
@@ -101,7 +101,6 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 
 					console.log("[/api/callback/scraper] User found and active for area with credits: ");
 					console.log(user);
-                    const message = `Instafication har hittat en ny tvättid i ${area}: ${`${paramDate} ${paramTime}`}. Om du vill boka denna tid logga in som vanligt via <a href="https://sssb.aptustotal.se/AptusPortal/Account/Login">SSSB (klicka här)</a>`;
 
 					// Check notification method by service
 					usersByArea.forEach(async (userInside: any) => {
@@ -123,9 +122,9 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
 								const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
 
-                                console.log(`[/api/callback/scraper] Sending trigger to: '${user.id}', with html message: '${message}'`);
+                                console.log(`[/api/callback/scraper] Sending laundry notification email to: '${user.email}' for area: '${area}'`);
                                 if (userInside.notificationMethod === "e-post" && userInside.user == user.id) {
-                                    const hasSent = await sendEmail(user.email, `🚀 Ny tvättid – ${paramDate} ${paramTime}`, message);
+                                    const hasSent = await sendLaundryNotification(user.email, area, paramDate, paramTime);
 								} else if (userInside.service === "SMS" && userInside.user === user.id) {
 									//const hasSent = await sendSMS(user.id, message);
 									console.log("[/api/callback/scraper] SMS not sent!");
