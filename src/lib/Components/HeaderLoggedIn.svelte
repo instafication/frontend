@@ -63,7 +63,7 @@
 				class="hover:cursor-pointer"
 				onclick={() => showServicesModal.set(true)}
 			>
-				<Settings />Alarm
+				<Settings />Bevakningar
 			</Button>
 
 			<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->

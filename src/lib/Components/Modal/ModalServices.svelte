@@ -75,6 +75,7 @@
         toast.error("Det gick inte att ta bort bevakningen.");
       }
       hasActiveService = false;
+      selectedNotificationMethod = "e-post";
       selectedWithinTime = "";
       selectedArea = "";
     } else {
@@ -132,15 +133,16 @@
           <div>
             <Label>{$t("SERVICES_OPTION1_TITLE")}</Label>
             <Select.Root type="single" bind:value={selectedNotificationMethod}>
-              <Select.Trigger class="mt-2 w-full">
+              <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
                 {selectedNotificationMethod || placeholder}
-              </Select.Trigger>
+              </Select.Trigger >
               <Select.Content>
                 <Select.Group>
                   {#each NOTIFICATION_METHOD_LIST as item (item.value)}
                     <Select.Item
                       value={item.value}
                       label={item.label}
+                       class="hover:cursor-pointer"
                       >
                       {item.label}
                     </Select.Item>
@@ -154,14 +156,15 @@
           <div>
             <Label>{$t("SERVICES_OPTION2_TITLE")}</Label>
             <Select.Root type="single" required bind:value={selectedWithinTime}>
-              <Select.Trigger class="mt-2 w-full">
+              <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
                 {selectedWithinTime || placeholder}
               </Select.Trigger>
-              <Select.Content>
+              <Select.Content class="hover:cursor-pointer">
                 {#each WITHIN_TIME_LIST as item (item.value)}
                   <Select.Item
                     value={item.value}
                     label={item.label}
+                    class="hover:cursor-pointer"
                   >
                     {item.label}
                   </Select.Item>
@@ -174,7 +177,7 @@
           <div>
             <Label>{$t("SERVICES_OPTION3_TITLE")}</Label>
             <Select.Root type="single" required bind:value={selectedArea}>
-              <Select.Trigger class="mt-2 w-full">
+              <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
                 {selectedArea || placeholder}
               </Select.Trigger>
               <Select.Content>
@@ -182,6 +185,7 @@
                   <Select.Item
                     value={item.value}
                     label={item.label}
+                    class="hover:cursor-pointer"
                   >
                     {item.label}
                   </Select.Item>
@@ -191,7 +195,7 @@
           </div>
         </form>
 
-      <Button variant="outline" onclick={toggleService} disabled={loading}>
+      <Button variant="outline" onclick={toggleService} disabled={loading} class="hover:cursor-pointer">
         {#if loading}
           <Loader2 class="w-4 h-4 mr-1 animate-spin" />
         {:else}

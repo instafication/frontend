@@ -2,7 +2,7 @@ export default {
     sv: {
 
         // COFIGURATION SERVICES
-        "SERVICES_TITLE": "Konfigurera alarm",
+        "SERVICES_TITLE": "Konfigurera bevakningar",
         "SERVICES_OPTION1_TITLE": "Välj notifikation:",
         "SERVICES_OPTION2_TITLE": "Få notifikation om tid inom:",
         "SERVICES_OPTION3_TITLE": "Välj område:",

@@ -1,15 +1,10 @@
 <script lang="ts">
-  /* ───── UI kit ───── */
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import { Button, Label, Input } from "flowbite-svelte";
   import { Loader2, UserRoundPlus } from "@lucide/svelte";
   import { toast } from "svelte-sonner";
-
-  /* managers & stores */
   import { signUp } from "$lib/Managers/AuthManager";
   import { showRegisterModal } from "$lib/sharedStore";
-
-  /* i18n */
   import { t } from "$lib/i18n";
 
   /* ───────── reactive state ───────── */
