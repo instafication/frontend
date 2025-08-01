@@ -25,10 +25,6 @@
 
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-        <Button onclick={() => window.open("https://discord.gg/SvWJAc4RNB")} color="alternative">
-            <img src="/discord-mark-black.svg" alt="Discord" class="w-5 h-5 ml-2" />
-            {$t("chat_with_us")}
-        </Button>
 
         <Button onclick={() => $showRegisterModal = true} color="alternative">
                         <lord-icon

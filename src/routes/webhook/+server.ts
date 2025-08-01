@@ -55,7 +55,7 @@
 //                 console.log("📧 [prolong]Email sent: ", emailSent);
 //                 console.log(`✅ [prolong] ${email} has been prolonged: ${prolonged}`);
 //             } else {
-//                 const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Din prenumeration går inte förlänga 📞", "Hej, din prenumeration går inte förlängas. Vänligen kontakta oss på: Hello@Instafication.shop eller i Discord-kanalen för att komma vidare.");
+//                 const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Din prenumeration går inte förlänga 📞", "Hej, din prenumeration går inte förlängas. Vänligen kontakta oss på: Hello@Instafication.shop.");
 //                 console.log("📧 [prolong] Email sent: ", emailSent);
 //                 console.log("❌ [prolong] User subscription could not be prolonged: ", email);
 //                 return false;
@@ -96,7 +96,7 @@
 //                 console.log("📧 [refilled] Email sent: ", emailSent);
 //                 console.log(`✅ [refilled] ${email} has been refilled: ${refilled}`);
 //             } else {
-//                 const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Ditt konto går inte ladda på", "Hej, ditt konto går inte ladda på med nya krediter. Vänligen kontakta oss på: Hello@instafication.shop eller i Discord-kanalen för att komma vidare.");
+//                 const emailSent: boolean = await SendEmailWhenSubscriptionProlonged(email, "Instafication – Ditt konto går inte ladda på", "Hej, ditt konto går inte ladda på med nya krediter. Vänligen kontakta oss på: Hello@instafication.shop.");
 //                 console.log("📧 [refilled] Email sent: ", emailSent);
 //                 console.log("❌ [refilled] User account could not be refilled: ", email);
 //                 return false;

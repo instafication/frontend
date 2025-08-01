@@ -28,7 +28,7 @@ export default {
         "FAQ_A2": "För nuvarande så söker vi endast hos Stockholms Studentbostäder (SSSB) efter tvättider.",
         "FAQ_A3": "Genom att klicka på 'Kom igång' högst upp. Då får du 30 dagar test gratis. Det går alltid avbryta innan 30 dagar har passerat.",
         "FAQ_A4": "Alternativ 1: Gratis i 30 dagar. Därefter betalning på 19kr/månad för att få oändligt antal notiser. Alternativ 2: 9kr för att köpa 2 notiser. Du kan helt kostnadsfritt skapa ett konto via knappen uppe i menyraden 'Skapa ett konto', eller direkt logga in med ditt Google-konto genom att klicka på Logga in i högra hörnet i menyraden.",
-        "FAQ_A5": "Ni kan kontakta oss via email Hello@Instafication.shop eller gå med i vår Discord-kanal via: https://discord.gg/SvWJAc4RNB.",
+        "FAQ_A5": "Ni kan kontakta oss via email Hello@instafication.shop",
 
 
         // Overall:
@@ -157,7 +157,7 @@ export default {
         "FAQ_A2": "Currently, we only search for laundry times at Stockholm Student Housing (SSSB).",
         "FAQ_A3": "By clicking 'Get started' at the top. Then you get 30 days of free testing. It's always possible to cancel before 30 days have passed.",
         "FAQ_A4": "Option 1: Free for 30 days. Then payment of 19 SEK/month for unlimited notifications. Option 2: 9 SEK to buy 2 notifications. You can create an account for free via the 'Create an account' button in the menu bar, or log in directly with your Google account by clicking on 'Log in' in the upper right corner of the menu bar.",
-        "FAQ_A5": "You can contact us via email at Hello@instafication.shop or join our Discord channel at: https://discord.gg/SvWJAc4RNB.",
+        "FAQ_A5": "You can contact us via email at Hello@instafication.shop.",
 
 
         // Overall:
