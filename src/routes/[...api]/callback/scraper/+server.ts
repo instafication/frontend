@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
-import { DatabaseManager } from '../../../../lib/server/databasemanager';
-import { sendEmail, SendEmailWhenUserIsCreated } from '../../../../lib/Managers/EmailManager';
+import { DatabaseManager } from '$lib/server/databasemanager';
+import { sendEmail, SendEmailWhenUserIsCreated } from '$lib/Managers/EmailManager';
 import type { Scraper } from '$lib/drizzle/types';
 import type { JsonValue } from 'type-fest';
 
