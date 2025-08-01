@@ -3,7 +3,7 @@ import { createContext } from './context';
 import { appRouter } from './router';
 import type { RequestHandler } from '@sveltejs/kit';
 
-const trpcHandler = ({ request }) => {
+const trpcHandler = ({ request }: { request: Request }) => {
     return fetchRequestHandler({
         endpoint: '/api',
         req: request,
@@ -14,3 +14,6 @@ const trpcHandler = ({ request }) => {
 
 export const GET = trpcHandler satisfies RequestHandler;
 export const POST = trpcHandler satisfies RequestHandler;
+
+
+
