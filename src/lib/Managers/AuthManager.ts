@@ -163,6 +163,32 @@ async function resetPasswordForEmail(email: string) {
   }
 }
 
+async function updateEmail(email: string): Promise<boolean> {
+  // Check if we're in the browser and have a Supabase client
+  if (!browser || !supabase) {
+    toast.error("Authentication not available");
+    return false;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.updateUser({
+      email: email,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      return false;
+    }
+
+    toast.success("Email updated successfully");
+    return true;
+  } catch (error) {
+    console.error("Error updating email:", error);
+    toast.error("An error occurred while updating email");
+    return false;
+  }
+}
+
 async function signOut() {
   // Check if we're in the browser and have a Supabase client
   if (!browser || !supabase) {
@@ -183,6 +209,20 @@ async function signOut() {
   }
 }
 
+async function getUser() {
+  if (!browser || !supabase) {
+    toast.error("Authentication not available");
+    return;
+  }
+
+  return await supabase.auth.getUser();
+}
+
+async function getUserEmail() {
+  const { data: { user } } = await getUser();
+  return user?.email || "";
+}
+
 export {
   signUp,
   signInWithPassword,
@@ -191,5 +231,8 @@ export {
   resetPasswordForEmail,
   isLoggedIn,
   getUserId,
-  supabase
+  updateEmail,
+  supabase,
+  getUser,
+  getUserEmail
 };

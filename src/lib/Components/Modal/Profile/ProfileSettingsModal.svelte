@@ -1,40 +1,32 @@
 <script lang="ts">
-  /* -------- UI kit -------- */
   import * as Dialog from "$lib/Components/ui/dialog/index.js";
   import { Label, Input } from "flowbite-svelte";
   import { Button } from "$lib/Components/ui/button/index.js";
-  import { Save } from "@lucide/svelte";
+  import { Save, Loader2 } from "@lucide/svelte";
 
-  /* managers & stores ----------------------------------------------- */
   import { getUserId } from "$lib/Managers/AuthManager";
-  import { updateProfileById } from "$lib/Managers/ProfileManager";
+  import * as authManager from "$lib/Managers/AuthManager";
   import { trpc } from "$lib/trpc/client";
   import { showProfileSettingsModal } from "$lib/sharedStore";
 
-  /* svelte internals & i18n ----------------------------------------- */
   import { onMount } from "svelte";
   import { t } from "$lib/i18n";
 
-  /* ---------- local state (reactive & bind-able) -------------------- */
-  let id = $state("");
-  let email = $state("");
-  let phone = $state("");
 
-  /* ---------- lifecycle -------------------------------------------- */
+  let email = $state("");
+  let loading = $state(false);
+
   async function loadUserData() {
-    id = await getUserId();
-    [email, phone] = await Promise.all([
-      trpc.email.query(id),
-      trpc.phone.query(id),
-    ]);
+    email = await authManager.getUserEmail();
   }
 
   onMount(loadUserData);
 
-  /* ---------- actions ---------------------------------------------- */
+
   const handleSave = async () => {
-    await updateProfileById(id, email, phone);
-    // close dialog after saving
+    loading = true;
+    await authManager.updateEmail(email);
+    loading = false;
     showProfileSettingsModal.set(false);
   };
 </script>
@@ -61,7 +53,7 @@
         />
       </Label>
 
-      <Label class="space-y-2">
+      <!-- <Label class="space-y-2">
         <span>{$t("profile_your_phone_number")}</span>
         <Input
           bind:value={phone}
@@ -70,11 +62,17 @@
           placeholder="+46707749377"
           required
         />
-      </Label>
+      </Label> -->
 
       <Dialog.Footer>
         <Button variant="outline" type="submit" class="hover:cursor-pointer w-full">
-          <Save/>{$t("profile_save_changes")}
+          <!-- If loading show spinner -->
+          {#if loading}
+            <Loader2 class="animate-spin"/>
+          {:else}
+            <Save/>
+          {/if}
+          {$t("profile_save_changes")}
         </Button>
       </Dialog.Footer>
     </form>
