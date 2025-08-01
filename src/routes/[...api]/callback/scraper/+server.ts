@@ -123,7 +123,7 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
 								const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
 
-                                console.log(`[/api/callback/scraper] Sending trigger to: '${user.id}', with message: '${message}'`);
+                                console.log(`[/api/callback/scraper] Sending trigger to: '${user.id}', with html message: '${message}'`);
                                 if (userInside.notificationMethod === "e-post" && userInside.user == user.id) {
                                     const hasSent = await sendEmail(user.email, `🚀 Ny tvättid – ${paramDate} ${paramTime}`, message);
 								} else if (userInside.service === "SMS" && userInside.user === user.id) {

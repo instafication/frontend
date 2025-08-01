@@ -72,7 +72,7 @@ async function SendEmailWhenSubscription(
 async function sendEmail(
     to: string,
     subject: string,
-    body: string
+    html: string
 ): Promise<boolean> {
     console.log("[EmailManager -> sendEmail()]: Called")
     try {
@@ -80,7 +80,7 @@ async function sendEmail(
             from: 'Instafication <no-reply@transactional.instafication.shop>',
             to,
             subject,
-            body
+            html
         });
         return true;
     } catch (err: any) {
