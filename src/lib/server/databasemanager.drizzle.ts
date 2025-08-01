@@ -490,12 +490,15 @@ export class DatabaseManager {
 
     public static async getUserIdsByOptions(key: string, value: any): Promise<any> {
       try {
-        // Note: Drizzle doesn't have direct JSON path support like Prisma
-        // We'll need to handle this differently, possibly with raw SQL
+
+        // Get all usr ids with {"area": "medicinaren"} for instance
+        console.log("[DatabaseManager -> getUserIdsByOptions -> key+value: ")
+        console.log(key, value)
         const result = await db.select()
           .from(services)
           .where(sql`options->>'${sql.raw(key)}' = ${value}`);
         
+        console.log("[DatabaseManager -> getUserIdsByOptions (results): ")
         console.log(result);
         return result;
       } catch (error) {

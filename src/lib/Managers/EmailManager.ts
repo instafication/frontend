@@ -71,14 +71,16 @@ async function SendEmailWhenSubscription(
 
 async function sendEmail(
     to: string,
+    subject: string,
     body: string
 ): Promise<boolean> {
+    console.log("[EmailManager -> sendEmail()]: Called")
     try {
         await resend.emails.send({
             from: 'Instafication <no-reply@transactional.instafication.shop>',
             to,
-            subject: 'Välkommen till Instafication Premium!',
-            html: body
+            subject,
+            body
         });
         return true;
     } catch (err: any) {

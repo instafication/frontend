@@ -17,7 +17,7 @@
 //     let UUID: string = "";
 
 //     if (command === "start" && message?.split(" ")[1] !== undefined) {
-//         area = message?.split(" ")[1].toLowerCase(); // area = ['Medicinaren', 'Jerum', 'Lappkärrsberget']
+//         area = message?.split(" ")[1].toLowerCase(); // area = ['medicinaren', 'jerum', 'lappkärrsberget']
 //     }
 
 //     console.log(jsonData);

@@ -101,7 +101,7 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 
 					console.log("[/api/callback/scraper] User found and active for area with credits: ");
 					console.log(user);
-                    const message = `Instafication har hittat en ny tvättid i ${area}: ${`${paramDate} ${paramTime}`}. Om du vill boka denna tid logga in som vanligt via SSSB`;
+                    const message = `Instafication har hittat en ny tvättid i ${area}: ${`${paramDate} ${paramTime}`}. Om du vill boka denna tid logga in som vanligt via <a href="https://sssb.aptustotal.se/AptusPortal/Account/Login">SSSB (klicka här)</a>`;
 
 					// Check notification method by service
 					usersByArea.forEach(async (userInside: any) => {
@@ -113,20 +113,19 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 
 
 							console.log(`[+] Difference in seconds: ${differenceInSeconds}`);
-							console.log(`[+] Is free time more close than user setting: ${(differenceInSeconds < userInside.notificationWithin)}`);
+                            console.log(`[+] Is free time more close than user setting: ${(differenceInSeconds < userInside.notificationWithinTime)}`);
 
 
-							if (differenceInSeconds > userInside.notificationWithin) {
-								console.log(`[/api/callback/scraper] Free time is more far away, user configuration (sec): ${userInside.notificationWithin}`);
+                            if (differenceInSeconds > userInside.notificationWithinTime) {
+                                console.log(`[/api/callback/scraper] Free time is more far away, user configuration (sec): ${userInside.notificationWithinTime}`);
 							} else {
 
 								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
 								const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
 
-								console.log(`[/api/callback/scraper] Sending trigger to: ${user.id} with message: ${message}`);
-								if (userInside.notification === "Email" && userInside.user == user.id) {
-									const hasSent = await sendEmail(user.email, message);
-									console.log(`[/api/callback/scraper] Email sent1: ${hasSent}`);
+                                console.log(`[/api/callback/scraper] Sending trigger to: '${user.id}', with message: '${message}'`);
+                                if (userInside.notificationMethod === "e-post" && userInside.user == user.id) {
+                                    const hasSent = await sendEmail(user.email, `🚀 Ny tvättid – ${paramDate} ${paramTime}`, message);
 								} else if (userInside.service === "SMS" && userInside.user === user.id) {
 									//const hasSent = await sendSMS(user.id, message);
 									console.log("[/api/callback/scraper] SMS not sent!");
