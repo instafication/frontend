@@ -65,7 +65,7 @@
       </Label> -->
 
       <Dialog.Footer>
-        <Button variant="outline" type="submit" class="hover:cursor-pointer w-full">
+        <Button variant="outline" type="submit" class="hover:cursor-pointer w-full" disabled={loading}>
           <!-- If loading show spinner -->
           {#if loading}
             <Loader2 class="animate-spin"/>
