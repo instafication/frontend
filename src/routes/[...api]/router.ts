@@ -175,11 +175,11 @@ export const appRouter = t.router({
             return notifications;
         }),
     
-    getLastUpdateByCompany: t.procedure
+    getLastPingByCompanyName: t.procedure
         .input(z.string())
         .query(async ({ input }) => {
             const company = input;
-            const lastUpdate = await DatabaseManager.Scraper.getLastUpdatedByCompany(company);
+            const lastUpdate = await DatabaseManager.Scraper.getLastPingByCompanyName(company);
             return { lastUpdate };
         }),
 });

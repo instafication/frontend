@@ -21,7 +21,8 @@
   async function fetchLastUpdateTime() {
     try {
       loading = true;
-      const data = await trpc.getLastUpdateByCompany.query('Stockholms Studentbostäder');
+      const data = await trpc.getLastPingByCompanyName.query('Stockholms Studentbostäder');
+      console.log(data);
       lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
     } catch (error) {
       lastSearchedMinutes = 0;
@@ -83,7 +84,7 @@
             </Badge>
           {:else}
             <Badge variant="secondary">
-              <Activity/>Last searched: {lastSearchedMinutes} minutes ago
+              <Activity/>Last scan: {lastSearchedMinutes} minutes ago
             </Badge>
           {/if}
         </p>

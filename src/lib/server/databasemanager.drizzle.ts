@@ -109,17 +109,17 @@ export class DatabaseManager {
       }
     }
 
-    public static async getLastUpdatedByCompany(company: string): Promise<number> {
+    public static async getLastPingByCompanyName(company: string): Promise<number> {
       try {
         // Get the most recent last_update time for all scrapers of a company
-        const r = await db.select({ last_update: scrapers.last_update }).from(scrapers)
+        const r = await db.select({ last_ping: scrapers.last_ping }).from(scrapers)
           .where(eq(scrapers.company, company))
-          .orderBy(desc(scrapers.last_update))
+          .orderBy(desc(scrapers.last_ping))
           .limit(1);
         
-        return Number(r[0]?.last_update) || -1;
+        return Number(r[0]?.last_ping) || -1;
       } catch (error) {
-        console.error("[DatabaseManager] Error in getLastUpdatedByCompany:", error);
+        console.error("[DatabaseManager] Error in getLastPingByCompanyName:", error);
         return -1;
       }
     }
