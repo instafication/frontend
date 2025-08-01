@@ -8,7 +8,6 @@ async function getAllNotifications() {
         return notifications;
     } catch (error) {
         console.error("Error getting all notifications:", error);
-        toast.error("Failed to get notifications");
         return [];
     }
 }
@@ -19,7 +18,6 @@ async function getLatestNotifications(count: number = 5) {
         return notifications;
     } catch (error) {
         console.error("Error getting latest notifications:", error);
-        toast.error("Failed to get notifications");
         return [];
     }
 }
