@@ -109,14 +109,25 @@ export const appRouter = t.router({
                 });
             }
             
-            await DatabaseManager.Services.createService(
+            const response: boolean = await DatabaseManager.Services.createService(
                 user,
                 name,
                 notificationMethod,
                 notificationWithinTime,
                 options,
             );
-            return true;
+            return response;
+        }),
+
+    removeService: t.procedure
+        .input(z.object({
+            user: z.string(),
+            name: z.string(),
+        }))
+        .query(async ({ input }) => {
+            const { user, name } = input;
+            const response: boolean = await DatabaseManager.Services.removeServiceNameByUserId(user, name);
+            return response;
         }),
 
     raw_user_meta_data: t.procedure

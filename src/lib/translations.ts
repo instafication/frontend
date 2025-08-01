@@ -6,7 +6,8 @@ export default {
         "SERVICES_OPTION1_TITLE": "Välj notifikation:",
         "SERVICES_OPTION2_TITLE": "Få notifikation om tid inom:",
         "SERVICES_OPTION3_TITLE": "Välj område:",
-        "SERVICES_BUTTON1": "Spara ändringarna",
+        "SERVICES_BUTTON1": "Aktivera bevakning",
+        "SERVICES_BUTTON1_ACTIVE": "Inaktivera bevakning",
 
 
         // HEADER LOGGED IN
