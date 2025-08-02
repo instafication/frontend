@@ -35,6 +35,7 @@
   onMount(() => {
     fetchLastUpdateTime();
   });
+
 </script>
 
 <Card
