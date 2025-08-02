@@ -7,7 +7,7 @@ import {
   bigint,
   text,
   timestamp,
-  uniqueIndex,              // ← import this helper
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
 /* ─────────── profiles ─────────── */
