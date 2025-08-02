@@ -145,7 +145,7 @@
           <div>
             <Label>{$t("SERVICES_OPTION1_TITLE")}</Label>
             <Select.Root type="single" bind:value={selectedNotificationMethod}>
-              <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
+              <Select.Trigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
                 {selectedNotificationMethod || placeholder}
               </Select.Trigger>
               <Select.Content>
@@ -168,7 +168,7 @@
           <div>
             <Label>{$t("SERVICES_OPTION2_TITLE")}</Label>
             <Select.Root type="single" required bind:value={selectedWithinTime}>
-              <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
+              <Select.Trigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
                 {selectedWithinTime || placeholder}
               </Select.Trigger>
               <Select.Content class="hover:cursor-pointer">
@@ -188,8 +188,8 @@
           <!-- Area -->
           <div>
             <Label>{$t("SERVICES_OPTION3_TITLE")}</Label>
-            <Select.Root type="single" required bind:value={selectedArea}>
-              <Select.Trigger class="mt-2 w-full hover:cursor-pointer">
+            <Select.Root type="single" required bind:value={selectedArea} >
+              <Select.Trigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
                 {selectedArea || placeholder}
               </Select.Trigger>
               <Select.Content>

@@ -77,7 +77,8 @@ async function createService(name: string, notificationMethod: string, notificat
         console.log(response);
         return response;
     } catch (error) {
-        toast.error("Failed to create service");
+        toast.error("Failed to create service: ", error);
+        console.error(error);
         throw error;
     }
 }
@@ -85,8 +86,6 @@ async function createService(name: string, notificationMethod: string, notificat
 async function removeService(serviceName: string): Promise<boolean> {
     const UUID: string = await getUserId();
     const response = await trpc.removeService.query({ user: UUID, name: serviceName });
-    console.log("RES!");
-    console.log(response);
     return response;
 }
 
@@ -116,7 +115,6 @@ async function getServiceConfiguration(serviceName: string): Promise<any> {
 
     } catch (error) {
         console.error("Error getting service configuration:", error);
-        toast.error("Failed to get service configuration");
         return null;
     }
 }

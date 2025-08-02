@@ -9,6 +9,8 @@ import {
   timestamp,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 /* ─────────── profiles ─────────── */
 export const profiles = pgTable('profiles', {
