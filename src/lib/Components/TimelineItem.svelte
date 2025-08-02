@@ -83,7 +83,7 @@
         ? 'flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white'
         : 'text-lg font-semibold text-gray-900 dark:text-white'
     )
-  );
+  ));
 
   /* ---------- fallback icon HTML ---------- */
   const defaultIconHtml = /*html*/`

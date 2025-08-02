@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Navbar, NavBrand } from "flowbite-svelte";
-  import { Button } from "$lib/components/ui/button/index.js";
+  import { Button } from "$lib/Components/ui/button/index.js";
   import { showLoginModal, showRegisterModal } from "$lib/sharedStore";
+  import { LogIn, UserRoundPlus } from "@lucide/svelte";
   import LanguageSelector from "./LanguageSelector.svelte";
   import { t } from "$lib/i18n";
 </script>
@@ -26,8 +27,6 @@
 
     <!-- mobile hamburger -->
     <!-- <NavHamburger /> -->
-
-
     <!-- right-hand tools -->
     <div class="flex items-center gap-2">
       <LanguageSelector />
@@ -41,14 +40,7 @@
         color="alternative"
         class="cursor-pointer"
       >
-        <lord-icon
-          src="https://cdn.lordicon.com/rqqkvjqf.json"
-          trigger="hover"
-          colors="primary:#121331"
-          stroke="48"
-          scale="48"
-          style="width:24px;height:24px"
-        ></lord-icon>
+        <LogIn />
         <span>{$t("log_in")}</span>
       </Button>
 
@@ -59,17 +51,9 @@
         }}
         class="cursor-pointer bg-blue-700 hover:bg-blue-800"
       >
-        <lord-icon
-          src="https://cdn.lordicon.com/wcjauznf.json"
-          trigger="hover"
-          colors="primary:#FFF"
-          stroke="48"
-          scale="48"
-          style="width:24px;height:24px"
-        ></lord-icon>
+        <UserRoundPlus />
         {$t("register")}
       </Button>
-
     </div>
   </div>
 

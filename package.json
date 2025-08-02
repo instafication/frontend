@@ -2,14 +2,15 @@
   "name": "instafication",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "license": "MIT",
   "packageManager": "bun@1.2",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "svelte-kit build",
-    "preview": "svelte-kit preview",
+    "dev": "vite dev",
+    "build": "vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
@@ -19,7 +20,7 @@
     "generate": "drizzle-kit generate",
     "push": "drizzle-kit push",
     "studio": "drizzle-kit studio",
-    "clean": "bunx rimraf .svelte-kit node_modules .wrangler && rm -f bun.lock"
+    "clean": "rm -rf .svelte-kit && rm -rf node_modules && rm -rf .wrangler && rm -rf .svelte-kit && rm -f bun.lock && rm -f package-lock.json && bun i"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",

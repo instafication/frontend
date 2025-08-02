@@ -81,12 +81,6 @@
             class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
         >
             <!-- <div class="flex items-center mb-8">
-              <lord-icon
-                    src="https://cdn.lordicon.com/hdiorcun.json"
-                    trigger="loop"
-                    delay="4000"
-                    style="width:64px;height:64px">
-                </lord-icon> 
                 <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Senast nytt</h5>
             </div> -->
 
@@ -157,14 +151,6 @@
     >
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div class="max-w-screen-md mb-8 lg:mb-16">
-                <lord-icon
-                    src="https://cdn.lordicon.com/krmfspeu.json"
-                    trigger="loop"
-                    delay="2000"
-                    colors="primary:#121331,secondary:#08a88a"
-                    style="width:62px;height:62px"
-                >
-                </lord-icon>
                 <h2
                     class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
                 >
@@ -182,14 +168,6 @@
     >
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div class="max-w-screen-md mb-8 lg:mb-16">
-                <lord-icon
-                    src="https://cdn.lordicon.com/msoeawqm.json"
-                    trigger="loop"
-                    delay="2000"
-                    colors="primary:#121331,secondary:#08a88a"
-                    style="width:62px;height:62px"
-                >
-                </lord-icon>
                 <h2
                     class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
                 >
@@ -207,13 +185,6 @@
     >
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div class="max-w-screen-md mb-8 lg:mb-16">
-                <lord-icon
-                    src="https://cdn.lordicon.com/lupuorrc.json"
-                    trigger="loop"
-                    delay="2000"
-                    style="width:72px;height:72px"
-                >
-                </lord-icon>
                 <h2
                     class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
                 >

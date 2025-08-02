@@ -27,14 +27,6 @@
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
 
         <Button onclick={() => $showRegisterModal = true} color="alternative">
-                        <lord-icon
-            src="https://cdn.lordicon.com/wcjauznf.json"
-            trigger="hover"
-            colors="primary:#000"
-            stroke="50"
-            scale="40"
-            style="width:32px;height:32px">
-            </lord-icon>
             {$t("get_started_modal_create_account")}
         </Button>
 
