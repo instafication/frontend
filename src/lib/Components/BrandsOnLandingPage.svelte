@@ -21,8 +21,7 @@
   async function fetchLastUpdateTime() {
     try {
       loading = true;
-      const data = await trpc.getLastPingByCompanyName.query('Stockholms Studentbostäder');
-      console.log(data);
+      const data = await trpc.getLastUpdateByCompanyName.query('Stockholms Studentbostäder');
       lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
     } catch (error) {
       lastSearchedMinutes = 0;
