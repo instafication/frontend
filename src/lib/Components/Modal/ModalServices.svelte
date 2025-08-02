@@ -75,9 +75,9 @@
         toast.success("Bevakningen har tagits bort.");
         // Update UI state immediately
         hasActiveService = false;
-        selectedNotificationMethod = "e-post";
-        selectedWithinTime = "";
-        selectedArea = "";
+        // selectedNotificationMethod = "e-post";
+        // selectedWithinTime = "";
+        // selectedArea = "";
       } else {
         toast.error("Det gick inte att ta bort bevakningen.");
       }
@@ -211,8 +211,8 @@
           variant="outline"
           onclick={toggleService}
           disabled={loading}
-          class="hover:cursor-pointer"
-        >
+          class="hover:cursor-pointer {hasActiveService ? 'bg-red-500 text-white hover:text-white hover:bg-red-600' : ''}"
+          >
           {#if loading}
             <Loader2 class="w-4 h-4 mr-1 animate-spin" />
           {:else}
