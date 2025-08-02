@@ -1,7 +1,5 @@
 import { generateRandomUUID } from '../Inbox/Utils';
 import { DATABASE_URL } from '$env/static/private';
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
 import {
     profiles,
     services,
@@ -9,11 +7,20 @@ import {
     notifications
 } from '../../drizzle';
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
-import ws from 'ws';
 
+// ============= NEON SERVERLESS WS DRIVER (WORKS WITH SUPABASE)
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import ws from 'ws';
 neonConfig.webSocketConstructor = ws;
 const pool = new Pool({ connectionString: DATABASE_URL });
 const db = drizzle({ client: pool });
+
+// import { neon } from '@neondatabase/serverless';
+// import { drizzle } from 'drizzle-orm/neon-http';
+// const clientDriver = neon(DATABASE_URL!);
+// const db = drizzle({ client: clientDriver });
+
 
 export class DatabaseManager {
 
