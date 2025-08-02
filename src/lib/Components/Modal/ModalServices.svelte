@@ -4,8 +4,7 @@
   import * as Select from "$lib/Components/ui/select/index.js";
   import { Button } from "$lib/Components/ui/button/index.js";
   import { Avatar, Label } from "flowbite-svelte";
-  import Save from "@lucide/svelte/icons/save.svelte";
-  import Loader2 from "@lucide/svelte/icons/loader-2";
+  import { Save, Loader2 } from "@lucide/svelte";
 
   import {
     createService,

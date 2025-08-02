@@ -1,5 +1,5 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
   import { getContext } from 'svelte';
 
   /* ---------- props ---------- */
@@ -78,7 +78,7 @@
   );
 
   const h3Class = $derived(() =>
-    classNames(
+    clsx((
       order === 'vertical'
         ? 'flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white'
         : 'text-lg font-semibold text-gray-900 dark:text-white'
@@ -99,24 +99,12 @@
 </script>
 
 <li class={liClasses[order]}>
-  {#if order === 'default'}
+  {#if order === "default"}
     <div class={divClass}></div>
     {#if date}<time class={timeClass}>{date}</time>{/if}
     {#if title}<h3 class={h3Class}>{title}</h3>{/if}
     {@render children?.()}
-  
-  {:else if order === 'vertical'}
-    <div class={divClass}></div>
-    {#if icon}
-      {@render icon()}
-    {:else}
-      {@html defaultIconHtml}
-    {/if}
-    {#if title}<h3 class={h3Class}>{title}</h3>{/if}
-    {#if date}<time class={timeClass}>{date}</time>{/if}
-    {@render children?.()}
-  
-  {:else if order === 'horizontal'}
+  {:else if order === "vertical"}
     <div class={divClass}></div>
     {#if icon}
       {@render icon()}
@@ -126,7 +114,16 @@
     {#if title}<h3 class={h3Class}>{title}</h3>{/if}
     {#if date}<time class={timeClass}>{date}</time>{/if}
     {@render children?.()}
-  
+  {:else if order === "horizontal"}
+    <div class={divClass}></div>
+    {#if icon}
+      {@render icon()}
+    {:else}
+      {@html defaultIconHtml}
+    {/if}
+    {#if title}<h3 class={h3Class}>{title}</h3>{/if}
+    {#if date}<time class={timeClass}>{date}</time>{/if}
+    {@render children?.()}
   {:else}
     <div class={divClass}></div>
     {#if icon}
