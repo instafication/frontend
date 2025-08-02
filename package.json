@@ -20,6 +20,7 @@
     "studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "@supabase/supabase-js": "^2.53.0",
     "@trpc/client": "^11.4.3",
     "@trpc/server": "^11.4.3",
@@ -42,6 +43,7 @@
     "@lucide/svelte": "^0.536.0",
     "@sveltejs/adapter-cloudflare": "^7.1.2",
     "@sveltejs/kit": "^2.27.0",
+    "@sveltejs/vite-plugin-svelte": "^6.1.0",
     "@tailwindcss/vite": "^4.1.11",
     "@types/pg": "^8.15.5",
     "bits-ui": "^2.9.0",
