@@ -16,9 +16,8 @@
 	import posthog from "posthog-js";
 	import { Toaster } from "$lib/Components/ui/sonner/index.js";
 
-	
-	let lastAuthStatus = $state<string>("");
-	let lastSession = $state<Awaited<ReturnType<NonNullable<typeof supabase>['auth']['getSession']>> | null>(null);
+	let lastAuthStatus = $state("");
+	let lastSession = $state<Awaited<ReturnType<NonNullable<typeof supabase>["auth"]["getSession"]>> | null>(null);
 
 	let { children } = $props();
 
@@ -35,16 +34,16 @@
 	if (supabase) {
 		supabase.auth.onAuthStateChange((event, session) => {
 			lastAuthStatus = event;
-			
+
 			if (session) {
 				lastSession = {
 					data: { session },
-					error: null
+					error: null,
 				};
 			} else {
 				lastSession = {
 					data: { session: null },
-					error: null
+					error: null,
 				};
 			}
 			$userLoggedIn = event === "SIGNED_IN";

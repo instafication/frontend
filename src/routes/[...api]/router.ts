@@ -2,7 +2,6 @@ import * as trpc from '@trpc/server';
 import type { Context } from './context';
 import { z } from 'zod';
 import { DatabaseManager } from '$lib/server/databasemanager';
-// import { createPortalByEmail } from '$lib/server/StripeManager';
 import superjson from 'superjson';
 import type { Scraper } from '$lib/drizzle/types';
 
@@ -32,10 +31,6 @@ export const appRouter = t.router({
 
     ping: t.procedure.query(() => {
         return "Pong!";
-    }),
-    pingdb: t.procedure.query(async () => {
-        const res = await DatabaseManager.Ping();
-        return res;
     }),
 
     get_all_scrapers: t.procedure

@@ -16,13 +16,6 @@ const pool = new Pool({ connectionString: DATABASE_URL });
 const db = drizzle({ client: pool });
 
 export class DatabaseManager {
-    public static Ping = async () => {
-        if (!PING_TEST_EMAIL) {
-            throw new Error("PING_TEST_EMAIL environment variable is not set.");
-        }
-        const res = await db.select().from(profiles).where(eq(profiles.email, PING_TEST_EMAIL)).limit(1);
-        return res[0] || null;
-    }
 
     public static Scraper = class {
         public static async updatePingTimestampByCompanyNameAndParamValue(k: string, v: any, unixTimestamp: number): Promise<boolean> {
