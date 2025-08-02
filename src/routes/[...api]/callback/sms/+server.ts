@@ -41,7 +41,7 @@
 //             console.log("[+] Created new user: " + customersNumber);
 //             return new Response(message, { status: 200 });
 //         } else {
-//             const message = `Du måste ange vilket område. Skriv: Start [Medicinaren/Jerum/Lappkärrsberget]. Exempelvis: Start Medicinaren`;
+//             const message = `Du måste ange vilket område. Skriv: Start [Medicinaren/Jerum/lappkärrsberget]. Exempelvis: Start Medicinaren`;
 //             //await smsManager.sendSMS(customersNumber, message)
 //             console.log("[+] User tried to start without area: " + customersNumber);
 //             return new Response(message, { status: 200 });

@@ -16,7 +16,7 @@
   import { toast } from "svelte-sonner";
 
   const AREA_LIST = [
-    { value: "medicinaren", label: "medicinaren" },
+    { value: "lappkärrsberget", label: "lappkärrsberget" },
     // { value: "kungshamra", label: "kungshamra" },
     // { value: "jerum", label: "jerum" },
   ] as const;
