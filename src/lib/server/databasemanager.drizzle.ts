@@ -1,22 +1,18 @@
 import { generateRandomUUID } from '../Inbox/Utils';
 import { DATABASE_URL } from '$env/static/private';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 import {
   profiles,
   services,
   scrapers,
   notifications
 } from '../../drizzle';
-import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
+import { eq, gt, and, inArray, desc } from 'drizzle-orm';
 
 // Create the database connection
-const client = postgres(DATABASE_URL, {
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
-const db = drizzle(client);
+const client = neon(DATABASE_URL);
+const db = drizzle({ client });
 
 export class DatabaseManager {
   public static Ping = async () => {
