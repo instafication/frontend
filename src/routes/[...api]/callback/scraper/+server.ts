@@ -160,45 +160,56 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 
 
 export const POST = (async ({ request }) => {
+	try {
+		const scraper: Scraper = await request.json();
+		console.log("[/api/callback/scraper] Received scraper data:", JSON.stringify(scraper, null, 2));
 
-	const scraper: Scraper = await request.json();
+		if (scraper.company === "Stockholms Studentbostäder") {
+			const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
 
-	if (scraper.company === "Stockholms Studentbostäder") {
-		const params: postParamsSssb = JSON.parse(JSON.stringify(scraper.params));
+			if (params === undefined) {
+				console.log("[!] Missing params");
+				return new Response('Missing params', { status: 400 });
+			} else if (params.area === undefined) {
+				console.log("[!] Missing area");
+				return new Response('Missing area', { status: 400 });
+			} else if (params.date === undefined) {
+				console.log("[!] Missing date");
+				return new Response('Missing date', { status: 400 });
+			} else if (params.time === undefined) {
+				console.log("[!] Missing time");
+				return new Response('Missing time', { status: 400 });
+			}
 
-		if (params === undefined) {
-			console.log("[!] Missing params");
-			return new Response('Missing params', { status: 400 });
-		} else if (params.area === undefined) {
-			console.log("[!] Missing area");
-			return new Response('Missing area', { status: 400 });
-		} else if (params.date === undefined) {
-			console.log("[!] Missing date");
-			return new Response('Missing date', { status: 400 });
-		} else if (params.time === undefined) {
-			console.log("[!] Missing time");
-			return new Response('Missing time', { status: 400 });
+			console.log(scraper.params);
+			console.log(`[+] Scraper: ${scraper.company}`);
+			const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue("area", params.area);
+			console.log(`[+] Scraper exists: ${exists}`);
+
+			if (exists === false) {
+				await DatabaseManager.Scraper.createScraper(scraper);
+				console.log(`[+] Scraper created: ${scraper.company} (${scraper.id}) `);
+			}
+
+			const updated: boolean = await DatabaseManager.Scraper.updatePingTimestampByCompanyNameAndParamValue("area", params.area, Date.now());
+			console.log(`[+] Scraper ping updated: ${updated}`);
+			
+			try {
+				const response: Response = await HandleSssb(scraper);
+				console.log(`[+] Scraper response: ${response.status} (${response.statusText})`);
+				return response;
+			} catch (handlerError) {
+				console.error(`[/api/callback/scraper] Error in HandleSssb: ${handlerError}`);
+				return new Response(`Internal server error in handler: ${handlerError}`, { status: 500 });
+			}
+
+		} else {
+			console.log(`[!] Unknown company: ${scraper.company}`);
+			return new Response('Unknown service', { status: 400 });
 		}
-
-		console.log(scraper.params);
-		console.log(`[+] Scraper: ${scraper.company}`);
-		const exists = await DatabaseManager.Scraper.existsByCompanyNameAndParamValue("area", params.area);
-		console.log(`[+] Scraper exists: ${exists}`);
-
-		if (exists === false) {
-			await DatabaseManager.Scraper.createScraper(scraper);
-			console.log(`[+] Scraper created: ${scraper.company} (${scraper.id}) `);
-		}
-
-		const updated: boolean = await DatabaseManager.Scraper.updatePingTimestampByCompanyNameAndParamValue("area", params.area, Date.now());
-		console.log(`[+] Scraper ping updated: ${updated}`);
-		const response: Response = await HandleSssb(scraper);
-		console.log(`[+] Scraper response: ${response.status} (${response.statusText})`);
-		return response;
-
-	} else {
-		console.log(`[!] Unknown company: ${scraper.company}`);
-		return new Response('Unknown service', { status: 400 });
+	} catch (error) {
+		console.error(`[/api/callback/scraper] Error processing request: ${error}`);
+		return new Response(`Internal server error: ${error}`, { status: 500 });
 	}
 
 }) satisfies RequestHandler;
