@@ -85,6 +85,8 @@ async function createService(name: string, notificationMethod: string, notificat
 async function removeService(serviceName: string): Promise<boolean> {
     const UUID: string = await getUserId();
     const response = await trpc.removeService.query({ user: UUID, name: serviceName });
+    console.log("RES!");
+    console.log(response);
     return response;
 }
 
