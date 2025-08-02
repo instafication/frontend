@@ -181,11 +181,11 @@ export const appRouter = t.router({
             return notifications;
         }),
     
-    getLastPingByCompanyName: t.procedure
+    getLastUpdateByCompanyName: t.procedure
         .input(z.string())
         .query(async ({ input }) => {
             const company = input;
-            const lastUpdate = await DatabaseManager.Scraper.getLastPingByCompanyName(company);
+            const lastUpdate = await DatabaseManager.Scraper.getLastUpdateByCompanyName(company);
             return { lastUpdate };
         }),
 });
