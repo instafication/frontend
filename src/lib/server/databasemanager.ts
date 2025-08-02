@@ -17,7 +17,10 @@ const db = drizzle({ client: pool });
 
 export class DatabaseManager {
     public static Ping = async () => {
-        const res = await db.select().from(profiles).where(eq(profiles.email, "hello@martinjakobsson.se")).limit(1);
+        if (!PING_TEST_EMAIL) {
+            throw new Error("PING_TEST_EMAIL environment variable is not set.");
+        }
+        const res = await db.select().from(profiles).where(eq(profiles.email, PING_TEST_EMAIL)).limit(1);
         return res[0] || null;
     }
 
