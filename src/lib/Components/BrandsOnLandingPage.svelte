@@ -4,7 +4,7 @@
   import { t } from '$lib/i18n';
   import { onMount } from 'svelte';
   import { trpc } from '$lib/trpc/client';
-  import { Activity } from '@lucide/svelte';
+  import Activity from '@lucide/svelte/icons/activity';
   
   let lastSearchedMinutes = $state(0);
   let loading = $state(true);
@@ -35,6 +35,7 @@
   onMount(() => {
     fetchLastUpdateTime();
   });
+
 </script>
 
 <Card
