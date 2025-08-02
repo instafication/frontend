@@ -7,8 +7,12 @@ declare global {
 			// user: User;
 			language: string;
 		}
+		interface Platform {
+			env: Env
+			cf: CfProperties
+			ctx: ExecutionContext
+		}
 		// interface PageData {}
-		// interface Platform {}
 	}
 }
 

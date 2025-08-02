@@ -8,7 +8,7 @@ import {
   scrapers,
   notifications
 } from '../../drizzle';
-import { eq, gt, and, inArray, desc } from 'drizzle-orm';
+import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 
 // Create the database connection
 const client = neon(DATABASE_URL);
