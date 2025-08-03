@@ -29,4 +29,5 @@ pnpm-lock.yaml
 
 # Wrangler
 .wrangler
+wrangler.backup.toml
 wrangler.toml
