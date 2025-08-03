@@ -3,8 +3,8 @@
 	import { Badge } from '$lib/Components/ui/badge';
 	import { t } from '$lib/i18n';
 	import { onMount } from 'svelte';
-	import { trpc } from '$lib/trpc/client';
 	import Activity from '@lucide/svelte/icons/activity';
+	import { scraper_getLastUpdateByCompany } from '$routes/db.remote';
 
 	let lastSearchedMinutes = $state(0);
 	let loading = $state(true);
@@ -21,7 +21,7 @@
 	async function fetchLastUpdateTime() {
 		try {
 			loading = true;
-			const data = await trpc.getLastUpdateByCompanyName.query('Stockholms Studentbostäder');
+			const data = await scraper_getLastUpdateByCompany('Stockholms Studentbostäder');
 			lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
 		} catch (_err) {
 			lastSearchedMinutes = 0;

@@ -3,12 +3,9 @@
 	import { Label, Input } from 'flowbite-svelte';
 	import { Button } from '$lib/Components/ui/button/index.js';
 	import { Save, Loader2 } from '@lucide/svelte';
-
 	import { getUserId } from '$lib/Managers/AuthManager';
 	import * as authManager from '$lib/Managers/AuthManager';
-	import { trpc } from '$lib/trpc/client';
 	import { showProfileSettingsModal } from '$lib/sharedStore';
-
 	import { onMount } from 'svelte';
 	import { t } from '$lib/i18n';
 

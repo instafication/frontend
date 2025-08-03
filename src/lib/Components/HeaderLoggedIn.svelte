@@ -4,13 +4,13 @@
 	import * as Avatar from '$lib/Components/ui/avatar/index.js';
 	import * as DropdownMenu from '$lib/Components/ui/dropdown-menu/index.js';
 	import { LogOut, UserCog, Coins, Settings } from '@lucide/svelte';
-	import { trpc } from '$lib/trpc/client';
 	import { getUserId, signOut } from '$lib/Managers/AuthManager';
 	import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
 	import { showProfileSettingsModal, showServicesModal } from '$lib/sharedStore';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import { t } from '$lib/i18n';
 	import { Button } from './ui/button';
+	import { addLike } from "../../db.remote"
 
 	/* ——— state ——— */
 	let id = $state('');
@@ -19,14 +19,17 @@
 	let credits = $state<number>(0);
 	// let userMeta = $state<Record<string, unknown>>({});
 
+
 	/* fetch user-data once */
 	onMount(async () => {
 		id = await getUserId();
-		[email, phone, credits] = await Promise.all([
-			trpc.email.query(id),
-			trpc.phone.query(id),
-			trpc.credits.query(id)
-		]);
+		let user = await addLike()
+
+		// [email, phone, credits] = await Promise.all([
+		// 	trpc.email.query(id),
+		// 	trpc.phone.query(id),
+		// 	trpc.credits.query(id)
+		// ]);
 	});
 </script>
 

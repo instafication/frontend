@@ -5,11 +5,14 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 export default {
 	preprocess: vitePreprocess(),
 	compilerOptions: {
-		runes: true
+		runes: true,
+		experimental: {
+			async: true
+		},
 	},
 	kit: {
 		experimental: {
-			remoteFunctions: true
+			remoteFunctions: true,
 		},
 		adapter: adapter({
 			// See below for an explanation of these options

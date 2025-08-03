@@ -108,7 +108,6 @@ src/
 │   ├── Components/          # Reusable Svelte components
 │   ├── Managers/           # Business logic managers
 │   ├── server/             # Server-side utilities
-│   ├── trpc/              # tRPC API routes
 │   ├── i18n.ts            # Internationalization
 │   └── translations.ts    # Translation strings
 ├── routes/
@@ -126,7 +125,6 @@ src/
 - **Styling**: Tailwind CSS + Flowbite components
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: Supabase Auth
-- **API**: tRPC for type-safe APIs
 - **Payments**: Stripe integration
 - **Deployment**: Cloudflare Workers support
 - **Email**: Resend integration
@@ -198,17 +196,6 @@ We welcome contributions! Please follow these steps:
 - Follow the existing code formatting (Rome)
 - Add JSDoc comments for complex functions
 - Use semantic commit messages
-
-## 📝 API Documentation
-
-### tRPC Routes
-
-The application uses tRPC for type-safe API communication. Key endpoints:
-
-- User management
-- Service configuration
-- Notification handling
-- Payment processing
 
 ### Webhooks
 
