@@ -3,6 +3,7 @@ import {
     services,
     scrapers,
     notifications
+
 } from '../../../drizzle';
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 import { db } from '$lib/db';
@@ -11,10 +12,6 @@ export class DatabaseManager {
 
     public static Scraper = class {
         public static async updatePingTimestampByCompanyNameAndParamValue(k: string, v: any, unixTimestamp: number): Promise<boolean> {
-            console.log(`[Scraper] Updating latest_ping with ${k} = ${v} to ${unixTimestamp}`);
-
-            // Note: Drizzle doesn't have direct JSON path support like Prisma
-            // We'll need to handle this differently, possibly with raw SQL
             const r = await db().update(scrapers)
                 .set({ last_ping: BigInt(unixTimestamp) })
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`);
@@ -23,8 +20,6 @@ export class DatabaseManager {
         }
 
         public static async existsByCompanyNameAndParamValue(k: string, v: any): Promise<boolean> {
-            // Note: Drizzle doesn't have direct JSON path support like Prisma
-            // We'll need to handle this differently, possibly with raw SQL
             const r = await db().select().from(scrapers)
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`)
                 .limit(1);
@@ -44,14 +39,11 @@ export class DatabaseManager {
                 });
                 return result.count > 0;
             } catch (error) {
-                console.error("[DatabaseManager] Error creating scraper:", error);
                 return false;
             }
         }
 
         public static async updateLastUpdatedByCompanyAndParam(k: string, v: any, last_update: number): Promise<boolean> {
-            // Note: Drizzle doesn't have direct JSON path support like Prisma
-            // We'll need to handle this differently, possibly with raw SQL
             const r = await db().update(scrapers)
                 .set({ last_update: BigInt(last_update) })
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`);
@@ -60,8 +52,6 @@ export class DatabaseManager {
         }
 
         public static async getLastUpdated(k: string, v: any): Promise<number> {
-            // Note: Drizzle doesn't have direct JSON path support like Prisma
-            // We'll need to handle this differently, possibly with raw SQL
             const r = await db().select({ last_update: scrapers.last_update }).from(scrapers)
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`)
                 .limit(1);
@@ -70,14 +60,10 @@ export class DatabaseManager {
         }
 
         public static async getLastUpdateByCompanyName(companyName: string): Promise<number> {
-            // Get the most recent last_update time for all scrapers of a company
             const r = await db().select({ last_update: scrapers.last_update }).from(scrapers)
                 .where(eq(scrapers.company, companyName))
                 .orderBy(desc(scrapers.last_update))
                 .limit(1);
-
-            console.log(r);
-
             return Number(r[0]?.last_update) || -1;
         }
     }
@@ -166,7 +152,6 @@ export class DatabaseManager {
                 .from(profiles)
                 .where(eq(profiles.phone, phone))
                 .limit(1);
-
             return result.length > 0;
         }
 
@@ -212,7 +197,6 @@ export class DatabaseManager {
             const now: Date = new Date();
             const futureDate: Date = new Date(now.getTime() + daysToProlong * 24 * 60 * 60 * 1000);
             const futureTimestamp: number = Math.floor(futureDate.getTime() / 1000);
-
             const result = await db().update(profiles)
                 .set({
                     subscription_expiration_date: futureTimestamp.toString(),
@@ -237,7 +221,7 @@ export class DatabaseManager {
             if (user[0].credits !== null) {
                 newCredits = user[0].credits + credits;
             }
-
+          
             const result = await db().update(profiles)
                 .set({ credits: newCredits })
                 .where(eq(profiles.email, email));
@@ -299,8 +283,6 @@ export class DatabaseManager {
         public static async getAllScrapers() {
             const [row] = await db()
                 .select().from(scrapers);
-            console.log("AA");
-            console.log(row);
             return await db().select().from(scrapers);
         }
     }
@@ -314,16 +296,10 @@ export class DatabaseManager {
                     eq(services.name, name)
                 ))
                 .limit(1);
-
-            console.log("Databasemanager — Service configuration: ");
-            console.log(result[0]);
-
             return result[0] || null;
         }
 
         public static async getUserIdsByOptions(key: string, value: any): Promise<any> {
-            // Note: Drizzle doesn't have direct JSON path support like Prisma
-            // We'll need to handle this differently, possibly with raw SQL
             const result = await db().select()
                 .from(services)
                 .where(sql`options->>'${sql.raw(key)}' = ${value}`);
@@ -341,7 +317,6 @@ export class DatabaseManager {
 
             let res;
             if (existingService.length === 0) {
-                // If the record doesn't exist, create a new one
                 res = await db().insert(services).values({
                     user: user,
                     name: name,
@@ -367,8 +342,6 @@ export class DatabaseManager {
                 eq(services.user, user),
                 eq(services.name, name)
             ));
-            console.log(`[Databasemanager] Removed service: ${r}`);
-            console.log(r);
             return r.success;
         }
     }

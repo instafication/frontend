@@ -1,0 +1,45 @@
+name = "frontend"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2025-07-31"
+
+routes = [
+  { pattern = "instafication.shop", custom_domain = true }
+]
+
+[assets]
+directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"
+
+[observability.logs]
+enabled = true
+
+[placement]
+mode = "smart"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "prod"
+database_id = "1c5984b4-b872-4e54-aeab-ea0a2fa81a6d"
+
+[vars]
+NODE_VERSION = "24.4.1"
+ENVIRONMENT = "production"
+
+PUBLIC_POSTHOG_KEY="phc_HLDbWoUxDBzdI73yrjji2OWu6rLTzlVfThdLuh7wtYH"
+PUBLIC_POSTHOG_HOST="https://eu.i.posthog.com"
+
+PUBLIC_SUPABASE_URL="https://dkavcpubobbtovqtobkv.supabase.co"
+PUBLIC_SUPABASE_ANON_KEY="sb_publishable_5-XfVjKYK6cWiV6s9K8M-g_kmze62xn"
+DATABASE_URL="postgresql://postgres.dkavcpubobbtovqtobkv:hqD0xjNboPDubDqx@aws-0-eu-north-1.pooler.supabase.com:5432/postgres?sslmode=no-verify"
+DB_PASSWORD="hqD0xjNboPDubDqx"
+
+STRIPE_PUBLISHABLE_KEY=""
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""
+
+RESEND_API_KEY="re_KECmwWaz_MW4D5qz4BotMof1nugRXnmA7"
+
+CLOUDFLARE_ACCOUNT_ID="07fcc391e70aef085433693af250bda9"
+CLOUDFLARE_DATABASE_ID="1c5984b4-b872-4e54-aeab-ea0a2fa81a6d"
+CLOUDFLARE_D1_TOKEN="ykEaZAZp4A5u07NSjeVNLpvk2EwGHW9TvgYj4g_l"
