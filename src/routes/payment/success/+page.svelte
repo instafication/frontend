@@ -1,12 +1,5 @@
 <script lang="ts">
-	import { Timeline, Button, Modal } from 'flowbite-svelte';
-	import { showInformationModal, showRegisterModal, showLoginModal } from '$lib/sharedStore';
-	import { getLatestNotifications } from '$lib/Managers/NotificationManager';
-	import TimelineItem from '$lib/Components/TimelineItem.svelte';
-	import CardWithList from '$lib/Components/BrandsOnLandingPage.svelte';
-	import { t } from '$lib/i18n';
-	import PriceSection from '$lib/Components/PriceSection.svelte';
-	import HeaderPhone from '$lib/Components/HeaderPhone.svelte';
+
 </script>
 
 <svelte:head>

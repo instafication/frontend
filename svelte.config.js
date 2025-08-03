@@ -8,6 +8,9 @@ export default {
 		runes: true
 	},
 	kit: {
+		experimental: {
+			remoteFunctions: true
+		},
 		adapter: adapter({
 			// See below for an explanation of these options
 			// config: undefined,

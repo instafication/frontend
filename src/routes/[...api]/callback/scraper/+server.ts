@@ -1,8 +1,6 @@
 import type { RequestHandler } from './$types';
 import { DatabaseManager } from '$lib/server/databasemanager';
 import {
-	sendEmail,
-	SendEmailWhenUserIsCreated,
 	sendLaundryNotification
 } from '$lib/Managers/EmailManager';
 import type { Scraper } from '$lib/drizzle/types';
@@ -42,7 +40,7 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 
 	console.log(dateString);
 	console.log(`${paramDate} ${paramTime}`);
-	const [, , date, monthName, startTime]: any | null = dateString.match(
+	const [, , date, monthName, startTime]: unknown | null = dateString.match(
 		/([A-ZÅÄÖ]{3})\s(\d+)\s([A-Z]{3})\s(\d\d:\d\d)/
 	);
 
@@ -116,14 +114,14 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 		console.log(`[/api/callback/scraper] Notification created: ${success}`);
 
 		try {
-			const usersByArea: any = await DatabaseManager.Services.getUserIdsByOptions('area', area);
+			const usersByArea: unknown = await DatabaseManager.Services.getUserIdsByOptions('area', area);
 			if (usersByArea.length > 0) {
-				const userIds: string[] = usersByArea.map((user: any) => user.user);
+				const userIds: string[] = usersByArea.map((user: unknown) => user.user);
 				console.log('[/api/callback/scraper] Users with setting activated: ');
 				console.log(usersByArea);
 				console.log('[/api/callback/scraper] UserIds: ');
 				console.log(userIds);
-				const usersWithCredits: any[] =
+				const usersWithCredits: unknown[] =
 					await DatabaseManager.Profiles.getUsersWithCreditsByUserIds(userIds);
 				console.log('[/api/callback/scraper] usersWithCredits: ');
 				console.log(usersWithCredits);
@@ -148,21 +146,17 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 									`[/api/callback/scraper] Free time is more far away, user configuration (sec): ${userInside.notificationWithinTime}`
 								);
 							} else {
-								const success = await DatabaseManager.Profiles.removeOneCreditFromUserID(user.id);
-								const credits = await DatabaseManager.Profiles.getUserCreditsByID(user.id);
-
 								console.log(
 									`[/api/callback/scraper] Sending laundry notification email to: '${user.email}' for area: '${area}'`
 								);
 								if (userInside.notificationMethod === 'e-post' && userInside.user == user.id) {
-									const hasSent = await sendLaundryNotification(
+									await sendLaundryNotification(
 										user.email,
 										area,
 										paramDate,
 										paramTime
 									);
 								} else if (userInside.service === 'SMS' && userInside.user === user.id) {
-									//const hasSent = await sendSMS(user.id, message);
 									console.log('[/api/callback/scraper] SMS not sent!');
 								} else {
 									console.log(

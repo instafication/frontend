@@ -1,16 +1,14 @@
 <script lang="ts">
-	/* ——— imports ——— */
 	import { onMount } from 'svelte';
-	import { Navbar, NavBrand, Toolbar } from 'flowbite-svelte';
+	import { Navbar, NavBrand } from 'flowbite-svelte';
 	import * as Avatar from '$lib/Components/ui/avatar/index.js';
 	import * as DropdownMenu from '$lib/Components/ui/dropdown-menu/index.js';
-	import { LogOut, BellRing, UserCog, Coins, Settings } from '@lucide/svelte';
+	import { LogOut, UserCog, Coins, Settings } from '@lucide/svelte';
 	import { trpc } from '$lib/trpc/client';
 	import { getUserId, signOut } from '$lib/Managers/AuthManager';
 	import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
 	import { showProfileSettingsModal, showServicesModal } from '$lib/sharedStore';
 	import LanguageSelector from './LanguageSelector.svelte';
-	import { goto } from '$app/navigation';
 	import { t } from '$lib/i18n';
 	import { Button } from './ui/button';
 

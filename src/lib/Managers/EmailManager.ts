@@ -43,8 +43,6 @@ async function SendEmailWhenUserIsCreated(
 
 async function SendEmailWhenSubscription(
 	to: string,
-	/* body param is unused here, so you can omit or repurpose it */
-	body: string
 ): Promise<boolean> {
 	try {
 		await resend.emails.send({

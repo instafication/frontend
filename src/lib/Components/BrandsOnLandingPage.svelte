@@ -23,7 +23,7 @@
 			loading = true;
 			const data = await trpc.getLastUpdateByCompanyName.query('Stockholms Studentbostäder');
 			lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
-		} catch (error) {
+		} catch (_err) {
 			lastSearchedMinutes = 0;
 		} finally {
 			loading = false;

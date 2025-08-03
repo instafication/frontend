@@ -1,6 +1,4 @@
 import { trpc } from '$lib/trpc/client';
-import { getUserId } from './AuthManager';
-import { toast } from 'svelte-sonner';
 
 async function getAllNotifications() {
 	try {
