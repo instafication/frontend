@@ -10,7 +10,7 @@
 	import LanguageSelector from './LanguageSelector.svelte';
 	import { t } from '$lib/i18n';
 	import { Button } from './ui/button';
-	import { profile_getCreditsById } from "../../routes/db.remote"
+	import { profile_GetCreditsByUserId } from "../../routes/db.remote"
 
 	/* ——— state ——— */
 	let id = $state('');
@@ -23,7 +23,7 @@
 	/* fetch user-data once */
 	onMount(async () => {
 		id = await getUserId()
-		credits = await profile_getCreditsById(id)
+		credits = await profile_GetCreditsByUserId(id)
 		console.log("Credits: ")
 		console.log(credits);
 		// [email, phone, credits] = await Promise.all([
@@ -39,7 +39,6 @@
 	<div
 		class="flex items-center justify-between w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
 	>
-		<!-- brand / logo -->
 		<NavBrand href="/">
 			<img
 				src="/images/instafication-logo-symbol-1.png"
@@ -51,7 +50,6 @@
 			</span>
 		</NavBrand>
 
-		<!-- right-hand tools -->
 		<div class="flex items-center md:order-1 gap-1">
 			<LanguageSelector />
 			<NotificationDropdown />
@@ -63,7 +61,6 @@
 				<Settings />Bevakningar
 			</Button>
 
-			<!-- ⏬ NEW dropdown menu based on Avatar ⏬ -->
 			<DropdownMenu.Root class="px-4">
 				<DropdownMenu.Trigger class="hover:cursor-pointer">
 					<Avatar.Root>
@@ -79,38 +76,13 @@
 					</DropdownMenu.Item>
 
 					<DropdownMenu.Separator />
-
-					<!-- <DropdownMenu.Item
-					class="hover:cursor-pointer"
-					onSelect={() => showServicesModal.set(true)}
-				>
-					<BellRing />{$t("HEADER_LOGGEDIN_I2")}
-				</DropdownMenu.Item> -->
-
 					<DropdownMenu.Item
 						class="hover:cursor-pointer"
 						onSelect={() => showProfileSettingsModal.set(true)}
 					>
 						<UserCog />{$t('HEADER_LOGGEDIN_I3')}
 					</DropdownMenu.Item>
-
-					<!-- <DropdownMenu.Item
-						onSelect={async () => {
-							const url =
-								await trpc.create_customer_portal_session.query(
-									email(),
-								);
-							goto(
-								url ??
-									"https://buy.stripe.com/test_cN2cQTexF9hke9W6oq",
-							);
-						}}
-					>
-						Prenumeration
-					</DropdownMenu.Item> -->
-
 					<DropdownMenu.Separator />
-
 					<DropdownMenu.Item class="hover:cursor-pointer " onSelect={signOut}>
 						<LogOut class="" />{$t('HEADER_LOGGEDIN_I4')}
 					</DropdownMenu.Item>

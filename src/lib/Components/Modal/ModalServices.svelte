@@ -5,20 +5,14 @@
 	import { Button } from '$lib/Components/ui/button/index.js';
 	import { Avatar, Label } from 'flowbite-svelte';
 	import { Save, Loader2 } from '@lucide/svelte';
-
-	import {
-		createService,
-		removeService,
-		getServiceConfiguration
-	} from '$lib/Managers/ServiceManager';
 	import { showServicesModal } from '$lib/sharedStore';
 	import { t } from '$lib/i18n';
 	import { toast } from 'svelte-sonner';
+	import { service_GetConfigByCompanyName, service_RemoveByServiceName, service_createOrUpdate } from "../../../routes/db.remote"
 
 	const AREA_LIST = [
 		{ value: 'lappkärrsberget', label: 'lappkärrsberget' },
 		{ value: 'kungshamra', label: 'kungshamra' }
-		// { value: "jerum", label: "jerum" },
 	] as const;
 
 	const WITHIN_TIME_LIST = [
@@ -39,7 +33,7 @@
 	let hasActiveService = $state<boolean>(false);
 
 	onMount(async () => {
-		const cfg: any = await getServiceConfiguration('Stockholms Studentbostäder');
+		const cfg: any = await service_GetConfigByCompanyName('Stockholms Studentbostäder');
 		if (cfg) {
 			selectedNotificationMethod = cfg.notificationMethod ?? '';
 			selectedWithinTime = String(cfg.notificationWithinTime ?? '');
@@ -63,7 +57,7 @@
 
 		// Remove service from database if press inactive and also set all fields to empty
 		if (hasActiveService) {
-			const isRemoved: boolean = await removeService('Stockholms Studentbostäder');
+			const isRemoved: boolean = await service_RemoveByServiceName('Stockholms Studentbostäder');
 			if (isRemoved) {
 				toast.success('Bevakningen har tagits bort.');
 				hasActiveService = false;
@@ -74,18 +68,19 @@
 				toast.error('Det gick inte att ta bort bevakningen.');
 			}
 		} else {
-			const isCreated: boolean = await createService(
-				'Stockholms Studentbostäder',
-				selectedNotificationMethod,
-				Number(selectedWithinTime),
-				{ area: selectedArea }
-			);
-			if (isCreated) {
-				toast.success('Bevakningen har skapats.');
-				hasActiveService = true;
-			} else {
-				toast.error('Det gick inte att skapa bevakningen.');
-			}
+			// const isCreated: boolean = await service_createOrUpdate(
+			// 	"a",
+			// 	"Stockholms Studentbostäder",
+			// 	selectedNotificationMethod,
+			// 	Number(selectedWithinTime),
+			// 	{ area: selectedArea }
+			// );
+			// if (isCreated) {
+			// 	toast.success('Bevakningen har skapats.');
+			// 	hasActiveService = true;
+			// } else {
+			// 	toast.error('Det gick inte att skapa bevakningen.');
+			// }
 		}
 		loading = false;
 	}

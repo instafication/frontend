@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { getLatestNotifications } from '$lib/Managers/NotificationManager';
+	import { notification_getLatest } from '../../../routes/db.remote';
 	import { BellRing } from '@lucide/svelte';
 	import { Button } from '$lib/Components/ui/button/index.js';
 
-	// plain reactive variables
 	let loading = $state(true);
-	let notifications: { id: string; body: string }[] = $state([]);
+	let notifications = $state([]);
 
 	onMount(async () => {
 		try {
-			notifications = (await getLatestNotifications()) ?? [];
+			notifications = await notification_getLatest(3);
 		} finally {
 			loading = false;
 		}

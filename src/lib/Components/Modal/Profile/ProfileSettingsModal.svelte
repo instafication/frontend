@@ -48,17 +48,6 @@
 				/>
 			</Label>
 
-			<!-- <Label class="space-y-2">
-        <span>{$t("profile_your_phone_number")}</span>
-        <Input
-          bind:value={phone}
-          type="tel"
-          name="phoneNumber"
-          placeholder="+46707749377"
-          required
-        />
-      </Label> -->
-
 			<Dialog.Footer>
 				<Button
 					variant="outline"
@@ -66,7 +55,6 @@
 					class="hover:cursor-pointer w-full"
 					disabled={loading}
 				>
-					<!-- If loading show spinner -->
 					{#if loading}
 						<Loader2 class="animate-spin" />
 					{:else}

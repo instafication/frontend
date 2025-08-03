@@ -4,10 +4,10 @@
 	import { notification_getLatest } from '../routes/db.remote';
 	import TimelineItem from '$lib/Components/TimelineItem.svelte';
 	import CardWithList from '$lib/Components/BrandsOnLandingPage.svelte';
-	import { t } from '$lib/i18n';
 	import PriceSection from '$lib/Components/PriceSection.svelte';
 	import HeaderPhone from '$lib/Components/HeaderPhone.svelte';
 	import FAQ from '$lib/Components/FAQ.svelte';
+	import { t } from '$lib/i18n';
 </script>
 
 <Modal
@@ -69,9 +69,7 @@
 		<div
 			class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
 		>
-
 			<Timeline>
-
 				{#await notification_getLatest(3) then notifications}
 					{#each notifications as notification}
 						<TimelineItem
@@ -87,21 +85,6 @@
 				{/await}
 			</Timeline>
 		</div>
-
-		<!-- <Timeline>  
-            <TimelineItem customDiv={"animate-ping bg-sky-200"} title="Söker efter nya tider...">
-                <Button  onclick={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button>
-            </TimelineItem>
-
-                {#await getLatestNotifications(3) then notifications}
-                    {#each notifications as notification}
-                        <TimelineItem customDiv={"bg-green-300"} title="Ny tvättid hittad för Stockholms studentbostäder" date={notification.date}>
-                        <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{notification.body}</p>
-                        </TimelineItem>
-                    {/each} 
-                    
-                {/await}
-        </Timeline> -->
 	</section>
 </section>
 
@@ -120,10 +103,6 @@
 <section
 	class="bg-white dark:bg-gray-900 w-full grid md:grid-cols-3 gap-4 content-center items-stretch justify-start py-4 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6"
 >
-	<!-- <section class="w-full col-span-all text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-        Kom igång inom 30 sekunder!
-    </section> -->
-
 	<section class="bg-slate-0 dark:bg-gray-900 border-gray-200 border rounded-3xl">
 		<div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 			<div class="max-w-screen-md mb-8 lg:mb-16">

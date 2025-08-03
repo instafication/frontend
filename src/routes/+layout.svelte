@@ -16,12 +16,11 @@
 	import posthog from 'posthog-js';
 	import { Toaster } from '$lib/Components/ui/sonner/index.js';
 
+	let { children } = $props();
 	let lastAuthStatus = $state('');
 	let lastSession = $state<Awaited<
 		ReturnType<NonNullable<typeof supabase>['auth']['getSession']>
 	> | null>(null);
-
-	let { children } = $props();
 
 	if (browser) {
 		beforeNavigate(() => posthog.capture('$pageleave'));
@@ -29,7 +28,6 @@
 	}
 
 	onMount(async () => {
-		// selectedLanguage.set($page.data.language); // migrate when ready
 		$userLoggedIn = await isLoggedIn();
 	});
 
@@ -53,14 +51,12 @@
 	}
 </script>
 
-<!-- global modals -->
 <ModalLogin />
 <ModalRegister />
 <ModalLostPassword />
 <ModalServices />
 <ProfileSettingsModal />
 
-<!-- header switches on authentication -->
 {#if $userLoggedIn}
 	<HeaderLoggedIn />
 {:else}

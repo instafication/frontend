@@ -4,8 +4,7 @@
 	import { t } from '$lib/i18n';
 	import { onMount } from 'svelte';
 	import Activity from '@lucide/svelte/icons/activity';
-	import { scraper_getLastUpdateByCompanyName } from '../../routes/db.remote';
-	import type { Scraper } from '../../../drizzle/schema';
+	import { scraper_GetLastUpdateByCompanyName } from '../../routes/db.remote';
 
 	let lastSearchedMinutes = $state(0);
 	let loading = $state(true);
@@ -20,8 +19,7 @@
 	async function fetchLastUpdateTime() {
 		try {
 			loading = true;
-			const companyScraper = await scraper_getLastUpdateByCompanyName('Stockholms Studentbostäder');
-			lastSearchedMinutes = calculateMinutesSince(companyScraper. ?? 0);
+			calculateMinutesSince(await scraper_getLastUpdateByCompanyName('Stockholms Studentbostäder'));
 		} catch (_err) {
 			lastSearchedMinutes = 0;
 		} finally {

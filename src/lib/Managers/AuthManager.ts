@@ -22,7 +22,6 @@ if (browser && !supabase) {
 }
 
 async function getUserId(): Promise<string> {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		console.warn('Supabase client not available');
 		return '';
