@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Timeline, Button, Modal } from 'flowbite-svelte';
 	import { showInformationModal, showRegisterModal, showLoginModal } from '$lib/sharedStore';
-	import { notification_getLatest } from '../routes/db.remote';
+	import { notification_GetLatest } from '../routes/db.remote';
 	import TimelineItem from '$lib/Components/TimelineItem.svelte';
 	import CardWithList from '$lib/Components/BrandsOnLandingPage.svelte';
 	import PriceSection from '$lib/Components/PriceSection.svelte';
@@ -70,8 +70,8 @@
 			class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
 		>
 			<Timeline>
-				{#await notification_getLatest(3) then notifications}
-					{#each notifications as notification}
+				<svelte:boundary>
+					{#each await notification_GetLatest(3) as notification}
 						<TimelineItem
 							customDiv={'bg-green-300'}
 							title="Ny tvättid hittad för Stockholms studentbostäder"
@@ -82,7 +82,10 @@
 							</p>
 						</TimelineItem>
 					{/each}
-				{/await}
+					{#snippet pending()}
+						<p>Loading...</p>
+					{/snippet}
+				</svelte:boundary>
 			</Timeline>
 		</div>
 	</section>

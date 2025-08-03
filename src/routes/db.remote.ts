@@ -17,20 +17,15 @@ import {
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 import { getUserId } from '$lib/Managers/AuthManager';
 
-/* ───────── helper types for object params ───────── */
-type KV = { key: string; value: unknown };
-type WithUnix = KV & { unixTimestamp: number };
-type EmailDays = { email: string; days: number };
-type EmailAmount = { email: string; amount: number };
 
 /*──────────────────────── SCRAPERS ──────────────────────*/
-export const scraper_getAll = query(async () =>
+export const scraper_GetAll = query(async () =>
     await db()
         .select()
         .from(scrapers)
 );
 
-export const scraper_getLastUpdated = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }: KV) =>
+export const scraper_GetLastUpdated = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
     await db()
         .select({ last_update: scrapers.last_update })
         .from(scrapers)
@@ -49,7 +44,7 @@ export const scraper_GetLastUpdateByCompanyName = query(v.string(), async (compa
         .then(r => Number(r[0]?.last_update) || -1)
 );
 
-export const scraper_Exists = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }: KV) =>
+export const scraper_Exists = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
     await db()
         .select()
         .from(scrapers)
@@ -70,7 +65,7 @@ export const scraper_Create = command(ScraperInsertSchema, async (payload: Scrap
     return r.success;
 });
 
-export const scraper_UpdateLastPing = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }: WithUnix) =>
+export const scraper_UpdateLastPing = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }) =>
     await db()
         .update(scrapers)
         .set({ last_ping: unixTimestamp })
@@ -78,7 +73,7 @@ export const scraper_UpdateLastPing = command(v.object({ key: v.string(), value:
         .then(r => r.success)
 );
 
-export const scraper_UpdateLastUpdate = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }: WithUnix) =>
+export const scraper_UpdateLastUpdate = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }) =>
     await db()
         .update(scrapers)
         .set({ last_update: unixTimestamp })
@@ -170,7 +165,7 @@ export const profile_DecreaseOneCreditByUserId = command(v.string(), async (user
         .where(eq(profiles.id, userId)).then(r => r.success)
 );
 
-export const profile_ProlongSubscriptionByUserEmail = command(v.object({ email: v.string(), days: v.number() }), async ({ email, days }: EmailDays) => {
+export const profile_ProlongSubscriptionByUserEmail = command(v.object({ email: v.string(), days: v.number() }), async ({ email, days }) => {
     const future = Math.floor((Date.now() + days * 86_400_000) / 1000);
     return await db()
         .update(profiles)
@@ -179,7 +174,7 @@ export const profile_ProlongSubscriptionByUserEmail = command(v.object({ email: 
         .then(r => r.success);
 });
 
-export const profile_RefillCreditsByUserEmail = command(v.object({ email: v.string(), amount: v.number() }), async ({ email, amount }: EmailAmount) => {
+export const profile_RefillCreditsByUserEmail = command(v.object({ email: v.string(), amount: v.number() }), async ({ email, amount }) => {
     const [user] = await db()
         .select()
         .from(profiles)
@@ -218,7 +213,7 @@ export const notification_GetAll = query(async () =>
         .from(notifications)
 );
 
-export const notification_getLatest = query(v.optional(v.number(), 3), async (count: number = 3) =>
+export const notification_GetLatest = query(v.optional(v.number(), 3), async (count: number = 3) =>
     await db()
         .select()
         .from(notifications)
@@ -236,14 +231,14 @@ export const service_GetConfigByCompanyName = query(v.string(), async (companyNa
         .then(r => r[0] ?? null)
 });
 
-export const service_getUserIdsByOptions = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }: KV) =>
+export const service_GetUserIdsByOptions = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
     await db()
         .select()
         .from(services)
         .where(sql`options->>'${sql.raw(key)}' = ${value}`)
 );
 
-export const service_createOrUpdate = command(ServiceInsertSchema, async (payload: ServiceInsert) => {
+export const service_CreateOrUpdate = command(ServiceInsertSchema, async (payload: ServiceInsert) => {
     const { user, name, notificationWithinTime, ...rest } = payload;
     const [existing] = await db()
         .select()
