@@ -10,7 +10,7 @@
 	import LanguageSelector from './LanguageSelector.svelte';
 	import { t } from '$lib/i18n';
 	import { Button } from './ui/button';
-	import { addLike } from "../../db.remote"
+	import { addLike } from "../../routes/db.remote"
 
 	/* ——— state ——— */
 	let id = $state('');
@@ -22,9 +22,7 @@
 
 	/* fetch user-data once */
 	onMount(async () => {
-		id = await getUserId();
-		let user = await addLike()
-
+		id = await getUserId()
 		// [email, phone, credits] = await Promise.all([
 		// 	trpc.email.query(id),
 		// 	trpc.phone.query(id),

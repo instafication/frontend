@@ -10,9 +10,9 @@ import {
     ServiceInsertSchema, ScraperInsertSchema,
     NotificationInsertSchema,
     /* TS helper types */
-    ProfileInsert, ProfileUpdate,
-    ServiceInsert, ScraperInsert, NotificationInsert,
-    Profile
+    type ProfileInsert, type ProfileUpdate,
+    type ServiceInsert, type ScraperInsert, type NotificationInsert,
+    type Profile
 } from '../../drizzle/schema';
 
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
@@ -27,7 +27,7 @@ type EmailAmount = { email: string; amount: number };
 
 /*──────────────────────── SCRAPERS ──────────────────────*/
 
-export const addLike = command(v.string(), async (id) => {
+export const addLike = command("unchecked", async (id: string) => {
     console.log("id: ", id);
 });
 
