@@ -1,9 +1,4 @@
-import type {
-  profiles,
-  services,
-  scrapers,
-  notifications
-} from '../../../drizzle';
+import type { profiles, services, scrapers, notifications } from '../../../drizzle';
 
 // Export types for the Drizzle schema
 export type Profile = typeof profiles.$inferSelect;

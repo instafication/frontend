@@ -1,10 +1,9 @@
-
 # 📱 Instafication - Smart Booking Notifications
 
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://kit.svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Drizzle](https://img.shields.io/badge/Drizzle-3982CE?style=for-the-badge&logo=Drizzle&logoColor=black)]([https://Drizzle.io/](https://orm.drizzle.team/))
+[![Drizzle](https://img.shields.io/badge/Drizzle-3982CE?style=for-the-badge&logo=Drizzle&logoColor=black)](<[https://Drizzle.io/](https://orm.drizzle.team/)>)
 
 Instafication is a smart notification service that monitors booking systems and instantly alerts you via SMS or email when new appointment slots become available. Never miss a booking opportunity again!
 
@@ -31,18 +30,21 @@ Instafication is a smart notification service that monitors booking systems and 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/instafication/frontend.git
    cd frontend
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    ```
 
 3. **Set up environment variables**
    Create a `.env` file in the root directory:
+
    ```env
    DATABASE_URL=your_postgresql_connection_string
    DIRECT_URL=your_postgresql_direct_connection_string
@@ -54,6 +56,7 @@ Instafication is a smart notification service that monitors booking systems and 
    ```
 
 4. **Set up the database**
+
    ```bash
    bunx drizzle generate
    bunx drizzle db push
@@ -61,6 +64,7 @@ Instafication is a smart notification service that monitors booking systems and 
 
 5. **Configure Supabase triggers**
    Run this SQL in your Supabase SQL editor:
+
    ```sql
    -- Create function to handle new user registration
    create function public.handle_new_user()
@@ -141,6 +145,7 @@ The application uses four main database tables:
 ### Service Configuration
 
 Users can configure:
+
 - Notification method (Email)
 - Notification timing (1 hour, 1 day, 2 days in advance)
 - Service areas (e.g., specific housing areas)
@@ -149,6 +154,7 @@ Users can configure:
 ### Scraper Configuration
 
 Administrators can configure:
+
 - Scraping frequency (minutes)
 - Target companies/services
 - Service parameters
@@ -172,6 +178,7 @@ Instafication offers two pricing tiers:
 ## 🌐 Supported Services
 
 Currently supports:
+
 - **Stockholms Studentbostäder (SSSB)** - Laundry booking monitoring
 - More services coming soon!
 

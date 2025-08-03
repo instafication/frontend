@@ -4,16 +4,13 @@ import { appRouter } from './router';
 import type { RequestHandler } from '@sveltejs/kit';
 
 const trpcHandler = ({ request }: { request: Request }) => {
-    return fetchRequestHandler({
-        endpoint: '/api',
-        req: request,
-        router: appRouter,
-        createContext
-    });
-}
+	return fetchRequestHandler({
+		endpoint: '/api',
+		req: request,
+		router: appRouter,
+		createContext
+	});
+};
 
 export const GET = trpcHandler satisfies RequestHandler;
 export const POST = trpcHandler satisfies RequestHandler;
-
-
-

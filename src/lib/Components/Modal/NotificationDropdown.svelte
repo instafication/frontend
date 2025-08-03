@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { getLatestNotifications } from '$lib/Managers/NotificationManager';
-	import { BellRing } from "@lucide/svelte";
-	import { Button } from "$lib/Components/ui/button/index.js";
+	import { BellRing } from '@lucide/svelte';
+	import { Button } from '$lib/Components/ui/button/index.js';
 
 	// plain reactive variables
 	let loading = $state(true);

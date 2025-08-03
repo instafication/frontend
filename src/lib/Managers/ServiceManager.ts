@@ -1,15 +1,16 @@
 import { trpc } from '$lib/trpc/client';
 import { getUserId } from './AuthManager';
-import { toast } from "svelte-sonner";
+import { toast } from 'svelte-sonner';
 
-
-async function parseUserDataById(id: string): Promise<{ email: string, phone: string, credits: number }> {
-    // const userId = await getUserId();    
-    // const email = await trpc.email.query(userId);
-    // const phone = await trpc.phone.query(userId);
-    // const credits = await trpc.credits.query(userId);
-    return { email: "", phone: "", credits: 0 };
-    // return { email, phone, credits };
+async function parseUserDataById(
+	id: string
+): Promise<{ email: string; phone: string; credits: number }> {
+	// const userId = await getUserId();
+	// const email = await trpc.email.query(userId);
+	// const phone = await trpc.phone.query(userId);
+	// const credits = await trpc.credits.query(userId);
+	return { email: '', phone: '', credits: 0 };
+	// return { email, phone, credits };
 }
 
 /*
@@ -25,7 +26,6 @@ async function parseUserDataById(id: string): Promise<{ email: string, phone: st
     }
 */
 
-
 /*
 Input object = [
     {
@@ -36,7 +36,6 @@ Input object = [
         options: {}
     },
 ]*/
-
 
 /*
 
@@ -53,68 +52,71 @@ model services {
 
   */
 
+async function createService(
+	name: string,
+	notificationMethod: string,
+	notificationWithinTime: number,
+	options: {}
+): Promise<boolean> {
+	const UUID = await getUserId();
+	if (!UUID) {
+		toast.error('You must be logged in to create a service');
+		throw new Error('User not authenticated');
+	}
 
-async function createService(name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<boolean> {
-    const UUID = await getUserId();
-    if (!UUID) {
-        toast.error("You must be logged in to create a service");
-        throw new Error("User not authenticated");
-    }
+	console.log(UUID, name, notificationMethod, notificationWithinTime, options);
 
-    console.log(UUID, name, notificationMethod, notificationWithinTime, options);
+	try {
+		const response = await trpc.createService.query({
+			user: UUID,
+			name: name,
+			notificationMethod: notificationMethod,
+			notificationWithinTime: notificationWithinTime,
+			options: options
+		});
 
-    try {
-        const response = await trpc.createService.query({
-            user: UUID,
-            name: name,
-            notificationMethod: notificationMethod,
-            notificationWithinTime: notificationWithinTime,
-            options: options
-        });
-
-        console.log(response);
-        return response;
-    } catch (error) {
-        toast.error("Failed to create service");
-        console.error(error);
-        throw error;
-    }
+		console.log(response);
+		return response;
+	} catch (error) {
+		toast.error('Failed to create service');
+		console.error(error);
+		throw error;
+	}
 }
 
 async function removeService(serviceName: string): Promise<boolean> {
-    const UUID: string = await getUserId();
-    const response = await trpc.removeService.query({ user: UUID, name: serviceName });
-    return response;
+	const UUID: string = await getUserId();
+	const response = await trpc.removeService.query({ user: UUID, name: serviceName });
+	return response;
 }
 
 async function getServiceConfiguration(serviceName: string): Promise<any> {
-    const UUID: string = await getUserId();
-    
-    // Check if user is logged in
-    if (!UUID) {
-        // toast.error("You must be logged in to access service configuration");
-        return null;
-    }
+	const UUID: string = await getUserId();
 
-    try {
-        const serviceConfiguration = await trpc.getConfiguration.query({
-            user: UUID,
-            name: serviceName
-        });
+	// Check if user is logged in
+	if (!UUID) {
+		// toast.error("You must be logged in to access service configuration");
+		return null;
+	}
 
-        console.log(serviceConfiguration);
+	try {
+		const serviceConfiguration = await trpc.getConfiguration.query({
+			user: UUID,
+			name: serviceName
+		});
 
-        if (serviceConfiguration == null) {
-            console.log("Service configuration not found");
-            return null;
-        } else {
-            return serviceConfiguration;
-        }
+		console.log(serviceConfiguration);
 
-    } catch (error) {
-        console.error("Error getting service configuration:", error);
-        return null;
-    }
+		if (serviceConfiguration == null) {
+			console.log('Service configuration not found');
+			return null;
+		} else {
+			return serviceConfiguration;
+		}
+	} catch (error) {
+		console.error('Error getting service configuration:', error);
+		return null;
+	}
 }
 
-export { createService, getServiceConfiguration, removeService }
+export { createService, getServiceConfiguration, removeService };

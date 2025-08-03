@@ -8,7 +8,6 @@
 //     typescript: true,
 // });
 
-
 // async function createPortalByEmail(email: string): Promise<string> {
 
 //     const configuration = await stripe.billingPortal.configurations.create({
@@ -43,7 +42,6 @@
 
 //         return session.url;
 //     }
-
 
 // }
 

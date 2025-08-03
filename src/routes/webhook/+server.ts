@@ -5,12 +5,10 @@
 // import { json } from "@sveltejs/kit";
 // import Stripe from "stripe";
 
-
 // const stripe = new Stripe(STRIPE_SECRET_KEY, {
 //     apiVersion: "2025-07-30.basil",
 //     typescript: true,
 // });
-
 
 // class RandomEmailGenerator {
 //     private static readonly ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -37,9 +35,7 @@
 //     }
 // }
 
-
 // async function prolong(email: string): Promise<boolean> {
-
 
 //     if (email !== null) {
 
@@ -115,8 +111,6 @@
 
 //     return true;
 // }
-
-
 
 // /** @type {import('./$types').RequestHandler} */
 // export async function POST({ request }) {
@@ -204,7 +198,6 @@
 //             return json({ received: false });
 //         }
 
-
 //     } else if (eventType === 'payment_intent.payment_failed') {
 
 //         intent = data.object as Stripe.PaymentIntent;
@@ -219,10 +212,8 @@
 //         //console.log(intent);
 //     }
 
-
 //     return json({ received: true });
 
 // };
-
 
 // // export stripe };

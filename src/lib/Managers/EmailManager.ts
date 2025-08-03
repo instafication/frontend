@@ -1,102 +1,89 @@
 import { Resend } from 'resend';
-import { RESEND_API_KEY } from "$env/static/private";
+import { RESEND_API_KEY } from '$env/static/private';
 
 const resend = new Resend(RESEND_API_KEY!);
 
 async function SendEmailWhenSubscriptionProlonged(
-    to: string,
-    subject: string,
-    body: string
+	to: string,
+	subject: string,
+	body: string
 ): Promise<boolean> {
-    try {
-        await resend.emails.send({
-            from: 'Instafication <no-reply@transactional.instafication.shop>',
-            to,
-            subject,
-            html: body,
-        });
-        return true;
-    } catch (err: any) {
-        console.error(
-            `[Emailmanager] Error sending 'subscription prolonged' email:`,
-            err
-        );
-        return false;
-    }
+	try {
+		await resend.emails.send({
+			from: 'Instafication <no-reply@transactional.instafication.shop>',
+			to,
+			subject,
+			html: body
+		});
+		return true;
+	} catch (err: any) {
+		console.error(`[Emailmanager] Error sending 'subscription prolonged' email:`, err);
+		return false;
+	}
 }
 
 async function SendEmailWhenUserIsCreated(
-    to: string,
-    subject: string,
-    body: string
+	to: string,
+	subject: string,
+	body: string
 ): Promise<boolean> {
-    try {
-        await resend.emails.send({
-            from: 'Instafication <no-reply@transactional.instafication.shop>',
-            to,
-            subject,
-            html: body,
-        });
-        return true;
-    } catch (err: any) {
-        console.error(
-            `[Emailmanager] Error sending 'user created' email:`,
-            err
-        );
-        return false;
-    }
+	try {
+		await resend.emails.send({
+			from: 'Instafication <no-reply@transactional.instafication.shop>',
+			to,
+			subject,
+			html: body
+		});
+		return true;
+	} catch (err: any) {
+		console.error(`[Emailmanager] Error sending 'user created' email:`, err);
+		return false;
+	}
 }
 
 async function SendEmailWhenSubscription(
-    to: string,
-    /* body param is unused here, so you can omit or repurpose it */
-    body: string
+	to: string,
+	/* body param is unused here, so you can omit or repurpose it */
+	body: string
 ): Promise<boolean> {
-    try {
-        await resend.emails.send({
-            from: 'Instafication <no-reply@transactional.instafication.shop>',
-            to,
-            subject: 'Välkommen till Instafication Premium!',
-            html: 'Välkommen till Instafication Premium!'
-        });
-        return true;
-    } catch (err: any) {
-        console.error(
-            `[Emailmanager] Error sending 'subscription welcome' email:`,
-            err
-        );
-        return false;
-    }
+	try {
+		await resend.emails.send({
+			from: 'Instafication <no-reply@transactional.instafication.shop>',
+			to,
+			subject: 'Välkommen till Instafication Premium!',
+			html: 'Välkommen till Instafication Premium!'
+		});
+		return true;
+	} catch (err: any) {
+		console.error(`[Emailmanager] Error sending 'subscription welcome' email:`, err);
+		return false;
+	}
 }
 
-async function sendEmail(
-    to: string,
-    subject: string,
-    html: string
-): Promise<boolean> {
-    console.log("[EmailManager -> sendEmail()]: Called")
-    try {
-        await resend.emails.send({
-            from: 'Instafication <no-reply@transactional.instafication.shop>',
-            to,
-            subject,
-            html
-        });
-        return true;
-    } catch (err: any) {
-        console.error(`[Emailmanager] Error sending generic email:`, err);
-        return false;
-    }
+async function sendEmail(to: string, subject: string, html: string): Promise<boolean> {
+	console.log('[EmailManager -> sendEmail()]: Called');
+	try {
+		await resend.emails.send({
+			from: 'Instafication <no-reply@transactional.instafication.shop>',
+			to,
+			subject,
+			html
+		});
+		return true;
+	} catch (err: any) {
+		console.error(`[Emailmanager] Error sending generic email:`, err);
+		return false;
+	}
 }
 
 async function sendLaundryNotification(
-    to: string,
-    area: string,
-    date: string,
-    time: string
+	to: string,
+	area: string,
+	date: string,
+	time: string
 ): Promise<boolean> {
-    const subject = `🚀 Ny tvättid hittad – ${date} ${time}`;
-    const html = `
+	const subject = `🚀 Ny tvättid hittad – ${date} ${time}`;
+	const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="text-align: center; background-color: #4F46E5; padding: 20px; border-radius: 10px 10px 0 0;">
             <h1 style="color: white; margin: 0;">Ny Tvättid Tillgänglig!</h1>
@@ -137,24 +124,24 @@ async function sendLaundryNotification(
     </div>
     `;
 
-    try {
-        await resend.emails.send({
-            from: 'Instafication <no-reply@transactional.instafication.shop>',
-            to,
-            subject,
-            html
-        });
-        return true;
-    } catch (err: any) {
-        console.error(`[Emailmanager] Error sending laundry notification email:`, err);
-        return false;
-    }
+	try {
+		await resend.emails.send({
+			from: 'Instafication <no-reply@transactional.instafication.shop>',
+			to,
+			subject,
+			html
+		});
+		return true;
+	} catch (err: any) {
+		console.error(`[Emailmanager] Error sending laundry notification email:`, err);
+		return false;
+	}
 }
 
 export {
-    SendEmailWhenUserIsCreated,
-    sendEmail,
-    SendEmailWhenSubscription,
-    SendEmailWhenSubscriptionProlonged,
-    sendLaundryNotification
+	SendEmailWhenUserIsCreated,
+	sendEmail,
+	SendEmailWhenSubscription,
+	SendEmailWhenSubscriptionProlonged,
+	sendLaundryNotification
 };

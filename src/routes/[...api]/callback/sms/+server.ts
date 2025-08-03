@@ -26,7 +26,6 @@
 //     console.log("SMS message: " + message);
 //     console.log("SMS command: " + command)
 
-
 //     EmailManager.sendEmail("SMS from: " + customersNumber, "SMS received from " + customersNumber + " with message: " + message);
 //     const userExists = await DatabaseManager.Profiles.userExistsByPhone(customersNumber);
 //     console.log(userExists);

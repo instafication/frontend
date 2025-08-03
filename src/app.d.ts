@@ -9,18 +9,17 @@ declare global {
 			db: ReturnType<typeof drizzle>;
 		}
 		interface Platform {
-			env: Env
-			cf: CfProperties
-			ctx: ExecutionContext
+			env: Env;
+			cf: CfProperties;
+			ctx: ExecutionContext;
 		}
 		interface Platform {
-			env: Env
-			cf: CfProperties
-			ctx: ExecutionContext
+			env: Env;
+			cf: CfProperties;
+			ctx: ExecutionContext;
 		}
 		// interface PageData {}
 	}
 }
 
-
-export { };
+export {};
