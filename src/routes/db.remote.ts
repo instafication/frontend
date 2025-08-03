@@ -15,7 +15,7 @@ import {
 } from '../../drizzle/schema';
 
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
-import { getUserId } from '$lib/Managers/AuthManager';
+import { getUser, getUserId } from '$lib/Managers/AuthManager';
 
 
 /*──────────────────────── SCRAPERS ──────────────────────*/
@@ -260,9 +260,9 @@ export const service_CreateOrUpdate = command(ServiceInsertSchema, async (payloa
     return res.success;
 });
 
-export const service_RemoveByServiceName = command(v.string(), async (serviceName: string) =>
-    await db()
+export const service_RemoveByUserIdAndServiceName = command(v.object({ userId: v.string(), serviceName: v.string() }), async ({ userId, serviceName }) => {
+    const res = await db()
         .delete(services)
-        .where(and(eq(services.user, await getUserId()), eq(services.name, serviceName)))
-        .then(r => r.success)
-);
+        .where(and(eq(services.user, userId), eq(services.name, serviceName)));
+    return res.success;
+});

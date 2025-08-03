@@ -8,7 +8,12 @@
 	import { showServicesModal } from '$lib/sharedStore';
 	import { t } from '$lib/i18n';
 	import { toast } from 'svelte-sonner';
-	import { service_GetConfigByCompanyName, service_RemoveByServiceName, service_CreateOrUpdate } from "../../../routes/db.remote"
+	import {
+		service_GetConfigByCompanyName,
+		service_RemoveByUserIdAndServiceName,
+		service_CreateOrUpdate
+	} from '../../../routes/db.remote';
+	import { getUserId } from '$lib/Managers/AuthManager';
 
 	const AREA_LIST = [
 		{ value: 'lappkärrsberget', label: 'lappkärrsberget' },
@@ -55,32 +60,29 @@
 		}
 		loading = true;
 
-		// Remove service from database if press inactive and also set all fields to empty
 		if (hasActiveService) {
-			const isRemoved: boolean = await service_RemoveByServiceName('Stockholms Studentbostäder');
+			console.log(hasActiveService);
+			const isRemoved: boolean = await service_RemoveByUserIdAndServiceName({userId: await getUserId(), "serviceName": "Stockholms Studentbostäder"});
 			if (isRemoved) {
 				toast.success('Bevakningen har tagits bort.');
 				hasActiveService = false;
-				// selectedNotificationMethod = "e-post";
-				// selectedWithinTime = "";
-				// selectedArea = "";
 			} else {
 				toast.error('Det gick inte att ta bort bevakningen.');
 			}
 		} else {
-			// const isCreated: boolean = await service_createOrUpdate(
-			// 	"a",
-			// 	"Stockholms Studentbostäder",
-			// 	selectedNotificationMethod,
-			// 	Number(selectedWithinTime),
-			// 	{ area: selectedArea }
-			// );
-			// if (isCreated) {
-			// 	toast.success('Bevakningen har skapats.');
-			// 	hasActiveService = true;
-			// } else {
-			// 	toast.error('Det gick inte att skapa bevakningen.');
-			// }
+			const isCreated: boolean = await service_CreateOrUpdate({
+				user: await getUserId(),
+				name: 'Stockholms Studentbostäder',
+				notificationMethod: selectedNotificationMethod,
+				notificationWithinTime: Number(selectedWithinTime),
+				options: { area: selectedArea }
+			});
+			if (isCreated) {
+				toast.success('Bevakningen har skapats.');
+				hasActiveService = true;
+			} else {
+				toast.error('Det gick inte att skapa bevakningen.');
+			}
 		}
 		loading = false;
 	}
@@ -103,7 +105,7 @@
 			>
 				<div class="flex items-center gap-4">
 					<div class="relative">
-						<Avatar src="/images/favicon-sssb.svg" alt="Logo" size="sm" />
+						<Avatar src="./images/sssb-favicon.svg" alt="SSSB Logo" size="sm" />
 						<span class="absolute -top-1 -right-1 flex h-3 w-3">
 							{#if hasActiveService}
 								<span

@@ -13,18 +13,14 @@ export const profiles = sqliteTable('profiles', {
 	raw_user_meta_data: text('raw_user_meta_data', { mode: 'json' })
 });
 
-export const services = sqliteTable(
-	'services',
-	{
-		id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),
-		user: text('user').notNull(),
-		name: text('name').notNull(),
-		notificationMethod: text('notification_method').notNull(),
-		notificationWithinTime: text('notification_within_time').notNull(),
-		options: text('options', { mode: 'json' }).default('{}')
-	},
-	(t) => [unique('services_user_name_unique').on(t.user, t.name)]
-);
+export const services = sqliteTable('services', {
+	id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),
+	user: text('user').notNull(),
+	name: text('name').notNull(),
+	notificationMethod: text('notification_method').notNull(),
+	notificationWithinTime: text('notification_within_time').notNull(),
+	options: text('options', { mode: 'json' }).default('{}')
+}, (t) => [unique('services_user_name_unique').on(t.user, t.name)]);
 
 export const scrapers = sqliteTable('scrapers', {
 	id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),

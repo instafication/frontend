@@ -13,10 +13,7 @@ function createSupabaseClient() {
 	return null;
 }
 
-// Initialize the Supabase client
 let supabase = createSupabaseClient();
-
-// Reinitialize the client when the module is loaded in the browser
 if (browser && !supabase) {
 	supabase = createSupabaseClient();
 }
@@ -39,7 +36,6 @@ async function getUserId(): Promise<string> {
 }
 
 async function isLoggedIn(): Promise<boolean> {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		return false;
 	}
@@ -60,7 +56,6 @@ async function signUp(
 	password: string,
 	isPremium: boolean = false
 ): Promise<boolean> {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		toast.error('Authentication not available');
 		return false;
@@ -101,14 +96,13 @@ async function signUp(
 }
 
 async function signInWithPassword(email: string, password: string): Promise<boolean> {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		toast.error('Authentication not available');
 		return false;
 	}
 
 	try {
-		const { data, error } = await supabase.auth.signInWithPassword({
+		const { error } = await supabase.auth.signInWithPassword({
 			email: email,
 			password: password
 		});
@@ -221,13 +215,13 @@ async function getUser() {
 }
 
 async function getUserEmail() {
-	const {
-		data: { user }
-	} = await getUser();
+	const userResponse = await getUser();
+	const user = userResponse?.data?.user;
 	return user?.email || '';
 }
 
 export {
+	supabase,
 	signUp,
 	signInWithPassword,
 	signInWithOAuth,
@@ -236,7 +230,6 @@ export {
 	isLoggedIn,
 	getUserId,
 	updateEmail,
-	supabase,
 	getUser,
 	getUserEmail
 };

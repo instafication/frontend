@@ -28,11 +28,9 @@
 		<!-- right-hand tools -->
 		<div class="flex items-center gap-2">
 			<LanguageSelector />
-			<!-- log-in -->
 			<Button
 				variant="outline"
 				onclick={() => {
-					console.log('Login button clicked');
 					$showLoginModal = true;
 				}}
 				color="alternative"

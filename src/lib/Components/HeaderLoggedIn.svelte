@@ -12,20 +12,13 @@
 	import { Button } from './ui/button';
 	import { profile_GetCreditsByUserId } from "../../routes/db.remote"
 
-	/* ——— state ——— */
 	let id = $state('');
 	let email = $state<string>('');
-	let phone = $state<string>('');
 	let credits = $state<number>(0);
-	// let userMeta = $state<Record<string, unknown>>({});
 
-
-	/* fetch user-data once */
 	onMount(async () => {
 		id = await getUserId()
 		credits = await profile_GetCreditsByUserId(id)
-		console.log("Credits: ")
-		console.log(credits);
 		// [email, phone, credits] = await Promise.all([
 		// 	trpc.email.query(id),
 		// 	trpc.phone.query(id),
