@@ -8,7 +8,7 @@
 	import { showServicesModal } from '$lib/sharedStore';
 	import { t } from '$lib/i18n';
 	import { toast } from 'svelte-sonner';
-	import { service_GetConfigByCompanyName, service_RemoveByServiceName, service_createOrUpdate } from "../../../routes/db.remote"
+	import { service_GetConfigByCompanyName, service_RemoveByServiceName, service_CreateOrUpdate } from "../../../routes/db.remote"
 
 	const AREA_LIST = [
 		{ value: 'lappkärrsberget', label: 'lappkärrsberget' },
