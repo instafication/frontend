@@ -56,8 +56,6 @@ model services {
 
 async function createService(name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<boolean> {
     const UUID = await getUserId();
-    
-    // Check if user is logged in
     if (!UUID) {
         toast.error("You must be logged in to create a service");
         throw new Error("User not authenticated");
@@ -77,7 +75,7 @@ async function createService(name: string, notificationMethod: string, notificat
         console.log(response);
         return response;
     } catch (error) {
-        toast.error("Failed to create service: ", error);
+        toast.error("Failed to create service");
         console.error(error);
         throw error;
     }

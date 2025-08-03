@@ -350,16 +350,10 @@ export class DatabaseManager {
             const result = await db().select()
                 .from(services)
                 .where(sql`options->>'${sql.raw(key)}' = ${value}`);
-
-            console.log(result);
             return result;
         }
 
-        public static async createService(user: string, name: string, notificationMethod: string, notificationWithinTime: number, options: {}) {
-
-            console.log(user, name, notificationMethod, notificationWithinTime, options);
-
-            // Check if a record with the same user and name combination exists
+        public static async createService(user: string, name: string, notificationMethod: string, notificationWithinTime: number, options: {}): Promise<boolean> {
             const existingService = await db().select()
                 .from(services)
                 .where(and(
@@ -368,42 +362,37 @@ export class DatabaseManager {
                 ))
                 .limit(1);
 
-            console.log("existingService: ", existingService.length);
-
-            let result;
-
+            let res;
             if (existingService.length === 0) {
                 // If the record doesn't exist, create a new one
-                result = await db().insert(services).values({
+                res = await db().insert(services).values({
                     user: user,
                     name: name,
                     notificationMethod: notificationMethod,
                     notificationWithinTime: notificationWithinTime.toString(),
                     options: options
                 });
-                console.log("[Databasemanager] Created service: " + result.count);
             } else {
                 // If the record exists, update it
-                result = await db().update(services)
+                res = await db().update(services)
                     .set({
                         notificationMethod: notificationMethod,
                         notificationWithinTime: notificationWithinTime.toString(),
                         options: options
                     })
                     .where(eq(services.id, existingService[0].id));
-                console.log(`[Databasemanager] Updated service: ${result.count}`);
             }
-
-            return result.count > 0;
+            return res.success;
         }
 
         public static async removeServiceNameByUserId(user: string, name: string): Promise<boolean> {
-            const result = await db().delete(services).where(and(
+            const r = await db().delete(services).where(and(
                 eq(services.user, user),
                 eq(services.name, name)
             ));
-            console.log(`[Databasemanager] Removed service: ${result.count}`);
-            return result.count > 0;
+            console.log(`[Databasemanager] Removed service: ${r}`);
+            console.log(r);
+            return r.success;
         }
     }
 }
