@@ -6,6 +6,7 @@ declare global {
 		interface Locals {
 			// user: User;
 			language: string;
+			db: ReturnType<typeof drizzle>;
 		}
 		interface Platform {
 			env: Env

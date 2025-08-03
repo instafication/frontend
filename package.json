@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "vite dev",
+    "dev:wrangler": "vite build && wrangler dev --x-remote-bindings",
     "build": "vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -19,6 +20,7 @@
     "deploy": "bun run build && bun run cf:typegen && wrangler deploy --minify",
     "generate": "drizzle-kit generate",
     "push": "drizzle-kit push",
+    "migrate:prod": "drizzle-kit generate && wrangler d1 migrations apply prod --remote",
     "studio": "drizzle-kit studio",
     "clean": "rm -rf .svelte-kit && rm -rf node_modules && rm -rf .wrangler && rm -rf .svelte-kit && rm -f bun.lock && rm -f package-lock.json && bun i"
   },
@@ -54,7 +56,6 @@
     "eslint-plugin-svelte": "^3.11.0",
     "mode-watcher": "^1.1.0",
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
     "svelte": "^5.37.2",
     "svelte-check": "^4.3.0",
     "svelte-flags": "^2.0.1",
@@ -62,7 +63,7 @@
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5.9.2",
-    "vite": "^7.0.6",
+    "vite": "npm:rolldown-vite@latest",
     "wrangler": "^4.27.0"
   }
 }

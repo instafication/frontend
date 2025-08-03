@@ -173,11 +173,11 @@ export const appRouter = t.router({
         return notifications;
     }),
     getLatestNotifications: t.procedure
-        .input(z.number().optional().default(5))
+        .input(z.number().optional().default(3))
         .query(async ({ input }) => {
-            console.log(input);
-            const notifications =
-                await DatabaseManager.Notifications.getLatestNotifications(input);
+            const notifications = await DatabaseManager.Notifications.getLatestNotifications(input);
+            console.log("BB");
+            console.log(notifications);
             return notifications;
         }),
     

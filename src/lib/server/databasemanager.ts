@@ -1,25 +1,21 @@
 import { generateRandomUUID } from '../Inbox/Utils';
-import { DATABASE_URL } from '$env/static/private';
 import {
     profiles,
     services,
     scrapers,
     notifications
-} from '../../drizzle';
+} from '../../../drizzle';
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
+import { db } from '$lib/db';
 
 // ============= NEON SERVERLESS WS DRIVER (WORKS WITH SUPABASE)
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from 'ws';
-neonConfig.webSocketConstructor = ws;
-const pool = new Pool({ connectionString: DATABASE_URL });
-const db = drizzle({ client: pool });
-
-// import { neon } from '@neondatabase/serverless';
-// import { drizzle } from 'drizzle-orm/neon-http';
-// const clientDriver = neon(DATABASE_URL!);
-// const db = drizzle({ client: clientDriver });
+import { DATABASE_URL } from '$env/static/private';
+// import { Pool, neonConfig } from '@neondatabase/serverless';
+// import { drizzle } from 'drizzle-orm/neon-serverless';
+// import ws from 'ws';
+// neonConfig.webSocketConstructor = ws;
+// const pool = new Pool({ connectionString: DATABASE_URL });
+// const db = drizzle({ client: pool });
 
 
 export class DatabaseManager {
@@ -30,7 +26,7 @@ export class DatabaseManager {
 
             // Note: Drizzle doesn't have direct JSON path support like Prisma
             // We'll need to handle this differently, possibly with raw SQL
-            const r = await db.update(scrapers)
+            const r = await db().update(scrapers)
                 .set({ last_ping: BigInt(unixTimestamp) })
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`);
 
@@ -40,7 +36,7 @@ export class DatabaseManager {
         public static async existsByCompanyNameAndParamValue(k: string, v: any): Promise<boolean> {
             // Note: Drizzle doesn't have direct JSON path support like Prisma
             // We'll need to handle this differently, possibly with raw SQL
-            const r = await db.select().from(scrapers)
+            const r = await db().select().from(scrapers)
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`)
                 .limit(1);
 
@@ -49,7 +45,7 @@ export class DatabaseManager {
 
         public static async createScraper(scraper: typeof scrapers.$inferSelect): Promise<boolean> {
             try {
-                const result = await db.insert(scrapers).values({
+                const result = await db().insert(scrapers).values({
                     company: scraper.company,
                     services: scraper.services || [],
                     last_ping: BigInt(Date.now()),
@@ -67,7 +63,7 @@ export class DatabaseManager {
         public static async updateLastUpdatedByCompanyAndParam(k: string, v: any, last_update: number): Promise<boolean> {
             // Note: Drizzle doesn't have direct JSON path support like Prisma
             // We'll need to handle this differently, possibly with raw SQL
-            const r = await db.update(scrapers)
+            const r = await db().update(scrapers)
                 .set({ last_update: BigInt(last_update) })
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`);
 
@@ -77,7 +73,7 @@ export class DatabaseManager {
         public static async getLastUpdated(k: string, v: any): Promise<number> {
             // Note: Drizzle doesn't have direct JSON path support like Prisma
             // We'll need to handle this differently, possibly with raw SQL
-            const r = await db.select({ last_update: scrapers.last_update }).from(scrapers)
+            const r = await db().select({ last_update: scrapers.last_update }).from(scrapers)
                 .where(sql`params->>'${sql.raw(k)}' = ${v}`)
                 .limit(1);
 
@@ -86,11 +82,11 @@ export class DatabaseManager {
 
         public static async getLastUpdateByCompanyName(companyName: string): Promise<number> {
             // Get the most recent last_update time for all scrapers of a company
-            const r = await db.select({ last_update: scrapers.last_update }).from(scrapers)
+            const r = await db().select({ last_update: scrapers.last_update }).from(scrapers)
                 .where(eq(scrapers.company, companyName))
                 .orderBy(desc(scrapers.last_update))
                 .limit(1);
-            
+
             console.log(r);
 
             return Number(r[0]?.last_update) || -1;
@@ -99,14 +95,14 @@ export class DatabaseManager {
 
     public static Profiles = class {
         public static async updateProfileById(id: string, email: string, phone: string) {
-            const result = await db.update(profiles)
+            const result = await db().update(profiles)
                 .set({ email, phone })
                 .where(eq(profiles.id, id));
             return result.count > 0;
         }
 
         public static async getRawUserData(id: string): Promise<{}> {
-            const result = await db.select({ raw_user_meta_data: profiles.raw_user_meta_data })
+            const result = await db().select({ raw_user_meta_data: profiles.raw_user_meta_data })
                 .from(profiles)
                 .where(eq(profiles.id, id))
                 .limit(1);
@@ -119,7 +115,7 @@ export class DatabaseManager {
         }
 
         public static async getCreditsById(id: string): Promise<number> {
-            const result = await db.select({ credits: profiles.credits })
+            const result = await db().select({ credits: profiles.credits })
                 .from(profiles)
                 .where(eq(profiles.id, id))
                 .limit(1);
@@ -132,7 +128,7 @@ export class DatabaseManager {
         }
 
         public static async getCreditsByPhone(phone: string): Promise<number> {
-            const result = await db.select({ credits: profiles.credits })
+            const result = await db().select({ credits: profiles.credits })
                 .from(profiles)
                 .where(eq(profiles.phone, phone))
                 .limit(1);
@@ -142,7 +138,7 @@ export class DatabaseManager {
         }
 
         public static async getPhoneById(id: string): Promise<string> {
-            const result = await db.select({ phone: profiles.phone })
+            const result = await db().select({ phone: profiles.phone })
                 .from(profiles)
                 .where(eq(profiles.id, id))
                 .limit(1);
@@ -151,7 +147,7 @@ export class DatabaseManager {
         }
 
         public static async getEmailById(id: string): Promise<string> {
-            const result = await db.select({ email: profiles.email })
+            const result = await db().select({ email: profiles.email })
                 .from(profiles)
                 .where(eq(profiles.id, id))
                 .limit(1);
@@ -160,7 +156,7 @@ export class DatabaseManager {
         }
 
         public static async getUserIdByPhone(phone: string): Promise<string> {
-            const result = await db.select({ id: profiles.id })
+            const result = await db().select({ id: profiles.id })
                 .from(profiles)
                 .where(eq(profiles.phone, phone))
                 .limit(1);
@@ -169,7 +165,7 @@ export class DatabaseManager {
         }
 
         public static async checkIfPhoneNumberExistsInRows(phone: string): Promise<boolean> {
-            const result = await db.select()
+            const result = await db().select()
                 .from(profiles)
                 .where(eq(profiles.phone, phone));
 
@@ -177,7 +173,7 @@ export class DatabaseManager {
         }
 
         public static async userExistsByPhone(phone: string): Promise<boolean> {
-            const result = await db.select()
+            const result = await db().select()
                 .from(profiles)
                 .where(eq(profiles.phone, phone))
                 .limit(1);
@@ -186,11 +182,11 @@ export class DatabaseManager {
         }
 
         public static async removeUser(id: string) {
-            await db.delete(profiles).where(eq(profiles.id, id));
+            await db().delete(profiles).where(eq(profiles.id, id));
         }
 
         public static async getUserById(id: string) {
-            const result = await db.select()
+            const result = await db().select()
                 .from(profiles)
                 .where(eq(profiles.id, id))
                 .limit(1);
@@ -199,13 +195,13 @@ export class DatabaseManager {
         }
 
         public static async getUsersWithCredits() {
-            return await db.select()
+            return await db().select()
                 .from(profiles)
                 .where(gt(profiles.credits, 0));
         }
 
         public static async getUsersWithCreditsByUserIds(ids: string[]) {
-            return await db.select()
+            return await db().select()
                 .from(profiles)
                 .where(and(
                     gt(profiles.credits, 0),
@@ -214,7 +210,7 @@ export class DatabaseManager {
         }
 
         public static async removeOneCreditFromUserID(id: string): Promise<boolean> {
-            const result = await db.update(profiles)
+            const result = await db().update(profiles)
                 .set({
                     credits: sql`${profiles.credits} - 1`
                 })
@@ -228,7 +224,7 @@ export class DatabaseManager {
             const futureDate: Date = new Date(now.getTime() + daysToProlong * 24 * 60 * 60 * 1000);
             const futureTimestamp: number = Math.floor(futureDate.getTime() / 1000);
 
-            const result = await db.update(profiles)
+            const result = await db().update(profiles)
                 .set({
                     subscription_expiration_date: futureTimestamp.toString(),
                     credits: 500
@@ -239,7 +235,7 @@ export class DatabaseManager {
         }
 
         public static async RefillByEmail(email: string, credits: number): Promise<boolean> {
-            const user = await db.select()
+            const user = await db().select()
                 .from(profiles)
                 .where(eq(profiles.email, email))
                 .limit(1);
@@ -253,7 +249,7 @@ export class DatabaseManager {
                 newCredits = user[0].credits + credits;
             }
 
-            const result = await db.update(profiles)
+            const result = await db().update(profiles)
                 .set({ credits: newCredits })
                 .where(eq(profiles.email, email));
 
@@ -261,11 +257,11 @@ export class DatabaseManager {
         }
 
         public static async getAllUsers() {
-            return await db.select().from(profiles);
+            return await db().select().from(profiles);
         }
 
         public static async getUserCreditsByID(id: string): Promise<number> {
-            const result = await db.select({ credits: profiles.credits })
+            const result = await db().select({ credits: profiles.credits })
                 .from(profiles)
                 .where(eq(profiles.id, id))
                 .limit(1);
@@ -284,7 +280,7 @@ export class DatabaseManager {
                 id = generateRandomUUID();
 
             try {
-                const result = await db.insert(notifications).values({
+                const result = await db().insert(notifications).values({
                     id: id,
                     title: title,
                     body: body,
@@ -301,32 +297,40 @@ export class DatabaseManager {
         }
 
         public static async getNotificationsByArea(area: string) {
-            return await db.select()
+            return await db().select()
                 .from(notifications)
                 .where(eq(notifications.area, area));
         }
 
         public static async getAllNotifications() {
-            return await db.select().from(notifications);
+            const res = await db().select().from(notifications);
+            return res;
         }
 
-        public static async getLatestNotifications(count: number = 5) {
-            return await db.select()
-                .from(notifications)
-                .orderBy(desc(notifications.date))
-                .limit(count);
+        public static async getLatestNotifications(count: number = 3) {
+            try {
+                return await db().select().from(notifications)
+                    .orderBy(desc(notifications.date))
+                    .limit(count);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 
     public static Scrapers = class {
         public static async getAllScrapers() {
-            return await db.select().from(scrapers);
+            const [row] = await db()
+                .select().from(scrapers);
+            console.log("AA");
+            console.log(row);
+            return await db().select().from(scrapers);
         }
     }
 
     public static Services = class {
         public static async getServiceConfiguration(user: string, name: string): Promise<any> {
-            const result = await db.select()
+            const result = await db().select()
                 .from(services)
                 .where(and(
                     eq(services.user, user),
@@ -343,7 +347,7 @@ export class DatabaseManager {
         public static async getUserIdsByOptions(key: string, value: any): Promise<any> {
             // Note: Drizzle doesn't have direct JSON path support like Prisma
             // We'll need to handle this differently, possibly with raw SQL
-            const result = await db.select()
+            const result = await db().select()
                 .from(services)
                 .where(sql`options->>'${sql.raw(key)}' = ${value}`);
 
@@ -356,7 +360,7 @@ export class DatabaseManager {
             console.log(user, name, notificationMethod, notificationWithinTime, options);
 
             // Check if a record with the same user and name combination exists
-            const existingService = await db.select()
+            const existingService = await db().select()
                 .from(services)
                 .where(and(
                     eq(services.user, user),
@@ -370,7 +374,7 @@ export class DatabaseManager {
 
             if (existingService.length === 0) {
                 // If the record doesn't exist, create a new one
-                result = await db.insert(services).values({
+                result = await db().insert(services).values({
                     user: user,
                     name: name,
                     notificationMethod: notificationMethod,
@@ -380,7 +384,7 @@ export class DatabaseManager {
                 console.log("[Databasemanager] Created service: " + result.count);
             } else {
                 // If the record exists, update it
-                result = await db.update(services)
+                result = await db().update(services)
                     .set({
                         notificationMethod: notificationMethod,
                         notificationWithinTime: notificationWithinTime.toString(),
@@ -394,7 +398,7 @@ export class DatabaseManager {
         }
 
         public static async removeServiceNameByUserId(user: string, name: string): Promise<boolean> {
-            const result = await db.delete(services).where(and(
+            const result = await db().delete(services).where(and(
                 eq(services.user, user),
                 eq(services.name, name)
             ));

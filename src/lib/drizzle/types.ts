@@ -3,7 +3,7 @@ import type {
   services,
   scrapers,
   notifications
-} from '../../drizzle';
+} from '../../../drizzle';
 
 // Export types for the Drizzle schema
 export type Profile = typeof profiles.$inferSelect;
