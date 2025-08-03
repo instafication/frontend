@@ -210,14 +210,12 @@ async function getUser() {
 		toast.error('Authentication not available');
 		return;
 	}
-
 	return await supabase.auth.getUser();
 }
 
-async function getUserEmail() {
+async function getUserEmail(): Promise<string> {
 	const userResponse = await getUser();
-	const user = userResponse?.data?.user;
-	return user?.email || '';
+	return userResponse?.data.user?.email ?? "";
 }
 
 export {

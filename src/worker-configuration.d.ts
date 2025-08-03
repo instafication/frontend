@@ -3,8 +3,8 @@
 // Runtime types generated with workerd@1.20250730.0 2025-07-31 nodejs_compat
 declare namespace Cloudflare {
 	interface Env {
-		NODE_VERSION: '24.4.1';
-		ENVIRONMENT: 'production';
+		NODE_VERSION: "24.4.1";
+		ENVIRONMENT: "production";
 		RESEND_API_KEY: string;
 		CLOUDFLARE_ACCOUNT_ID: string;
 		CLOUDFLARE_DATABASE_ID: string;
@@ -27,27 +27,7 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv
-		extends StringifyValues<
-			Pick<
-				Cloudflare.Env,
-				| 'NODE_VERSION'
-				| 'ENVIRONMENT'
-				| 'RESEND_API_KEY'
-				| 'CLOUDFLARE_ACCOUNT_ID'
-				| 'CLOUDFLARE_DATABASE_ID'
-				| 'CLOUDFLARE_D1_TOKEN'
-				| 'PUBLIC_SUPABASE_URL'
-				| 'PUBLIC_SUPABASE_ANON_KEY'
-				| 'DATABASE_URL'
-				| 'DB_PASSWORD'
-				| 'PUBLIC_POSTHOG_KEY'
-				| 'PUBLIC_POSTHOG_HOST'
-				| 'STRIPE_PUBLISHABLE_KEY'
-				| 'STRIPE_SECRET_KEY'
-				| 'STRIPE_WEBHOOK_SECRET'
-			>
-		> {}
+	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "NODE_VERSION" | "ENVIRONMENT" | "RESEND_API_KEY" | "CLOUDFLARE_ACCOUNT_ID" | "CLOUDFLARE_DATABASE_ID" | "CLOUDFLARE_D1_TOKEN" | "PUBLIC_SUPABASE_URL" | "PUBLIC_SUPABASE_ANON_KEY" | "DATABASE_URL" | "DB_PASSWORD" | "PUBLIC_POSTHOG_KEY" | "PUBLIC_POSTHOG_HOST" | "STRIPE_PUBLISHABLE_KEY" | "STRIPE_SECRET_KEY" | "STRIPE_WEBHOOK_SECRET">> {}
 }
 
 // Begin runtime types
