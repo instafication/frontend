@@ -1,4 +1,3 @@
-import { generateRandomUUID } from '../Inbox/Utils';
 import {
     profiles,
     services,
@@ -7,16 +6,6 @@ import {
 } from '../../../drizzle';
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 import { db } from '$lib/db';
-
-// ============= NEON SERVERLESS WS DRIVER (WORKS WITH SUPABASE)
-import { DATABASE_URL } from '$env/static/private';
-// import { Pool, neonConfig } from '@neondatabase/serverless';
-// import { drizzle } from 'drizzle-orm/neon-serverless';
-// import ws from 'ws';
-// neonConfig.webSocketConstructor = ws;
-// const pool = new Pool({ connectionString: DATABASE_URL });
-// const db = drizzle({ client: pool });
-
 
 export class DatabaseManager {
 
@@ -275,25 +264,14 @@ export class DatabaseManager {
     }
 
     public static Notifications = class {
-        public static async createNotification({ id = "", title = "", body = "", area = "", date = "" }: { id?: string, title?: string, body?: string, area?: string, date?: string }) {
-            if (id === "")
-                id = generateRandomUUID();
-
-            try {
-                const result = await db().insert(notifications).values({
-                    id: id,
-                    title: title,
-                    body: body,
-                    area: area,
-                    date: date ? new Date(date) : undefined
-                });
-
-                console.log(`[Databasemanager] Created notification: ${result.count > 0}`);
-                return result.count > 0;
-            } catch (error) {
-                console.error("[DatabaseManager] Error creating notification:", error);
-                return false;
-            }
+        public static async createNotification({ id = "", title = "", body = "", area = "", date = "" }: { id?: string, title?: string, body?: string, area?: string, date?: string }): Promise<boolean> {
+            const result = await db().insert(notifications).values({
+                title: title,
+                body: body,
+                area: area,
+                date: date ? Number(new Date(date)) : undefined
+            });
+            return result.success;
         }
 
         public static async getNotificationsByArea(area: string) {
@@ -303,8 +281,7 @@ export class DatabaseManager {
         }
 
         public static async getAllNotifications() {
-            const res = await db().select().from(notifications);
-            return res;
+            return await db().select().from(notifications);
         }
 
         public static async getLatestNotifications(count: number = 3) {
