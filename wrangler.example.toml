@@ -1,0 +1,48 @@
+name = "frontend"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2025-07-31"
+
+routes = [
+  { pattern = "instafication.shop", custom_domain = true }
+]
+
+[assets]
+directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"
+
+[observability.logs]
+enabled = true
+
+[placement]
+mode = "smart"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "prod"
+database_id = "" # 13343-3211-1234-aeab-ea0a2fa81a6d"
+migrations_dir = "drizzle/migrations"
+experimental_remote = true
+
+[vars]
+NODE_VERSION = "24.4.1"
+ENVIRONMENT = "production"
+
+RESEND_API_KEY="" # re_AAAmwAAA_MW4D5qz4BoAMof1nugRXnmA7"
+
+CLOUDFLARE_ACCOUNT_ID="" # 0AAAA391e70VVBBBB433693af250bda9"
+CLOUDFLARE_DATABASE_ID="" # AAAAAAAA-VVV2-4e54-aeab-ea0a2fa81a6d"
+CLOUDFLARE_D1_TOKEN="" # ykEaZAVAAAAA07NSjeVLLapLAHDf34678TvgYj4g_l"
+
+# Using Supabase for auth, replace with Better auth?
+PUBLIC_SUPABASE_URL="" # https://aaaaaaaaabbtovqtobkv.supabase.co"
+PUBLIC_SUPABASE_ANON_KEY="" # sb_publishable_5-Aaaaaaaaaaaaaaaaaa-g_bbbbbbbb"
+DATABASE_URL="" # postgresql://postgres.bbbbbbbbbbbbbbbbbbbb:[PASSOWRD-HERE]@aws-0-eu-north-1.pooler.supabase.com:5432/postgres?sslmode=no-verify"
+DB_PASSWORD="" # CCCCCCCCCCCCCCC"
+
+PUBLIC_POSTHOG_KEY="" # phc_AVCCKOIJEIUWHGEYUEILTzlVfThdLuh7wtYH"
+PUBLIC_POSTHOG_HOST="" # https://eu.i.posthog.com"
+
+STRIPE_PUBLISHABLE_KEY=""
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""

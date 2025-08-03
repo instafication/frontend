@@ -121,8 +121,8 @@ export const appRouter = t.router({
         }))
         .query(async ({ input }) => {
             const { user, name } = input;
-            const response: boolean = await DatabaseManager.Services.removeServiceNameByUserId(user, name);
-            return response;
+            const isRemoved: boolean = await DatabaseManager.Services.removeServiceNameByUserId(user, name);
+            return isRemoved;
         }),
 
     raw_user_meta_data: t.procedure
@@ -173,11 +173,9 @@ export const appRouter = t.router({
         return notifications;
     }),
     getLatestNotifications: t.procedure
-        .input(z.number().optional().default(5))
+        .input(z.number().optional().default(3))
         .query(async ({ input }) => {
-            console.log(input);
-            const notifications =
-                await DatabaseManager.Notifications.getLatestNotifications(input);
+            const notifications = await DatabaseManager.Notifications.getLatestNotifications(input);
             return notifications;
         }),
     

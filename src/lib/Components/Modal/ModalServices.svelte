@@ -67,13 +67,11 @@
 
     // Remove service from database if press inactive and also set all fields to empty
     if (hasActiveService) {
-      const isErrorWhenRemoving: boolean = await removeService(
+      const isRemoved: boolean = await removeService(
         "Stockholms Studentbostäder",
       );
-      console.log(isErrorWhenRemoving);
-      if (!isErrorWhenRemoving) {
+      if (isRemoved) {
         toast.success("Bevakningen har tagits bort.");
-        // Update UI state immediately
         hasActiveService = false;
         // selectedNotificationMethod = "e-post";
         // selectedWithinTime = "";
@@ -82,13 +80,13 @@
         toast.error("Det gick inte att ta bort bevakningen.");
       }
     } else {
-      const errorWhenCreating: boolean = await createService(
+      const isCreated: boolean = await createService(
         "Stockholms Studentbostäder",
         selectedNotificationMethod,
         Number(selectedWithinTime),
         { area: selectedArea },
       );
-      if (!errorWhenCreating) {
+      if (isCreated) {
         toast.success("Bevakningen har skapats.");
         hasActiveService = true;
       } else {

@@ -6,6 +6,12 @@ declare global {
 		interface Locals {
 			// user: User;
 			language: string;
+			db: ReturnType<typeof drizzle>;
+		}
+		interface Platform {
+			env: Env
+			cf: CfProperties
+			ctx: ExecutionContext
 		}
 		interface Platform {
 			env: Env

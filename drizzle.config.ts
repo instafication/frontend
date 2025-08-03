@@ -1,12 +1,14 @@
-import { defineConfig } from 'drizzle-kit';
+import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-    dialect: 'postgresql',
-    schema: './src/drizzle/schema.ts',
-    out: './src/drizzle',
-    /* ── use the Supabase Session pooler URL (IPv4 compatible) ── */
+    dialect: "sqlite",
+    driver: "d1-http",
+    schema: './drizzle/schema.ts',
+    out: './drizzle/migrations',
     dbCredentials: {
-        url: process.env.DATABASE_URL!, // e.g. "postgresql://postgres.<project_ref>:<pw>@aws-0-eu-north-1.pooler.supabase.com:5432/postgres?sslmode=no-verify"
+        accountId: process.env.CLOUDFLARE_ACCOUNT_ID!,
+        databaseId: process.env.CLOUDFLARE_DATABASE_ID!,
+        token: process.env.CLOUDFLARE_D1_TOKEN!,
     },
     verbose: true,
 });
