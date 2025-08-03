@@ -25,15 +25,6 @@ export const scraper_GetAll = query(async () =>
         .from(scrapers)
 );
 
-export const scraper_GetLastUpdated = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
-    await db()
-        .select({ last_update: scrapers.last_update })
-        .from(scrapers)
-        .where(sql`params->>'${sql.raw(key)}' = ${value}`)
-        .limit(1)
-        .then(r => Number(r[0]?.last_update) || -1)
-);
-
 export const scraper_GetLastUpdateByCompanyName = query(v.string(), async (companyName: string): Promise<number> =>
     await db()
         .select({ last_update: scrapers.last_update })
@@ -41,7 +32,7 @@ export const scraper_GetLastUpdateByCompanyName = query(v.string(), async (compa
         .where(eq(scrapers.company, companyName))
         .orderBy(desc(scrapers.last_update))
         .limit(1)
-        .then(r => Number(r[0]?.last_update) || -1)
+        .then(r => r[0].last_update || -1)
 );
 
 export const scraper_Exists = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
