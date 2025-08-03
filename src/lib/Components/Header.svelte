@@ -14,7 +14,7 @@
 		<!-- logo / brand -->
 		<NavBrand href="/">
 			<img
-				src="/images/instafication-logo-symbol-1.png"
+				src="/images/instafication-logo-symbol-1.avif"
 				class="mr-3 h-6 sm:h-9"
 				alt="Instafication Logo"
 			/>

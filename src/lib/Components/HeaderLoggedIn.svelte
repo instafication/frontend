@@ -41,7 +41,7 @@
 	>
 		<NavBrand href="/">
 			<img
-				src="/images/instafication-logo-symbol-1.png"
+				src="/images/instafication-logo-symbol-1.avif"
 				class="mr-3 h-6 sm:h-9"
 				alt="Instafication logo"
 			/>
@@ -64,7 +64,7 @@
 			<DropdownMenu.Root class="px-4">
 				<DropdownMenu.Trigger class="hover:cursor-pointer">
 					<Avatar.Root>
-						<Avatar.Image src="https://github.com/shadcn.png" alt="Logo" />
+						<Avatar.Image src="./images/profile.avif" alt="Profile Logo" />
 						<Avatar.Fallback>CN</Avatar.Fallback>
 					</Avatar.Root>
 				</DropdownMenu.Trigger>

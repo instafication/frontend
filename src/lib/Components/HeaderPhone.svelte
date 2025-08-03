@@ -52,7 +52,7 @@
 						transform="translate(24 24)"
 						clip-path="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)"
 					>
-						<img src="./images/screenshot-phone.png" alt="Phone screenshot" />
+						<img src="./images/screenshot-phone.avif" alt="Phone screenshot" />
 					</foreignObject>
 				</svg>
 			</div>
