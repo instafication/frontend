@@ -4,12 +4,12 @@
 	import { t } from '$lib/i18n';
 	import { onMount } from 'svelte';
 	import Activity from '@lucide/svelte/icons/activity';
-	import { scraper_getLastUpdateByCompany } from '$routes/db.remote';
+	import { scraper_getLastUpdateByCompanyName } from '../../routes/db.remote';
+	import type { Scraper } from '../../../drizzle/schema';
 
 	let lastSearchedMinutes = $state(0);
 	let loading = $state(true);
 
-	// Function to calculate minutes since last search
 	function calculateMinutesSince(timestamp: number): number {
 		if (timestamp <= 0) return 0;
 		const now = Date.now();
@@ -17,12 +17,11 @@
 		return Math.floor(diffMs / 60000);
 	}
 
-	// Function to fetch last update time from database
 	async function fetchLastUpdateTime() {
 		try {
 			loading = true;
-			const data = await scraper_getLastUpdateByCompany('Stockholms Studentbostäder');
-			lastSearchedMinutes = calculateMinutesSince(data.lastUpdate);
+			const companyScraper = await scraper_getLastUpdateByCompanyName('Stockholms Studentbostäder');
+			lastSearchedMinutes = calculateMinutesSince(companyScraper. ?? 0);
 		} catch (_err) {
 			lastSearchedMinutes = 0;
 		} finally {
@@ -30,7 +29,6 @@
 		}
 	}
 
-	// Fetch the last update time when component mounts
 	onMount(() => {
 		fetchLastUpdateTime();
 	});

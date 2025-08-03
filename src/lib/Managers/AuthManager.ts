@@ -80,7 +80,7 @@ async function signUp(
 	}
 
 	try {
-		const { data, error } = await supabase.auth.signUp({
+		const { error } = await supabase.auth.signUp({
 			email,
 			password,
 			options: {
@@ -128,7 +128,6 @@ async function signInWithPassword(email: string, password: string): Promise<bool
 }
 
 async function signInWithOAuth(provider: Provider = 'google') {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		toast.error('Authentication not available');
 		return;
@@ -136,7 +135,7 @@ async function signInWithOAuth(provider: Provider = 'google') {
 
 	try {
 		console.log(`Started login with provider: ${provider}`);
-		const { data, error } = await supabase.auth.signInWithOAuth({ provider: provider });
+		const { error } = await supabase.auth.signInWithOAuth({ provider: provider });
 
 		if (error) {
 			toast.error(error.message);
@@ -150,7 +149,6 @@ async function signInWithOAuth(provider: Provider = 'google') {
 }
 
 async function resetPasswordForEmail(email: string) {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		toast.error('Authentication not available');
 		return;
@@ -162,7 +160,6 @@ async function resetPasswordForEmail(email: string) {
 		if (error) {
 			toast.error(error.message);
 		} else {
-			// Implement i18n for this
 			toast.success('Check your email to reset your password.');
 		}
 	} catch (error) {
@@ -172,14 +169,13 @@ async function resetPasswordForEmail(email: string) {
 }
 
 async function updateEmail(email: string): Promise<boolean> {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		toast.error('Authentication not available');
 		return false;
 	}
 
 	try {
-		const { data, error } = await supabase.auth.updateUser({
+		const { error } = await supabase.auth.updateUser({
 			email: email
 		});
 
@@ -198,7 +194,6 @@ async function updateEmail(email: string): Promise<boolean> {
 }
 
 async function signOut() {
-	// Check if we're in the browser and have a Supabase client
 	if (!browser || !supabase) {
 		return;
 	}

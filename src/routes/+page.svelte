@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Timeline, Button, Modal } from 'flowbite-svelte';
 	import { showInformationModal, showRegisterModal, showLoginModal } from '$lib/sharedStore';
-	import { getLatestNotifications } from '$lib/Managers/NotificationManager';
+	import { notification_getLatest } from '../routes/db.remote';
 	import TimelineItem from '$lib/Components/TimelineItem.svelte';
 	import CardWithList from '$lib/Components/BrandsOnLandingPage.svelte';
 	import { t } from '$lib/i18n';
@@ -60,11 +60,6 @@
 		class=" bg-slate-0 dark:bg-gray-900 border-gray-200 grid grid-rows-1 md:grid-rows-2 gap-4 place-items-start justify-self-center md:justify-self-end"
 	>
 		<CardWithList />
-
-		<!-- <div class="max-w-screen-md lg:mb-16 bg-slate-100">
-                <img src="/images/hertz-logo.svg" alt="logo" width="200px"/>
-                Status: Kommer inom kort...
-            </div>  -->
 	</section>
 
 	<section
@@ -74,21 +69,15 @@
 		<div
 			class="w-full max-w-md p-8 bg-gray-0 border border-gray-200 text-left rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
 		>
-			<!-- <div class="flex items-center mb-8">
-                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Senast nytt</h5>
-            </div> -->
 
 			<Timeline>
-				<TimelineItem customDiv={'bg-sky-200'} title={$t('checking_pulse_searching_new_times')}>
-					<!-- <Button  onclick={() => showInformationModal = true} color="alternative">Få notis via SMS!</Button> -->
-				</TimelineItem>
 
-				{#await getLatestNotifications(3) then notifications}
+				{#await notification_getLatest(3) then notifications}
 					{#each notifications as notification}
 						<TimelineItem
 							customDiv={'bg-green-300'}
 							title="Ny tvättid hittad för Stockholms studentbostäder"
-							date={notification.date}
+							date={notification.date?.toString() ?? undefined}
 						>
 							<p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
 								{notification.body}

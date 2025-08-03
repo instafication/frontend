@@ -12,7 +12,8 @@ import {
     /* TS helper types */
     type ProfileInsert, type ProfileUpdate,
     type ServiceInsert, type ScraperInsert, type NotificationInsert,
-    type Profile
+    type Profile,
+    type Scraper
 } from '../../drizzle/schema';
 
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
@@ -26,11 +27,6 @@ type EmailDays = { email: string; days: number };
 type EmailAmount = { email: string; amount: number };
 
 /*──────────────────────── SCRAPERS ──────────────────────*/
-
-export const addLike = command("unchecked", async (id: string) => {
-    console.log("id: ", id);
-});
-
 // list all
 export const scraper_getAll = query(() => db().select().from(scrapers));
 
@@ -46,16 +42,14 @@ export const scraper_getLastUpdated = query(
             .then(r => Number(r[0]?.last_update) || -1)
 );
 
-export const scraper_getLastUpdateByCompany = query(
-    v.string(),
-    (company: string) =>
-        db()
-            .select({ last_update: scrapers.last_update })
-            .from(scrapers)
-            .where(eq(scrapers.company, company))
-            .orderBy(desc(scrapers.last_update))
-            .limit(1)
-            .then(r => Number(r[0]?.last_update) || -1)
+export const scraper_getLastUpdateByCompanyName = query(v.string(), async(companyName: string) =>
+    db()
+        .select({ last_update: scrapers.last_update })
+        .from(scrapers)
+        .where(eq(scrapers.company, companyName))
+        .orderBy(desc(scrapers.last_update))
+        .limit(1)
+        .then(r => Number(r[0]?.last_update) || -1)
 );
 
 export const scraper_exists = query(
