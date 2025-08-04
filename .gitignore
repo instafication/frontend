@@ -31,3 +31,4 @@ pnpm-lock.yaml
 .wrangler
 wrangler.toml
 wrangler.backup.toml
+/src/worker-configuration.d.ts
