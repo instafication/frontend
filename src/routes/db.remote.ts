@@ -15,10 +15,22 @@ import {
 } from '../../drizzle/schema';
 
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
-import { getUser, getUserId } from '$lib/Managers/AuthManager';
+import { getUserId } from '$lib/Managers/AuthManager';
 
 
 /*──────────────────────── SCRAPERS ──────────────────────*/
+/** Get the latest `last_update` for a scraper row
+ *  whose JSON param key matches the supplied value. */
+export const scraper_GetLastUpdateByArea = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }): Promise<number> =>
+    await db()
+        .select({ last_update: scrapers.last_update })
+        .from(scrapers)
+        .where(sql`params->>'${sql.raw(key)}' = ${value}`)
+        .orderBy(desc(scrapers.last_update))
+        .limit(1)
+        .then(r => r[0]?.last_update ?? -1)
+);
+
 export const scraper_GetAll = query(async () =>
     await db()
         .select()
@@ -35,7 +47,7 @@ export const scraper_GetLastUpdateByCompanyName = query(v.string(), async (compa
         .then(r => r[0].last_update || -1)
 );
 
-export const scraper_Exists = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
+export const scraper_ExistsByArea = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
     await db()
         .select()
         .from(scrapers)
@@ -56,7 +68,7 @@ export const scraper_Create = command(ScraperInsertSchema, async (payload: Scrap
     return r.success;
 });
 
-export const scraper_UpdateLastPing = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }) =>
+export const scraper_UpdateLastPingByOptionsKeyValue = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }) =>
     await db()
         .update(scrapers)
         .set({ last_ping: unixTimestamp })
@@ -64,7 +76,7 @@ export const scraper_UpdateLastPing = command(v.object({ key: v.string(), value:
         .then(r => r.success)
 );
 
-export const scraper_UpdateLastUpdate = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }) =>
+export const scraper_UpdateLastUpdateByOptionsKeyValue = command(v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }), async ({ key, value, unixTimestamp }) =>
     await db()
         .update(scrapers)
         .set({ last_update: unixTimestamp })
