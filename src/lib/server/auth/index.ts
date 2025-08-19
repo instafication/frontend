@@ -2,10 +2,11 @@ import { betterAuth } from 'better-auth';
 import type { BetterAuthOptions } from 'better-auth';
 import { withCloudflare } from 'better-auth-cloudflare';
 import type { CloudflareGeolocation } from 'better-auth-cloudflare';
-import { admin, apiKey } from 'better-auth/plugins';
+// import { admin, apiKey } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { getDb } from '$lib/server/db';
+import * as authSchema from '../../../../drizzle/generated.auth.schema';
 
 export type AuthEnv = {
     DB: unknown;
@@ -30,22 +31,24 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             sendOnSignUp: false
         },
         rateLimit: { enabled: true },
-        plugins: [admin(), apiKey()]
+        plugins: []
     };
 
     const options = env
         ? withCloudflare(
             {
-                // Only enable when running on Cloudflare where `cf` exists
-                autoDetectIpAddress: !!cf,
-                geolocationTracking: !!cf,
+                // Disable auto IP + geolocation enrichment to avoid requiring extra session columns
+                autoDetectIpAddress: false,
+                geolocationTracking: false,
                 cf,
                 // Provide D1 database only at runtime
                 d1: {
                     db: getDb({ d1Binding: env.DB }) as any,
                     options: {
+                        provider: 'mysql',
                         usePlural: true,
-                        debugLogs: true
+                        debugLogs: true,
+                        schema: authSchema as any
                     }
                 },
                 // Optional CF resources if bound
@@ -60,7 +63,8 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             database: drizzleAdapter({} as any, {
                 provider: 'sqlite',
                 usePlural: true,
-                debugLogs: true
+                debugLogs: true,
+                schema: authSchema as any
             })
         };
 

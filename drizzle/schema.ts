@@ -52,8 +52,8 @@ export const users = sqliteTable('users', {
 	name: text('name'),
 	image: text('image'),
 	role: text('role'),
-	created_at: integer('created_at', { mode: 'number' }).default(sql`(strftime('%s','now'))`),
-	updated_at: integer('updated_at', { mode: 'number' }).default(sql`(strftime('%s','now'))`)
+	created_at: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+	updated_at: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date())
 });
 
 export const sessions = sqliteTable('sessions', {
@@ -70,7 +70,8 @@ export const accounts = sqliteTable('accounts', {
 	provider_user_id: text('provider_user_id').notNull(),
 	access_token: text('access_token'),
 	refresh_token: text('refresh_token'),
-	expires_at: integer('expires_at', { mode: 'number' })
+	expires_at: integer('expires_at', { mode: 'number' }),
+	password: text('password')
 }, (t) => [unique('provider_user').on(t.provider_id, t.provider_user_id)]);
 
 export const verification_tokens = sqliteTable('verification_tokens', {
