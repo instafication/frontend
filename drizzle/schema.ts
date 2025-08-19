@@ -52,6 +52,9 @@ export const users = sqliteTable('users', {
 	name: text('name'),
 	image: text('image'),
 	role: text('role'),
+	banned: integer('banned', { mode: 'boolean' }),
+	ban_reason: text('ban_reason'),
+	ban_expires: integer('ban_expires', { mode: 'number' }),
 	created_at: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 	updated_at: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date())
 });
