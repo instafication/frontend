@@ -31,9 +31,6 @@ experimental_remote = true
 NODE_VERSION = "24.6.0"
 ENVIRONMENT = "production"
 
-# BetterAuth
-BETTER_AUTH_SECRET="change-me"
-
 RESEND_API_KEY="" # re_AAAmwAAA_MW4D5qz4BoAMof1nugRXnmA7"
 
 CLOUDFLARE_ACCOUNT_ID="" # 0AAAA391e70VVBBBB433693af250bda9"
@@ -41,11 +38,13 @@ CLOUDFLARE_DATABASE_ID="" # AAAAAAAA-VVV2-4e54-aeab-ea0a2fa81a6d"
 CLOUDFLARE_D1_TOKEN="" # ykEaZAVAAAAA07NSjeVLLapLAHDf34678TvgYj4g_l"
 
 # BetterAuth (D1 + Drizzle)
-# No Supabase variables required
+BETTER_AUTH_SECRET="change-me"
 
+# PostHog
 PUBLIC_POSTHOG_KEY="" # phc_AVCCKOIJEIUWHGEYUEILTzlVfThdLuh7wtYH"
 PUBLIC_POSTHOG_HOST="" # https://eu.i.posthog.com"
 
+# Stripe
 STRIPE_PUBLISHABLE_KEY=""
 STRIPE_SECRET_KEY=""
 STRIPE_WEBHOOK_SECRET=""
