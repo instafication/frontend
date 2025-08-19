@@ -8,6 +8,7 @@
 	import HeaderPhone from '$lib/Components/HeaderPhone.svelte';
 	import FAQ from '$lib/Components/FAQ.svelte';
 	import { t } from '$lib/i18n';
+	import { goto } from '$app/navigation';
 </script>
 
 <Modal

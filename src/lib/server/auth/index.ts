@@ -36,7 +36,26 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             // Allow sign-up/sign-in without requiring email verification
             requireEmailVerification: false,
             // Relax password policy for local dev
-            minPasswordLength: 1
+            minPasswordLength: 1,
+            // Forgot password: send email with reset link
+            sendResetPassword: async ({ user, url, token }, _request) => {
+                try {
+                    const { sendEmail } = await import('$lib/Managers/EmailManager');
+                    const subject = 'Återställ ditt lösenord';
+                    const body = `
+                        <p>Hej!</p>
+                        <p>Du har begärt att återställa ditt lösenord hos Instafication.</p>
+                        <p>Klicka på länken nedan för att återställa ditt lösenord:</p>
+                        <p><a href="${url}">${url}</a></p>
+                        <p>Om du inte begärt denna åtgärd kan du ignorera detta mail.</p>
+                        <p>Token: ${token}</p>
+                    `;
+                    await sendEmail(user.email, subject, body);
+                } catch (e) {
+                    console.error('[BetterAuth] sendResetPassword failed', e);
+                }
+            },
+            resetPasswordTokenExpiresIn: 60 * 60 // 1 hour
         },
         advanced: {
             useSecureCookies: !isDev,

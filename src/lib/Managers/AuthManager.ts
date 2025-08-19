@@ -90,7 +90,23 @@ export async function signInWithOAuth(_provider: string = 'google') {
 }
 
 export async function resetPasswordForEmail(_email: string) {
-	toast.error('Password reset is not configured');
+	if (!browser) {
+		toast.error('Authentication not available');
+		return;
+	}
+
+	try {
+		await (client as any).requestPasswordReset?.({
+			email: _email,
+			redirectTo: `${location.origin}/reset-password`
+		});
+		toast.success('Ett mail med återställningslänk har skickats om adressen finns hos oss');
+		return true;
+	} catch (error) {
+		console.error('Error requesting password reset:', error);
+		toast.error('Kunde inte skicka återställningslänk');
+		return false;
+	}
 }
 
 export async function updateEmail(_email: string): Promise<boolean> {
