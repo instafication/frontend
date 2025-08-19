@@ -2,6 +2,8 @@ import { betterAuth } from 'better-auth';
 import type { BetterAuthOptions } from 'better-auth';
 import { withCloudflare } from 'better-auth-cloudflare';
 import type { CloudflareGeolocation } from 'better-auth-cloudflare';
+import { sveltekitCookies } from 'better-auth/svelte-kit';
+import { getRequestEvent } from '$app/server';
 // import { admin, apiKey } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
@@ -16,9 +18,19 @@ export type AuthEnv = {
 
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
 export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | undefined) => {
+    const isDev = (import.meta as any)?.env?.DEV ?? false;
     const baseOptions: BetterAuthOptions = {
         basePath: '/api/auth',
         secret: env?.BETTER_AUTH_SECRET,
+        session: {
+            // Keep sessions for 30 days, and refresh expiry daily while active
+            expiresIn: 60 * 60 * 24 * 30,
+            updateAge: 60 * 60 * 24,
+            cookieCache: {
+                enabled: true,
+                maxAge: 5 * 60
+            }
+        },
         emailAndPassword: {
             enabled: true,
             // Allow sign-up/sign-in without requiring email verification
@@ -26,12 +38,20 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             // Relax password policy for local dev
             minPasswordLength: 1
         },
+        advanced: {
+            useSecureCookies: !isDev,
+            defaultCookieAttributes: {
+                sameSite: 'lax',
+                secure: !isDev
+            }
+        },
         // Do not send verification emails on sign-up (avoid needing email provider in dev)
         emailVerification: {
             sendOnSignUp: false
         },
         rateLimit: { enabled: true },
-        plugins: [],
+        // Ensure cookies are set correctly in SvelteKit responses
+        plugins: [sveltekitCookies(getRequestEvent)],
         // Deep debug logging
         databaseHooks: {
             user: {

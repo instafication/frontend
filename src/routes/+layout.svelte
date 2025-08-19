@@ -27,6 +27,8 @@
 
 	onMount(async () => {
 		$userLoggedIn = await isLoggedIn();
+		// touch session to refresh expiry (sliding window)
+		try { await isLoggedIn(); } catch {}
 	});
 
 // BetterAuth client does not expose an auth state listener here; we rely on page reload and explicit store updates.

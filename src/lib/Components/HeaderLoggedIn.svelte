@@ -10,7 +10,7 @@
 	import LanguageSelector from './LanguageSelector.svelte';
 	import { t } from '$lib/i18n';
 	import { Button } from './ui/button';
-	import { profile_GetCreditsByUserId } from "../../routes/db.remote"
+	import { profile_GetCreditsByUserId, profile_EnsureExistsByUserId } from "../../routes/db.remote"
 
 	let id = $state('');
 	let email = $state<string>('');
@@ -18,7 +18,12 @@
 
 	onMount(async () => {
 		id = await getUserId()
-		credits = await profile_GetCreditsByUserId(id)
+		// Optimistic default while ensuring profile exists
+		credits = 3
+		if (id) {
+			await profile_EnsureExistsByUserId(id)
+			credits = await profile_GetCreditsByUserId(id)
+		}
 		// [email, phone, credits] = await Promise.all([
 		// 	trpc.email.query(id),
 		// 	trpc.phone.query(id),
