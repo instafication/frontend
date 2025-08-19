@@ -3,6 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import { building } from '$app/environment';
 
 import { getDb } from './lib/server/db';
+import { initDB } from '$lib/db';
 import { createAuth, type AuthEnv } from './lib/server/auth';
 
 const loginRoute = '/';
@@ -16,6 +17,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	const env = event.platform?.env as unknown as AuthEnv | undefined;
 	if (env?.DB) {
+		// Initialize global DB instance used by remote functions in `$lib/db`
+		initDB(env as any);
 		event.locals.db = getDb({ d1Binding: env.DB }) as any;
 	}
 
