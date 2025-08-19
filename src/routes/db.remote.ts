@@ -108,14 +108,19 @@ export const profile_GetRawUserData = query(v.string(), async (id: string) =>
         .then(r => r[0]?.raw_user_meta_data ?? {})
 );
 
-export const profile_GetCreditsByUserId = query(v.string(), async (userId: string) =>
-    await db()
+export const profile_GetCreditsByUserId = query(v.string(), async (userId: string) => {
+    // Gracefully handle missing/invalid userId and missing profile rows
+    if (!userId) return 0;
+
+    const result = await db()
         .select({ credits: profiles.credits })
         .from(profiles)
         .where(eq(profiles.id, userId))
-        .limit(1)
-        .then(r => r[0]?.credits ?? -1)
-);
+        .limit(1);
+
+    const credits = result[0]?.credits;
+    return typeof credits === 'number' && credits >= 0 ? credits : 0;
+});
 
 export const profile_GetUserEmailByUserId = query(v.string(), async (userId: string) =>
     await db()
