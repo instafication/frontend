@@ -18,7 +18,11 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
     const baseOptions: BetterAuthOptions = {
         basePath: '/api/auth',
         secret: env?.BETTER_AUTH_SECRET,
-        emailAndPassword: { enabled: true },
+        emailAndPassword: {
+            enabled: true,
+            // Allow sign-up/sign-in without requiring email verification
+            requireEmailVerification: false
+        },
         rateLimit: { enabled: true },
         plugins: [admin(), apiKey()]
     };
