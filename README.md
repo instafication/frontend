@@ -22,7 +22,7 @@ Instafication is a smart notification service that monitors booking systems and 
 
 ### Prerequisites
 
-- Node.js 22.x or higher
+- Node.js 22.x or higher (Bun 1.2+ recommended)
 - Cloudflare D1 database
 - BetterAuth (email/password) with Drizzle ORM
 - Stripe account (for payments)
@@ -43,10 +43,13 @@ Instafication is a smart notification service that monitors booking systems and 
    ```
 
 3. **Set up environment variables**
-   Create a `.env` file in the root directory:
+   Create a `.env` file in the root directory (values are examples):
 
    ```env
    BETTER_AUTH_SECRET=your_random_secret
+   # Public analytics (optional)
+   PUBLIC_POSTHOG_KEY=phc_xxx
+   PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
    STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
    STRIPE_SECRET_KEY=your_stripe_secret_key
    STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
@@ -55,18 +58,26 @@ Instafication is a smart notification service that monitors booking systems and 
 4. **Set up the database**
 
    ```bash
-   bunx drizzle generate
-   bunx drizzle db push
+   # Generate migrations from the Drizzle schema
+   bun run generate
+   
+   # Apply to the local SQLite file (dev.db) or to D1 if configured
+   bun run push
    ```
 
-5. **Apply D1 migrations**
+5. **Apply D1 migrations (remote D1)**
+   If you're targeting a remote Cloudflare D1, ensure you have valid credentials in `wrangler.toml` or env variables used by `drizzle.config.ts`, then:
    ```bash
-   bun run push
+   bun run migrate:prod
    ```
 
 6. **Start the development server**
    ```bash
+   # Option A: Vite dev server (no CF bindings, good for UI work)
    bun run dev
+   
+   # Option B: Full Cloudflare Workers dev with D1 bindings
+   bunx wrangler dev --x-remote-bindings --port=5173 --local --persist-to=.wrangler/state
    ```
 
 Visit `http://localhost:5173` to see the application running!
@@ -101,21 +112,29 @@ src/
 ### Tech Stack
 
 - **Frontend**: SvelteKit with TypeScript
-- **Styling**: Tailwind CSS + Flowbite components
+- **Styling**: Tailwind CSS + Flowbite + Bits UI/shadcn-svelte ports
 - **Database**: Cloudflare D1 with Drizzle ORM
 - **Authentication**: BetterAuth (D1 + Drizzle)
 - **Payments**: Stripe integration
 - **Deployment**: Cloudflare Workers support
 - **Email**: Resend integration
 
+### Authentication
+
+- Email/password is enabled with BetterAuth. In development, email verification is disabled.
+- On successful sign‑up, a session cookie is set and the UI auto‑logs in. No activation email is sent in dev.
+- Key endpoints (served under `basePath` `/api/auth`):
+  - POST `/api/auth/sign-up/email` with `{ email, password }`
+  - POST `/api/auth/sign-in/email` with `{ email, password }`
+
 ## 📊 Database Schema
 
-The application uses four main database tables:
+Core tables include:
 
-- **`profiles`** - User profiles and subscription data
-- **`services`** - User service subscriptions and preferences
-- **`scrapers`** - Monitoring configuration for different booking systems
-- **`notifications`** - Historical notification data
+- Product tables: `profiles`, `services`, `scrapers`, `notifications`
+- Auth tables (BetterAuth): `users`, `sessions`, `accounts`, `verifications`, `apikeys`
+
+Generated auth schema lives at `drizzle/generated.auth.schema.ts`. If you upgrade BetterAuth and need to refresh the schema, regenerate with the BetterAuth CLI.
 
 ## 🔧 Configuration
 
@@ -144,6 +163,22 @@ Administrators can configure:
 1. Install Wrangler: `bun i -g wrangler`
 2. Configure `wrangler.toml`
 3. Run: `bun run deploy`
+
+Optional envs used by `drizzle.config.ts` when pushing via HTTP driver:
+
+```bash
+export DRIZZLE_USE_D1=1
+export CLOUDFLARE_ACCOUNT_ID=...
+export CLOUDFLARE_DATABASE_ID=...
+export CLOUDFLARE_D1_TOKEN=...
+```
+
+### Troubleshooting
+
+- If sign‑up returns 4xx due to schema mismatches, regenerate and push migrations, then apply to remote D1:
+  - `bun run generate && bun run push` (local) or `bun run migrate:prod` (remote)
+- To inspect D1 during dev:
+  - `wrangler d1 execute prod --remote --command "PRAGMA table_info('users');"`
 
 ## 💰 Pricing Model
 
@@ -190,15 +225,8 @@ We welcome contributions! Please follow these steps:
 
 ## 📄 License
 
-This project is proprietary software. All rights reserved.
+MIT License — see `LICENSE` for details.
 
-## 🚧 Roadmap
-
-- [ ] iOS/Android mobile apps
-- [ ] More booking service integrations
-- [ ] Advanced notification filtering
-- [ ] Calendar integration
-- [ ] Multi-user accounts for families
 
 ---
 
