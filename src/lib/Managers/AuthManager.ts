@@ -121,6 +121,10 @@ export async function updateEmail(_email: string): Promise<boolean> {
 			return false;
 		}
 
+		// Determine whether current email is verified; if not, change happens immediately
+		const currentSession = await getSession();
+		const isCurrentlyVerified = Boolean(currentSession?.user?.emailVerified);
+
 		const res = await client.changeEmail?.({
 			newEmail: _email,
 			callbackURL: `${location.origin}/?email-change=done`
@@ -134,7 +138,12 @@ export async function updateEmail(_email: string): Promise<boolean> {
 			return false;
 		}
 
-		toast.success('Om din e‑post är verifierad måste du bekräfta ändringen via länken vi skickat.');
+		if (isCurrentlyVerified) {
+			toast.info('Vi har skickat en bekräftelselänk till din nuvarande e‑post. Följ länken för att slutföra ändringen.');
+		} else {
+			// For unverified accounts, the change is immediate
+			toast.success('Din e‑post har uppdaterats.');
+		}
 		return true;
 	} catch (error) {
 		console.error('Error changing email:', error);

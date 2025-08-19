@@ -3,6 +3,7 @@ import type { BetterAuthOptions } from 'better-auth';
 import { withCloudflare } from 'better-auth-cloudflare';
 import type { CloudflareGeolocation } from 'better-auth-cloudflare';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
+import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { getRequestEvent } from '$app/server';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
@@ -194,6 +195,30 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
         // Do not send verification emails on sign-up (avoid needing email provider in dev)
         emailVerification: {
             sendOnSignUp: false
+        },
+        hooks: {
+            before: createAuthMiddleware(async (ctx) => {
+                // Block changing to an email that already exists on another account
+                if (ctx.path !== '/change-email') return;
+                const newEmail = (ctx.body as any)?.newEmail as string | undefined;
+                if (!newEmail) return;
+                try {
+                    const db = getDb({ d1Binding: (env as any)?.DB });
+                    const existing = await db
+                        .select()
+                        .from(authSchema.users)
+                        .where((await import('drizzle-orm')).eq(authSchema.users.email, newEmail))
+                        .limit(1);
+                    const currentUserId = (ctx.session as any)?.user?.id as string | undefined;
+                    if (existing?.length && existing[0]?.id !== currentUserId) {
+                        throw new APIError('CONFLICT', {
+                            message: 'E‑postadressen används redan.'
+                        });
+                    }
+                } catch (e) {
+                    console.warn('[auth hooks.before] uniqueness check failed', e);
+                }
+            })
         },
         user: {
             changeEmail: {

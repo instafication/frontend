@@ -14,9 +14,9 @@
 	const handleSave = async (e: Event) => {
 		e.preventDefault();
 		loading = true;
-		await authManager.updateEmail(email);
+		const ok = await authManager.updateEmail(email);
 		loading = false;
-		showProfileSettingsModal.set(false);
+		if (ok) showProfileSettingsModal.set(false);
 	};
 
 	async function loadUserData() {
