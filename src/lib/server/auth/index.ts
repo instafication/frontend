@@ -9,7 +9,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { getDb } from '$lib/server/db';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
-import { argon2id, argon2Verify } from "hash-wasm";
+import { subtle as webSubtle, getRandomValues as webGetRandomValues } from '@better-auth/utils';
 
 export type AuthEnv = {
     DB: unknown;
@@ -17,32 +17,67 @@ export type AuthEnv = {
     BETTER_AUTH_SECRET?: string;
     RESEND_API_KEY?: string;
     ENVIRONMENT?: string;
+    PBKDF2_ITERS?: string;
 };
 
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
 export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | undefined) => {
     const isDev = (import.meta as any)?.env?.DEV ?? false;
-    // Use Argon2id for password hashing (tuned for Cloudflare Workers)
-    const argon2idHasher = {
+    // Workers-safe PBKDF2-HMAC-SHA256 using Web Crypto via @better-auth/utils (uncrypto)
+    function toBase64(data: Uint8Array): string {
+        if (typeof Buffer !== 'undefined') return Buffer.from(data).toString('base64');
+        let binary = '';
+        for (let i = 0; i < data.length; i++) binary += String.fromCharCode(data[i]);
+        // btoa expects binary string
+        return btoa(binary);
+    }
+
+    function fromBase64(str: string): Uint8Array {
+        if (typeof Buffer !== 'undefined') return new Uint8Array(Buffer.from(str, 'base64'));
+        const binary = atob(str);
+        const out = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) out[i] = binary.charCodeAt(i);
+        return out;
+    }
+
+    function timingSafeEqualBytes(a: Uint8Array, b: Uint8Array): boolean {
+        if (a.length !== b.length) return false;
+        let diff = 0;
+        for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+        return diff === 0;
+    }
+
+    const pbkdf2Hasher = {
+    // Encodes as: pbkdf2$algo=sha256$it=120000$salt=<b64>$dk=<b64>
         hash: async (password: string) => {
             const salt = new Uint8Array(16);
-            // Cloudflare Workers and Node 22+ expose WebCrypto getRandomValues
-            crypto.getRandomValues(salt);
-            // Conservative params for Workers CPU limits while remaining strong
-            const encoded = await argon2id({
-                password,
-                salt,
-                parallelism: 1,
-                iterations: 3,
-                memorySize: 32 * 1024, // 32 MiB
-                hashLength: 32,
-                outputType: 'encoded'
-            });
-            return encoded; // PHC encoded string ($argon2id$...)
+            webGetRandomValues(salt);
+            const iterations = Number((env as any)?.PBKDF2_ITERS) || (isDev ? 100_000 : 120_000);
+            const hashAlgo = 'SHA-256';
+            const dkLen = 32;
+            const passwordBytes = new TextEncoder().encode(password);
+            const key = await webSubtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
+            const bits = await webSubtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: hashAlgo }, key, dkLen * 8);
+            const derivedKey = new Uint8Array(bits);
+            return `pbkdf2$algo=sha256$it=${iterations}$salt=${toBase64(salt)}$dk=${toBase64(derivedKey)}`;
         },
         verify: async (hash: string, password: string) => {
             try {
-                return await argon2Verify({ hash, password });
+                if (!hash.startsWith('pbkdf2$')) return false;
+                const parts = Object.fromEntries(
+                    hash
+                        .split('$')
+                        .slice(1) // drop 'pbkdf2'
+                        .map((kv) => kv.split('='))
+                ) as Record<string, string>;
+                const iterations = Number(parts.it);
+                const salt = fromBase64(parts.salt);
+                const expected = fromBase64(parts.dk);
+                const passwordBytes = new TextEncoder().encode(password);
+                const key = await webSubtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
+                const bits = await webSubtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, key, expected.length * 8);
+                const derivedKey = new Uint8Array(bits);
+                return timingSafeEqualBytes(derivedKey, expected);
             } catch {
                 return false;
             }
@@ -77,11 +112,11 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             requireEmailVerification: false,
             // Relax password policy for local dev
             minPasswordLength: 1,
-            // Argon2id password hashing
+            // PBKDF2-HMAC-SHA256 password hashing (Workers-safe)
             password: {
-                hash: async (password: string) => argon2idHasher.hash(password),
+                hash: async (password: string) => pbkdf2Hasher.hash(password),
                 verify: async ({ hash, password }: { hash: string; password: string }) =>
-                    argon2idHasher.verify(hash, password)
+                    pbkdf2Hasher.verify(hash, password)
             },
             // Forgot password: send email with reset link
             sendResetPassword: async ({ user, url, token }, _request) => {
