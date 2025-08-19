@@ -49,6 +49,18 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
                             id: user?.id,
                             email: user?.email
                         });
+                        try {
+                            const db = getDb({ d1Binding: (env as any)?.DB });
+                            const { profiles } = await import('../../../../drizzle/schema');
+                            const { eq } = await import('drizzle-orm');
+                            const existing = await db.select().from(profiles).where(eq(profiles.id, user.id)).limit(1);
+                            if (!existing?.length) {
+                                await db.insert(profiles).values({ id: user.id, email: user.email, credits: 3 });
+                                console.log('[BetterAuth hook] profile created with default credits', { id: user.id });
+                            }
+                        } catch (e) {
+                            console.error('[BetterAuth hook] failed to create default profile', e);
+                        }
                     }
                 }
             },
