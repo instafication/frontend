@@ -28,8 +28,11 @@ migrations_dir = "drizzle/migrations"
 experimental_remote = true
 
 [vars]
-NODE_VERSION = "24.4.1"
+NODE_VERSION = "24.6.0"
 ENVIRONMENT = "production"
+
+# BetterAuth
+BETTER_AUTH_SECRET="change-me"
 
 RESEND_API_KEY="" # re_AAAmwAAA_MW4D5qz4BoAMof1nugRXnmA7"
 

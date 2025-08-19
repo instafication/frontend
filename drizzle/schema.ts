@@ -42,6 +42,44 @@ export const notifications = sqliteTable('notifications', {
 
 
 // ---------------------------------------------------------------------------
+//  BetterAuth core tables (SQLite). If you use @better-auth/cli, prefer
+//  generating these to a separate file and importing instead of inlining.
+// ---------------------------------------------------------------------------
+export const users = sqliteTable('users', {
+	id: text('id').primaryKey(),
+	email: text('email').notNull().unique(),
+	email_verified: integer('email_verified', { mode: 'boolean' }).default(sql`0`),
+	name: text('name'),
+	image: text('image'),
+	created_at: integer('created_at', { mode: 'number' }).default(sql`(strftime('%s','now'))`),
+	updated_at: integer('updated_at', { mode: 'number' }).default(sql`(strftime('%s','now'))`)
+});
+
+export const sessions = sqliteTable('sessions', {
+	id: text('id').primaryKey(),
+	user_id: text('user_id').notNull(),
+	expires_at: integer('expires_at', { mode: 'number' }).notNull(),
+	created_at: integer('session_created_at', { mode: 'number' }).default(sql`(strftime('%s','now'))`)
+});
+
+export const accounts = sqliteTable('accounts', {
+	id: text('id').primaryKey(),
+	user_id: text('user_id').notNull(),
+	provider_id: text('provider_id').notNull(),
+	provider_user_id: text('provider_user_id').notNull(),
+	access_token: text('access_token'),
+	refresh_token: text('refresh_token'),
+	expires_at: integer('expires_at', { mode: 'number' })
+}, (t) => [unique('provider_user').on(t.provider_id, t.provider_user_id)]);
+
+export const verification_tokens = sqliteTable('verification_tokens', {
+	id: text('id').primaryKey(),
+	identifier: text('identifier').notNull(),
+	token: text('token').notNull(),
+	expires_at: integer('vt_expires_at', { mode: 'number' }).notNull()
+}, (t) => [unique('identifier_token').on(t.identifier, t.token)]);
+
+// ---------------------------------------------------------------------------
 //  Valibot schemas & types (generated via drizzle-valibot)
 // ---------------------------------------------------------------------------
 import * as v from 'valibot';
