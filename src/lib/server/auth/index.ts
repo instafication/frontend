@@ -21,7 +21,13 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
         emailAndPassword: {
             enabled: true,
             // Allow sign-up/sign-in without requiring email verification
-            requireEmailVerification: false
+            requireEmailVerification: false,
+            // Relax password policy for local dev
+            minPasswordLength: 1
+        },
+        // Do not send verification emails on sign-up (avoid needing email provider in dev)
+        emailVerification: {
+            sendOnSignUp: false
         },
         rateLimit: { enabled: true },
         plugins: [admin(), apiKey()]
