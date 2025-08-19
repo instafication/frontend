@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import { building } from '$app/environment';
 
 import { getDb } from './lib/server/db';
-import { createAuth } from './lib/server/auth';
+import { createAuth, type AuthEnv } from './lib/server/auth';
 
 const loginRoute = '/';
 function routeRequiresAuth(_event: RequestEvent) {
@@ -14,12 +14,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// prerendered routes throw an error during building because the build runtime can't access platform.env
 	if (building) return resolve(event);
 
-	const env = event.platform?.env as Env | undefined;
+	const env = event.platform?.env as unknown as AuthEnv | undefined;
 	if (env?.DB) {
-		event.locals.db = getDb({ d1Binding: env.DB });
+		event.locals.db = getDb({ d1Binding: env.DB }) as any;
 	}
 
-	const auth = createAuth(env);
+	const auth = createAuth(env, event.platform?.cf);
 
 	if (routeRequiresAuth(event)) {
 		const session = await auth.api.getSession({
