@@ -96,6 +96,21 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
                             id: session?.id,
                             userId: session?.userId
                         });
+                        // Ensure a corresponding profile exists for this user.
+                        // This covers users that predate the user.create.after hook
+                        // or any edge cases where profile creation failed.
+                        try {
+                            const db = getDb({ d1Binding: (env as any)?.DB });
+                            const { profiles } = await import('../../../../drizzle/schema');
+                            const { eq } = await import('drizzle-orm');
+                            const existing = await db.select().from(profiles).where(eq(profiles.id, session.userId)).limit(1);
+                            if (!existing?.length) {
+                                await db.insert(profiles).values({ id: session.userId, credits: 3 });
+                                console.log('[BetterAuth hook] profile created on session with default credits', { id: session.userId });
+                            }
+                        } catch (e) {
+                            console.error('[BetterAuth hook] failed to ensure profile on session', e);
+                        }
                     }
                 }
             }

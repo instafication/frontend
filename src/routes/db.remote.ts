@@ -108,6 +108,24 @@ export const profile_GetRawUserData = query(v.string(), async (id: string) =>
         .then(r => r[0]?.raw_user_meta_data ?? {})
 );
 
+/** Ensure a profile exists for the given userId; if missing, create with default credits (3). */
+export const profile_EnsureExistsByUserId = command(v.string(), async (userId: string) => {
+    if (!userId) return false;
+
+    const existing = await db()
+        .select()
+        .from(profiles)
+        .where(eq(profiles.id, userId))
+        .limit(1);
+
+    if (existing?.length) return true;
+
+    const res = await db()
+        .insert(profiles)
+        .values({ id: userId, credits: 3 });
+    return res.success;
+});
+
 export const profile_GetCreditsByUserId = query(v.string(), async (userId: string) => {
     // Gracefully handle missing/invalid userId and missing profile rows
     if (!userId) return 0;
@@ -118,8 +136,37 @@ export const profile_GetCreditsByUserId = query(v.string(), async (userId: strin
         .where(eq(profiles.id, userId))
         .limit(1);
 
+    if (!result?.length) {
+        // Create the profile with default credits if it doesn't exist
+        try {
+            const res = await db()
+                .insert(profiles)
+                .values({ id: userId, credits: 3 });
+            if ((res as any)?.success === false) {
+                console.warn('[profile_GetCreditsByUserId] insert returned success=false', { userId });
+            }
+        } catch (e) {
+            // Ignore duplicate/constraint errors due to race conditions
+            console.warn('[profile_GetCreditsByUserId] insert failed (possibly already exists)', e);
+        }
+        return 3;
+    }
+
     const credits = result[0]?.credits;
-    return typeof credits === 'number' && credits >= 0 ? credits : 0;
+    // If credits is missing/invalid, normalize DB value to 3 and return 3
+    if (typeof credits !== 'number' || credits < 0) {
+        try {
+            await db()
+                .update(profiles)
+                .set({ credits: 3 })
+                .where(eq(profiles.id, userId));
+        } catch (e) {
+            console.warn('[profile_GetCreditsByUserId] failed to normalize credits to 3', e);
+        }
+        return 3;
+    }
+
+    return credits;
 });
 
 export const profile_GetUserEmailByUserId = query(v.string(), async (userId: string) =>
