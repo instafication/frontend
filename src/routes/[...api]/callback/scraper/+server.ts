@@ -24,7 +24,7 @@ export interface postParamsSssb {
     area: string;
 }
 
-async function HandleSssb(scraper: Scraper): Promise<Response> {
+async function HandleSssb(scraper: Scraper, fetch: typeof globalThis.fetch): Promise<Response> {
     const params = scraper.params as JsonValue;
     const area =
         params && typeof params === 'object' && 'area' in params ? (params as { area: string }).area : '';
@@ -50,7 +50,7 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
     dateObj.setUTCHours(dateObj.getUTCHours() + 2); // force CET/CEST again
 
     /* ────────────── Business checks ────────────── */
-    const storedLastUpdated = await scraper_GetLastUpdateByArea({ key: 'area', value: area });
+    const storedLastUpdated = await scraper_GetLastUpdateByArea({ key: 'area', value: area }, fetch);
     if (storedLastUpdated === dateObj.getTime()) {
         console.log('[Scraper] Duplicate data – skipping.');
         return new Response('Duplicate data', { status: 200 });
@@ -63,7 +63,7 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
     }
 
     /* ────────────── Persist new timestamp ────────────── */
-    await scraper_UpdateLastUpdateByOptionsKeyValue({ key: 'area', value: area, unixTimestamp: dateObj.getTime() });
+    await scraper_UpdateLastUpdateByOptionsKeyValue({ key: 'area', value: area, unixTimestamp: dateObj.getTime()}, fetch);
 
     /* ────────────── Create notification row ────────────── */
     await notification_Create({
@@ -106,7 +106,7 @@ async function HandleSssb(scraper: Scraper): Promise<Response> {
 }
 
 /* ─────────────────────── POST handler ─────────────────────── */
-export const POST = (async ({ request }) => {
+export const POST = (async ({ request, fetch }) => {
     try {
         const scraper: Scraper = await request.json();
         console.log('[Scraper] Incoming payload:', JSON.stringify(scraper, null, 2));
@@ -121,17 +121,19 @@ export const POST = (async ({ request }) => {
         }
 
         /* Ensure scraper row exists */
-        const exists = await scraper_ExistsByArea({ key: 'area', value: params.area });
+        const exists = await scraper_ExistsByArea({ key: 'area', value: params.area }, fetch);
         if (!exists) {
-            await scraper_Create(scraper);
+            await scraper_Create(scraper, fetch);
             console.log(`[Scraper] New scraper row created for area ${params.area}`);
         }
 
         /* Always bump last_ping */
-        await scraper_UpdateLastPingByOptionsKeyValue({ key: 'area', value: params.area, unixTimestamp: Date.now() });
+        await scraper_UpdateLastPingByOptionsKeyValue(
+            { key: 'area', value: params.area, unixTimestamp: Date.now() },
+            fetch
+        );
 
-        /* Main handler */
-        return await HandleSssb(scraper);
+        return await HandleSssb(scraper, fetch);
     } catch (error) {
         console.error(`[Scraper] Unhandled error: ${error}`);
         return new Response(`Internal error: ${error}`, { status: 500 });
