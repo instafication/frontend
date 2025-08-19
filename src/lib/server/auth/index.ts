@@ -48,11 +48,11 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
     }
 
     const pbkdf2Hasher = {
-    // Encodes as: pbkdf2$algo=sha256$it=120000$salt=<b64>$dk=<b64>
+        // Encodes as: pbkdf2$algo=sha256$it=100000$salt=<b64>$dk=<b64>
         hash: async (password: string) => {
             const salt = new Uint8Array(16);
             webGetRandomValues(salt);
-            const iterations = Number((env as any)?.PBKDF2_ITERS) || (isDev ? 100_000 : 120_000);
+            const iterations = Number((env as any)?.PBKDF2_ITERS) || (isDev ? 100_000 : 100_000);
             const hashAlgo = 'SHA-256';
             const dkLen = 32;
             const passwordBytes = new TextEncoder().encode(password);
