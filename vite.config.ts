@@ -13,5 +13,8 @@ export default defineConfig({
 		alias: {
 			'@react-email/render': resolve(__dirname, 'src/shims/react-email-render.ts')
 		}
+	},
+	ssr: {
+		noExternal: ['better-auth-cloudflare', 'better-auth']
 	}
 });
