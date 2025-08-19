@@ -18,10 +18,10 @@
 		if (loading) return;
 		loading = true;
 		try {
-			await signUp(email, password);
-			toast.success(
-				'We have sent you a confirmation email, click the link in your email to activate account.'
-			);
+			const ok = await signUp(email, password);
+			if (ok) {
+				$showRegisterModal = false;
+			}
 		} catch (err: any) {
 			toast.error("Error, can't create account. Try again.");
 		} finally {

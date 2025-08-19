@@ -43,9 +43,12 @@ export async function signUp(email: string, password: string, _isPremium: boolea
 		console.log('[AuthManager] signUp response', res);
 		if (res?.error) {
 			console.error('[AuthManager] signUp error', res.error);
-			toast.error(res.error.message || 'Could not sign up');
+			const msg = res.error.message || 'Could not sign up';
+			const code = (res.error as any)?.code;
+			toast.error(code ? `${msg} (${code})` : msg);
 			return false;
 		}
+		userLoggedIn.set(true);
 		toast.success('Account created');
 		return true;
 	} catch (error) {
@@ -67,7 +70,9 @@ export async function signInWithPassword(email: string, password: string): Promi
 		console.log('[AuthManager] signIn response', res);
 		if (res?.error) {
 			console.error('[AuthManager] signIn error', res.error);
-			toast.error(res.error.message || 'Invalid credentials');
+			const msg = res.error.message || 'Invalid credentials';
+			const code = (res.error as any)?.code;
+			toast.error(code ? `${msg} (${code})` : msg);
 			return false;
 		}
 		userLoggedIn.set(true);
