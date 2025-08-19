@@ -14,6 +14,8 @@ export type AuthEnv = {
     DB: unknown;
     KV?: unknown;
     BETTER_AUTH_SECRET?: string;
+    RESEND_API_KEY?: string;
+    ENVIRONMENT?: string;
 };
 
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
@@ -22,6 +24,16 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
     const baseOptions: BetterAuthOptions = {
         basePath: '/api/auth',
         secret: env?.BETTER_AUTH_SECRET,
+        trustedOrigins: [
+            'http://localhost:8787',
+            'http://localhost:8787/reset-password',
+            'http://127.0.0.1:8787',
+            'http://127.0.0.1:8787/reset-password',
+            'http://localhost:5173',
+            'https://instafication.shop',
+            'https://instafication.shop/reset-password',
+            'http://instafication.shop'
+        ],
         session: {
             // Keep sessions for 30 days, and refresh expiry daily while active
             expiresIn: 60 * 60 * 24 * 30,
@@ -39,18 +51,47 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             minPasswordLength: 1,
             // Forgot password: send email with reset link
             sendResetPassword: async ({ user, url, token }, _request) => {
+                const subject = 'Återställ ditt lösenord';
+                const body = `
+                    <p>Hej!</p>
+                    <p>Du har begärt att återställa ditt lösenord hos Instafication.</p>
+                    <p>Klicka på länken nedan för att återställa ditt lösenord:</p>
+                    <p><a href="${url}">${url}</a></p>
+                    <p>Om du inte begärt denna åtgärd kan du ignorera detta mail.</p>
+                `;
                 try {
-                    const { sendEmail } = await import('$lib/Managers/EmailManager');
-                    const subject = 'Återställ ditt lösenord';
-                    const body = `
-                        <p>Hej!</p>
-                        <p>Du har begärt att återställa ditt lösenord hos Instafication.</p>
-                        <p>Klicka på länken nedan för att återställa ditt lösenord:</p>
-                        <p><a href="${url}">${url}</a></p>
-                        <p>Om du inte begärt denna åtgärd kan du ignorera detta mail.</p>
-                        <p>Token: ${token}</p>
-                    `;
-                    await sendEmail(user.email, subject, body);
+                    const { Resend } = await import('resend');
+                    const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
+                    if (!apiKey) {
+                        console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send reset email');
+                        return;
+                    }
+                    const resend = new Resend(apiKey);
+                    const preferredFrom = 'Instafication <no-reply@transactional.instafication.shop>';
+                    const fallbackFrom = 'Instafication <onboarding@resend.dev>';
+
+                    try {
+                        const r1 = await resend.emails.send({ from: preferredFrom, to: user.email, subject, html: body });
+                        console.log('[BetterAuth] reset email sent (preferred domain)', { id: (r1 as any)?.id || null, to: user.email, from: preferredFrom });
+                    } catch (err) {
+                        console.warn('[BetterAuth] preferred domain send failed, retrying with fallback', err);
+                        try {
+                            const r2 = await resend.emails.send({ from: fallbackFrom, to: user.email, subject, html: body });
+                            console.log('[BetterAuth] reset email sent (fallback domain)', { id: (r2 as any)?.id || null, to: user.email, from: fallbackFrom });
+                        } catch (fallbackErr) {
+                            console.warn('[BetterAuth] resend SDK fallback failed, using direct fetch', fallbackErr);
+                            const res = await fetch('https://api.resend.com/emails', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': `Bearer ${apiKey}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ from: fallbackFrom, to: user.email, subject, html: body })
+                            });
+                            const txt = await res.text();
+                            console.log('[BetterAuth] resend direct fetch result', { status: res.status, body: txt });
+                        }
+                    }
                 } catch (e) {
                     console.error('[BetterAuth] sendResetPassword failed', e);
                 }
