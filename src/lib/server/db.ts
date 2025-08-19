@@ -6,7 +6,7 @@ interface GetDbParams {
 
 export const getDb = ({ d1Binding }: GetDbParams) => {
     if (d1Binding) {
-        return drizzleD1(d1Binding);
+        return drizzleD1(d1Binding, { logger: true });
     }
     throw new Error(`No database binding provided ${JSON.stringify({ d1Binding })}`);
 };

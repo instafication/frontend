@@ -38,8 +38,11 @@ export async function signUp(email: string, password: string, _isPremium: boolea
 	}
 
 	try {
+		console.log('[AuthManager] signUp request', { email, hasPassword: Boolean(password) });
 		const res = await client.signUp?.email?.({ email, password });
+		console.log('[AuthManager] signUp response', res);
 		if (res?.error) {
+			console.error('[AuthManager] signUp error', res.error);
 			toast.error(res.error.message || 'Could not sign up');
 			return false;
 		}
@@ -59,8 +62,11 @@ export async function signInWithPassword(email: string, password: string): Promi
 	}
 
 	try {
+		console.log('[AuthManager] signIn request', { email, hasPassword: Boolean(password) });
 		const res = await client.signIn?.email?.({ email, password });
+		console.log('[AuthManager] signIn response', res);
 		if (res?.error) {
+			console.error('[AuthManager] signIn error', res.error);
 			toast.error(res.error.message || 'Invalid credentials');
 			return false;
 		}
