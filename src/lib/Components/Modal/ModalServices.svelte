@@ -38,7 +38,7 @@
 	let hasActiveService = $state<boolean>(false);
 
 	onMount(async () => {
-		const cfg: any = await service_GetConfigByCompanyName('Stockholms Studentbostäder');
+		const cfg: any = await service_GetConfigByCompanyName({ companyName: 'Stockholms Studentbostäder', userId: await getUserId() });
 		if (cfg) {
 			selectedNotificationMethod = cfg.notificationMethod ?? '';
 			selectedWithinTime = String(cfg.notificationWithinTime ?? '');

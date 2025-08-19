@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { isLoggedIn, supabase } from '$lib/Managers/AuthManager';
+	import { isLoggedIn } from '$lib/Managers/AuthManager';
 	import { userLoggedIn } from '$lib/sharedStore';
 	import HeaderLoggedIn from '$lib/Components/HeaderLoggedIn.svelte';
 	import Header from '$lib/Components/Header.svelte';
@@ -18,9 +18,7 @@
 
 	let { children } = $props();
 	let lastAuthStatus = $state('');
-	let lastSession = $state<Awaited<
-		ReturnType<NonNullable<typeof supabase>['auth']['getSession']>
-	> | null>(null);
+	let lastSession = $state<any | null>(null);
 
 	if (browser) {
 		beforeNavigate(() => posthog.capture('$pageleave'));
@@ -31,24 +29,7 @@
 		$userLoggedIn = await isLoggedIn();
 	});
 
-	if (supabase) {
-		supabase.auth.onAuthStateChange((event, session) => {
-			lastAuthStatus = event;
-
-			if (session) {
-				lastSession = {
-					data: { session },
-					error: null
-				};
-			} else {
-				lastSession = {
-					data: { session: null },
-					error: null
-				};
-			}
-			$userLoggedIn = event === 'SIGNED_IN';
-		});
-	}
+// BetterAuth client does not expose an auth state listener here; we rely on page reload and explicit store updates.
 </script>
 
 <ModalLogin />

@@ -23,8 +23,8 @@ Instafication is a smart notification service that monitors booking systems and 
 ### Prerequisites
 
 - Node.js 22.x or higher
-- PostgreSQL database
-- Supabase account (for authentication)
+- Cloudflare D1 database
+- BetterAuth (email/password) with Drizzle ORM
 - Stripe account (for payments)
 
 ### Installation
@@ -46,10 +46,7 @@ Instafication is a smart notification service that monitors booking systems and 
    Create a `.env` file in the root directory:
 
    ```env
-   DATABASE_URL=your_postgresql_connection_string
-   DIRECT_URL=your_postgresql_direct_connection_string
-   PUBLIC_SUPABASE_URL=your_supabase_project_url
-   PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   BETTER_AUTH_SECRET=your_random_secret
    STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
    STRIPE_SECRET_KEY=your_stripe_secret_key
    STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
@@ -62,27 +59,9 @@ Instafication is a smart notification service that monitors booking systems and 
    bunx drizzle db push
    ```
 
-5. **Configure Supabase triggers**
-   Run this SQL in your Supabase SQL editor:
-
-   ```sql
-   -- Create function to handle new user registration
-   create function public.handle_new_user()
-   returns trigger
-   language plpgsql
-   security definer set search_path = public
-   as $$
-   begin
-     insert into public.profiles (id, email)
-     values (new.id, new.email);
-     return new;
-   end;
-   $$;
-
-   -- Create trigger for new user registration
-   create trigger on_auth_user_created
-     after insert on auth.users
-     for each row execute procedure public.handle_new_user();
+5. **Apply D1 migrations**
+   ```bash
+   bun run push
    ```
 
 6. **Start the development server**
@@ -123,8 +102,8 @@ src/
 
 - **Frontend**: SvelteKit with TypeScript
 - **Styling**: Tailwind CSS + Flowbite components
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Supabase Auth
+- **Database**: Cloudflare D1 with Drizzle ORM
+- **Authentication**: BetterAuth (D1 + Drizzle)
 - **Payments**: Stripe integration
 - **Deployment**: Cloudflare Workers support
 - **Email**: Resend integration

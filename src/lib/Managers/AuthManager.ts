@@ -1,92 +1,49 @@
-import { createClient, type Provider } from '@supabase/supabase-js';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import { toast } from 'svelte-sonner';
 import { browser } from '$app/environment';
+import { toast } from 'svelte-sonner';
+import authClient from '$lib/authClient';
+import { userLoggedIn } from '$lib/sharedStore';
 
-function createSupabaseClient() {
-	if (browser) {
-		return createClient(
-			PUBLIC_SUPABASE_URL.trim(),
-			PUBLIC_SUPABASE_ANON_KEY.replace(/[\r\n]+/g, '').trim()
-		);
-	}
-	return null;
-}
+type AnyAuthClient = any;
+const client: AnyAuthClient = authClient as AnyAuthClient;
 
-let supabase = createSupabaseClient();
-if (browser && !supabase) {
-	supabase = createSupabaseClient();
-}
-
-async function getUserId(): Promise<string> {
-	if (!browser || !supabase) {
-		console.warn('Supabase client not available');
-		return '';
-	}
-
+async function getSession(): Promise<any | null> {
+	if (!browser) return null;
 	try {
-		const {
-			data: { user }
-		} = await supabase.auth.getUser();
-		return user?.id || '';
+		return await client.getSession?.();
 	} catch (error) {
-		console.error('Error getting user ID:', error);
-		return '';
+		console.error('Error getting session:', error);
+		return null;
 	}
 }
 
-async function isLoggedIn(): Promise<boolean> {
-	if (!browser || !supabase) {
-		return false;
-	}
-
-	try {
-		const {
-			data: { user }
-		} = await supabase.auth.getUser();
-		return user !== null && user !== undefined;
-	} catch (error) {
-		console.error('Error checking login status:', error);
-		return false;
-	}
+export async function getUserId(): Promise<string> {
+	const session = await getSession();
+	return session?.user?.id ?? '';
 }
 
-async function signUp(
-	email: string,
-	password: string,
-	isPremium: boolean = false
-): Promise<boolean> {
-	if (!browser || !supabase) {
+export async function getUserEmail(): Promise<string> {
+	const session = await getSession();
+	return session?.user?.email ?? '';
+}
+
+export async function isLoggedIn(): Promise<boolean> {
+	const session = await getSession();
+	return Boolean(session?.user);
+}
+
+export async function signUp(email: string, password: string, _isPremium: boolean = false): Promise<boolean> {
+	if (!browser) {
 		toast.error('Authentication not available');
 		return false;
 	}
 
-	let params = {};
-	if (isPremium) {
-		params = {
-			credits: 500,
-			subscription_expiration_date: Date.now().toString()
-		};
-	} else {
-		params = {
-			credits: 5
-		};
-	}
-
 	try {
-		const { error } = await supabase.auth.signUp({
-			email,
-			password,
-			options: {
-				data: params
-			}
-		});
-
-		if (error) {
-			toast.error(error.message);
+		const res = await client.signUp?.email?.({ email, password });
+		if (res?.error) {
+			toast.error(res.error.message || 'Could not sign up');
 			return false;
 		}
-
+		toast.success('Account created');
 		return true;
 	} catch (error) {
 		console.error('Error during signup:', error);
@@ -95,24 +52,21 @@ async function signUp(
 	}
 }
 
-async function signInWithPassword(email: string, password: string): Promise<boolean> {
-	if (!browser || !supabase) {
+export async function signInWithPassword(email: string, password: string): Promise<boolean> {
+	if (!browser) {
 		toast.error('Authentication not available');
 		return false;
 	}
 
 	try {
-		const { error } = await supabase.auth.signInWithPassword({
-			email: email,
-			password: password
-		});
-		if (!error) {
-			toast.success('Login successful');
-			return true;
-		} else {
-			toast.error(error.message);
+		const res = await client.signIn?.email?.({ email, password });
+		if (res?.error) {
+			toast.error(res.error.message || 'Invalid credentials');
 			return false;
 		}
+		userLoggedIn.set(true);
+		toast.success('Login successful');
+		return true;
 	} catch (error) {
 		console.error('Error during login:', error);
 		toast.error('An error occurred during login');
@@ -120,114 +74,31 @@ async function signInWithPassword(email: string, password: string): Promise<bool
 	}
 }
 
-async function signInWithOAuth(provider: Provider = 'google') {
-	if (!browser || !supabase) {
-		toast.error('Authentication not available');
-		return;
-	}
-
-	try {
-		console.log(`Started login with provider: ${provider}`);
-		const { error } = await supabase.auth.signInWithOAuth({ provider: provider });
-
-		if (error) {
-			toast.error(error.message);
-		} else {
-			toast.success('Login successful');
-		}
-	} catch (error) {
-		console.error('Error during OAuth login:', error);
-		toast.error('An error occurred during login');
-	}
+export async function signInWithOAuth(_provider: string = 'google') {
+	toast.error('OAuth sign-in not configured');
 }
 
-async function resetPasswordForEmail(email: string) {
-	if (!browser || !supabase) {
-		toast.error('Authentication not available');
-		return;
-	}
-
-	try {
-		const { error } = await supabase.auth.resetPasswordForEmail(email);
-
-		if (error) {
-			toast.error(error.message);
-		} else {
-			toast.success('Check your email to reset your password.');
-		}
-	} catch (error) {
-		console.error('Error resetting password:', error);
-		toast.error('An error occurred while resetting password');
-	}
+export async function resetPasswordForEmail(_email: string) {
+	toast.error('Password reset is not configured');
 }
 
-async function updateEmail(email: string): Promise<boolean> {
-	if (!browser || !supabase) {
-		toast.error('Authentication not available');
-		return false;
-	}
-
-	try {
-		const { error } = await supabase.auth.updateUser({
-			email: email
-		});
-
-		if (error) {
-			toast.error(error.message);
-			return false;
-		}
-
-		toast.success('Email updated successfully');
-		return true;
-	} catch (error) {
-		console.error('Error updating email:', error);
-		toast.error('An error occurred while updating email');
-		return false;
-	}
+export async function updateEmail(_email: string): Promise<boolean> {
+	toast.error('Updating email is not configured');
+	return false;
 }
 
-async function signOut() {
-	if (!browser || !supabase) {
-		return;
-	}
-
+export async function signOut() {
+	if (!browser) return;
 	try {
-		const { error } = await supabase.auth.signOut();
-
-		if (error) {
-			toast.error(error.message);
-		} else {
-			toast.info('You have been signed out');
-		}
+		await client.signOut?.();
+		userLoggedIn.set(false);
+		toast.info('You have been signed out');
 	} catch (error) {
 		console.error('Error during sign out:', error);
 		toast.error('An error occurred during sign out');
 	}
 }
 
-async function getUser() {
-	if (!browser || !supabase) {
-		toast.error('Authentication not available');
-		return;
-	}
-	return await supabase.auth.getUser();
+export async function getUser() {
+	return await getSession();
 }
-
-async function getUserEmail(): Promise<string> {
-	const userResponse = await getUser();
-	return userResponse?.data.user?.email ?? "";
-}
-
-export {
-	supabase,
-	signUp,
-	signInWithPassword,
-	signInWithOAuth,
-	signOut,
-	resetPasswordForEmail,
-	isLoggedIn,
-	getUserId,
-	updateEmail,
-	getUser,
-	getUserEmail
-};

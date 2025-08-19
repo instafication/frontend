@@ -40,11 +40,8 @@ CLOUDFLARE_ACCOUNT_ID="" # 0AAAA391e70VVBBBB433693af250bda9"
 CLOUDFLARE_DATABASE_ID="" # AAAAAAAA-VVV2-4e54-aeab-ea0a2fa81a6d"
 CLOUDFLARE_D1_TOKEN="" # ykEaZAVAAAAA07NSjeVLLapLAHDf34678TvgYj4g_l"
 
-# Using Supabase for auth, replace with Better auth?
-PUBLIC_SUPABASE_URL="" # https://aaaaaaaaabbtovqtobkv.supabase.co"
-PUBLIC_SUPABASE_ANON_KEY="" # sb_publishable_5-Aaaaaaaaaaaaaaaaaa-g_bbbbbbbb"
-DATABASE_URL="" # postgresql://postgres.bbbbbbbbbbbbbbbbbbbb:[PASSOWRD-HERE]@aws-0-eu-north-1.pooler.supabase.com:5432/postgres?sslmode=no-verify"
-DB_PASSWORD="" # CCCCCCCCCCCCCCC"
+# BetterAuth (D1 + Drizzle)
+# No Supabase variables required
 
 PUBLIC_POSTHOG_KEY="" # phc_AVCCKOIJEIUWHGEYUEILTzlVfThdLuh7wtYH"
 PUBLIC_POSTHOG_HOST="" # https://eu.i.posthog.com"

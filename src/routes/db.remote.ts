@@ -225,13 +225,14 @@ export const notification_GetLatest = query(v.optional(v.number(), 3), async (co
 );
 
 /*──────────────────────── SERVICES ──────────────────────*/
-export const service_GetConfigByCompanyName = query(v.string(), async (companyName: string) => {
-    await db()
+export const service_GetConfigByCompanyName = query(v.object({ companyName: v.string(), userId: v.optional(v.string()) }), async ({ companyName, userId }) => {
+    const effectiveUserId = userId && userId.length > 0 ? userId : await getUserId();
+    return await db()
         .select()
         .from(services)
-        .where(and(eq(services.user, await getUserId()), eq(services.name, companyName)))
+        .where(and(eq(services.user, effectiveUserId), eq(services.name, companyName)))
         .limit(1)
-        .then(r => r[0] ?? null)
+        .then(r => r[0] ?? null);
 });
 
 export const service_GetUserIdsByOptions = query(v.object({ key: v.string(), value: v.any() }), async ({ key, value }) =>
