@@ -11,7 +11,8 @@
 	let email = $state<string>('');
 	let loading = $state<boolean>(false);
 
-	const handleSave = async () => {
+	const handleSave = async (e: Event) => {
+		e.preventDefault();
 		loading = true;
 		await authManager.updateEmail(email);
 		loading = false;

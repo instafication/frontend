@@ -110,8 +110,37 @@ export async function resetPasswordForEmail(_email: string) {
 }
 
 export async function updateEmail(_email: string): Promise<boolean> {
-	toast.error('Updating email is not configured');
-	return false;
+	if (!browser) {
+		toast.error('Authentication not available');
+		return false;
+	}
+
+	try {
+		if (!_email || !_email.includes('@')) {
+			toast.error('Ogiltig e‑postadress');
+			return false;
+		}
+
+		const res = await client.changeEmail?.({
+			newEmail: _email,
+			callbackURL: `${location.origin}/?email-change=done`
+		});
+
+		if (res?.error) {
+			console.error('[AuthManager] changeEmail error', res.error);
+			const msg = res.error.message || 'Kunde inte ändra e‑post';
+			const code = (res.error as any)?.code;
+			toast.error(code ? `${msg} (${code})` : msg);
+			return false;
+		}
+
+		toast.success('Om din e‑post är verifierad måste du bekräfta ändringen via länken vi skickat.');
+		return true;
+	} catch (error) {
+		console.error('Error changing email:', error);
+		toast.error('Ett fel uppstod vid ändring av e‑post');
+		return false;
+	}
 }
 
 export async function signOut() {

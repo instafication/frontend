@@ -1,53 +1,73 @@
 <script lang="ts">
-  import authClient from '$lib/authClient';
-  import { onMount } from 'svelte';
+	import authClient from '$lib/authClient';
+	import { onMount } from 'svelte';
+	import * as Dialog from '$lib/Components/ui/dialog/index.js';
+	import { Button } from '$lib/Components/ui/button/index.js';
 
-  let newPassword = '';
-  let isLoading = false;
-  let token: string | null = null;
+	let newPassword = $state<string>('');
+	let isLoading = $state<boolean>(false);
+	let token = $state<string | null>(null);
+	let open = $state<boolean>(true);
 
-  onMount(() => {
-    const params = new URLSearchParams(location.search);
-    token = params.get('token');
-  });
+	onMount(() => {
+		const params = new URLSearchParams(location.search);
+		token = params.get('token') ?? null;
+	});
 
-  async function handleSubmit(e: Event) {
-    e.preventDefault();
-    if (!token) {
-      alert('Ogiltig återställningslänk');
-      return;
-    }
-    isLoading = true;
-    try {
-      await (authClient as any).resetPassword?.({ newPassword, token });
-      alert('Lösenordet är ändrat. Logga in igen.');
-      location.assign('/');
-    } catch (err) {
-      console.error('Reset password error', err);
-      alert('Kunde inte återställa lösenordet');
-    } finally {
-      isLoading = false;
-    }
-  }
+	async function handleSubmit(e: Event) {
+		e.preventDefault();
+		if (!token) {
+			alert('Ogiltig återställningslänk');
+			return;
+		}
+		isLoading = true;
+		try {
+			await (authClient as any).resetPassword?.({ newPassword, token });
+			alert('Lösenordet är ändrat. Logga in igen.');
+			location.assign('/');
+		} catch (err) {
+			console.error('Reset password error', err);
+			alert('Kunde inte återställa lösenordet');
+		} finally {
+			isLoading = false;
+		}
+	}
 </script>
 
-<section style="width:100%;min-height:60vh;display:flex;align-items:center;justify-content:center;padding:1rem;">
-  <form style="width:100%;max-width:24rem;display:flex;flex-direction:column;gap:1rem;" onsubmit={handleSubmit}>
-    <label style="display:flex;flex-direction:column;gap:0.5rem;">
-      <span>Nytt lösenord</span>
-      <input type="password" bind:value={newPassword} name="password" placeholder="••••••" required />
-    </label>
-    <button type="submit" disabled={isLoading} style="width:100%;padding:0.75rem;border-radius:0.5rem;background:#1d4ed8;color:white;">
-      {#if isLoading}
-        Bearbetar...
-      {:else}
-        Återställ lösenord
-      {/if}
-    </button>
-  </form>
-  {#if !token}
-    <p style="font-size:0.875rem;color:#6b7280;margin-top:1rem;">Ogiltig eller saknad token. Kontrollera länken i din e‑post.</p>
-  {/if}
-</section>
+<Dialog.Root bind:open>
+	<Dialog.Content class="w-full max-w-xs">
+		<Dialog.Header>
+			<Dialog.Title>Återställ lösenord</Dialog.Title>
+		</Dialog.Header>
 
+		<form class="flex flex-col space-y-6" onsubmit={handleSubmit}>
+			<label class="space-y-2">
+				<span>Nytt lösenord</span>
+				<input
+					class="w-full rounded-md border p-2"
+					type="password"
+					bind:value={newPassword}
+					name="password"
+					placeholder="••••••"
+					required
+				/>
+			</label>
 
+			{#if !token}
+				<p class="text-sm text-gray-500">
+					Ogiltig eller saknad token. Kontrollera länken i din e‑post.
+				</p>
+			{/if}
+
+			<Dialog.Footer>
+				<Button type="submit" variant="outline" class="w-full" disabled={isLoading}>
+					{#if isLoading}
+						Bearbetar...
+					{:else}
+						Återställ lösenord
+					{/if}
+				</Button>
+			</Dialog.Footer>
+		</form>
+	</Dialog.Content>
+</Dialog.Root>

@@ -4,7 +4,6 @@ import { withCloudflare } from 'better-auth-cloudflare';
 import type { CloudflareGeolocation } from 'better-auth-cloudflare';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
-// import { admin, apiKey } from 'better-auth/plugins';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { getDb } from '$lib/server/db';
@@ -196,6 +195,75 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
         emailVerification: {
             sendOnSignUp: false
         },
+        user: {
+            changeEmail: {
+                enabled: true,
+                sendChangeEmailVerification: async ({ user, newEmail, url, token }, _request) => {
+                    const subject = 'Bekräfta ändring av e‑post';
+                    const body = `
+                        <p>Hej!</p>
+                        <p>Du har begärt att ändra din e‑post till <strong>${newEmail}</strong>.</p>
+                        <p>Klicka på länken nedan för att bekräfta ändringen:</p>
+                        <p><a href="${url}">${url}</a></p>
+                        <p>Om du inte begärt denna ändring kan du ignorera detta mail.</p>
+                    `;
+                    try {
+                        const host = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
+                        const tokenPreview = typeof token === 'string' ? `${token.slice(0, 6)}…(${token.length})` : 'n/a';
+                        console.log('[BetterAuth] change-email email debug start', {
+                            to: user?.email,
+                            newEmail,
+                            url,
+                            host,
+                            tokenPreview
+                        });
+                    } catch { }
+                    try {
+                        const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
+                        console.log('[BetterAuth] RESEND_API_KEY present?', { present: Boolean(apiKey), length: apiKey?.length ?? 0 });
+                        if (!apiKey) {
+                            console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send change-email verification');
+                            return;
+                        }
+                        const preferredFrom = 'Instafication <no-reply@transactional.instafication.shop>';
+                        const fallbackFrom = 'Instafication <onboarding@resend.dev>';
+                        const payloadPreferred = { from: preferredFrom, to: user.email, subject, html: body };
+                        const payloadFallback = { from: fallbackFrom, to: user.email, subject, html: body };
+
+                        async function sendDirect(payload: any) {
+                            console.log('[BetterAuth] Resend POST /emails (direct)', { from: payload.from, to: payload.to });
+                            const res = await fetch('https://api.resend.com/emails', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': `Bearer ${apiKey}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(payload)
+                            });
+                            const txt = await res.text();
+                            let json: any = null; try { json = JSON.parse(txt); } catch { }
+                            console.log('[BetterAuth] Resend response', { status: res.status, ok: res.ok, id: json?.id ?? null, error: json?.error ?? null, raw: txt });
+                            if (!res.ok) throw new Error(`Resend error ${res.status}`);
+                            return json;
+                        }
+
+                        const isLocal = /localhost|127\./.test((() => { try { return new URL(url).hostname; } catch { return ''; } })());
+                        if (isLocal) {
+                            await sendDirect(payloadFallback);
+                        } else {
+                            try {
+                                await sendDirect(payloadPreferred);
+                            } catch (e) {
+                                console.warn('[BetterAuth] Preferred sender failed, trying fallback', e);
+                                await sendDirect(payloadFallback);
+                            }
+                        }
+                    } catch (e) {
+                        console.error('[BetterAuth] sendChangeEmailVerification failed', e);
+                    }
+                }
+            }
+        },
         rateLimit: { enabled: true },
         // Ensure cookies are set correctly in SvelteKit responses
         plugins: [sveltekitCookies(getRequestEvent)],
@@ -227,6 +295,22 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
                             }
                         } catch (e) {
                             console.error('[BetterAuth hook] failed to create default profile', e);
+                        }
+                    }
+                },
+                update: {
+                    after: async (user: any) => {
+                        // Keep profile email in sync with auth users table
+                        try {
+                            const db = getDb({ d1Binding: (env as any)?.DB });
+                            const { profiles } = await import('../../../../drizzle/schema');
+                            const { eq } = await import('drizzle-orm');
+                            await db
+                                .update(profiles)
+                                .set({ email: user.email })
+                                .where(eq(profiles.id, user.id));
+                        } catch (e) {
+                            console.error('[BetterAuth hook] failed to sync profile email on user.update', e);
                         }
                     }
                 }
