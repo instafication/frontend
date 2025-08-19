@@ -60,36 +60,54 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
                     <p>Om du inte begärt denna åtgärd kan du ignorera detta mail.</p>
                 `;
                 try {
-                    const { Resend } = await import('resend');
+                    const host = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
+                    const tokenPreview = typeof token === 'string' ? `${token.slice(0, 6)}…(${token.length})` : 'n/a';
+                    console.log('[BetterAuth] reset email debug start', {
+                        to: user?.email,
+                        url,
+                        host,
+                        tokenPreview
+                    });
+                } catch { }
+                try {
                     const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
+                    console.log('[BetterAuth] RESEND_API_KEY present?', { present: Boolean(apiKey), length: apiKey?.length ?? 0 });
                     if (!apiKey) {
                         console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send reset email');
                         return;
                     }
-                    const resend = new Resend(apiKey);
                     const preferredFrom = 'Instafication <no-reply@transactional.instafication.shop>';
                     const fallbackFrom = 'Instafication <onboarding@resend.dev>';
+                    const payloadPreferred = { from: preferredFrom, to: user.email, subject, html: body };
+                    const payloadFallback = { from: fallbackFrom, to: user.email, subject, html: body };
 
-                    try {
-                        const r1 = await resend.emails.send({ from: preferredFrom, to: user.email, subject, html: body });
-                        console.log('[BetterAuth] reset email sent (preferred domain)', { id: (r1 as any)?.id || null, to: user.email, from: preferredFrom });
-                    } catch (err) {
-                        console.warn('[BetterAuth] preferred domain send failed, retrying with fallback', err);
+                    async function sendDirect(payload: any) {
+                        console.log('[BetterAuth] Resend POST /emails (direct)', { from: payload.from, to: payload.to });
+                        const res = await fetch('https://api.resend.com/emails', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${apiKey}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        const txt = await res.text();
+                        let json: any = null; try { json = JSON.parse(txt); } catch { }
+                        console.log('[BetterAuth] Resend response', { status: res.status, ok: res.ok, id: json?.id ?? null, error: json?.error ?? null, raw: txt });
+                        if (!res.ok) throw new Error(`Resend error ${res.status}`);
+                        return json;
+                    }
+
+                    // In dev, use onboarding sender to avoid unverified domain; in prod, try preferred then fallback
+                    const isLocal = /localhost|127\./.test((() => { try { return new URL(url).hostname; } catch { return ''; } })());
+                    if (isLocal) {
+                        await sendDirect(payloadFallback);
+                    } else {
                         try {
-                            const r2 = await resend.emails.send({ from: fallbackFrom, to: user.email, subject, html: body });
-                            console.log('[BetterAuth] reset email sent (fallback domain)', { id: (r2 as any)?.id || null, to: user.email, from: fallbackFrom });
-                        } catch (fallbackErr) {
-                            console.warn('[BetterAuth] resend SDK fallback failed, using direct fetch', fallbackErr);
-                            const res = await fetch('https://api.resend.com/emails', {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': `Bearer ${apiKey}`,
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ from: fallbackFrom, to: user.email, subject, html: body })
-                            });
-                            const txt = await res.text();
-                            console.log('[BetterAuth] resend direct fetch result', { status: res.status, body: txt });
+                            await sendDirect(payloadPreferred);
+                        } catch (e) {
+                            console.warn('[BetterAuth] Preferred sender failed, trying fallback', e);
+                            await sendDirect(payloadFallback);
                         }
                     }
                 } catch (e) {

@@ -2,8 +2,8 @@
   import authClient from '$lib/authClient';
   import { onMount } from 'svelte';
 
-  let newPassword: string = '';
-  let isLoading: boolean = false;
+  let newPassword = '';
+  let isLoading = false;
   let token: string | null = null;
 
   onMount(() => {
