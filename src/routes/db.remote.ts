@@ -17,6 +17,15 @@ import {
 import { eq, gt, and, inArray, desc, sql } from 'drizzle-orm';
 import { getUserId } from '$lib/Managers/AuthManager';
 
+// Generate a 32-char lowercase hex ID (similar to lower(hex(randomblob(16))))
+const generateHexId = (): string => {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    let out = '';
+    for (let i = 0; i < bytes.length; i++) out += bytes[i].toString(16).padStart(2, '0');
+    return out;
+};
+
 
 /*──────────────────────── SCRAPERS ──────────────────────*/
 /** Get the latest `last_update` for a scraper row
@@ -62,6 +71,10 @@ export const scraper_Create = command(ScraperInsertSchema, async (payload: Scrap
         .insert(scrapers)
         .values({
             ...payload,
+            id: (payload as any).id ?? generateHexId(),
+            frequency: payload.frequency ?? 5,
+            services: (payload as any).services ?? [],
+            params: (payload as any).params ?? {},
             last_ping: now,
             last_update: now
         });
@@ -144,7 +157,11 @@ export const profile_GetAll = query(async () =>
 export const profile_Create = command(ProfileInsertSchema, async (payload: ProfileInsert) =>
     await db()
         .insert(profiles)
-        .values(payload)
+        .values({
+            ...payload,
+            id: (payload as any).id ?? generateHexId(),
+            credits: payload.credits ?? 3
+        })
 );
 
 export const profile_UpdateUserByUserId = command(v.object({ userId: v.string(), data: ProfileUpdateSchema }), async ({ userId, data }: { userId: string; data: ProfileUpdate }) =>
@@ -199,7 +216,11 @@ export const profile_RefillCreditsByUserEmail = command(v.object({ email: v.stri
 export const notification_Create = command(NotificationInsertSchema, async (payload: NotificationInsert) =>
     await db()
         .insert(notifications)
-        .values(payload)
+        .values({
+            ...payload,
+            id: (payload as any).id ?? generateHexId(),
+            date: (payload as any).date ?? Math.floor(Date.now() / 1000)
+        })
         .then(r => r.success)
 );
 
@@ -250,7 +271,11 @@ export const service_CreateOrUpdate = command(ServiceInsertSchema, async (payloa
         .where(and(eq(services.user, user), eq(services.name, name)))
         .limit(1);
 
-    const values = { ...rest, notificationWithinTime: String(notificationWithinTime) };
+    const values = {
+        ...rest,
+        options: (rest as any).options ?? {},
+        notificationWithinTime: String(notificationWithinTime)
+    };
 
     const res = existing
         ? await db()
@@ -259,7 +284,7 @@ export const service_CreateOrUpdate = command(ServiceInsertSchema, async (payloa
             .where(eq(services.id, existing.id))
         : await db()
             .insert(services)
-            .values({ user, name, ...values });
+            .values({ id: generateHexId(), user, name, ...values });
 
     return res.success;
 });

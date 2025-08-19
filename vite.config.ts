@@ -11,7 +11,8 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	resolve: {
 		alias: {
-			'@react-email/render': resolve(__dirname, 'src/shims/react-email-render.ts')
+			'@react-email/render': resolve(__dirname, 'src/shims/react-email-render.ts'),
+			'resend': resolve(__dirname, 'src/shims/resend.ts')
 		}
 	},
 	ssr: {
