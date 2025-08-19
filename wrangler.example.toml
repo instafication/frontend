@@ -1,11 +1,13 @@
 name = "frontend"
 main = ".svelte-kit/cloudflare/_worker.js"
 compatibility_flags = [ "nodejs_compat" ]
-compatibility_date = "2025-07-31"
+compatibility_date = "2025-08-19"
 preview_urls = false
+minify = true
 
 routes = [
-  { pattern = "instafication.shop", custom_domain = true }
+  { pattern = "instafication.shop", custom_domain = true },
+  { pattern = "www.instafication.shop", custom_domain = true }
 ]
 
 [assets]
