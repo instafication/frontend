@@ -14,11 +14,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// prerendered routes throw an error during building because the build runtime can't access platform.env
 	if (building) return resolve(event);
 
-	const { DB } = event.platform!.env;
+	const env = event.platform?.env as Env | undefined;
+	if (env?.DB) {
+		event.locals.db = getDb({ d1Binding: env.DB });
+	}
 
-	event.locals.db = getDb({ d1Binding: DB! });
-
-	const auth = createAuth(event.platform!.env);
+	const auth = createAuth(env);
 
 	if (routeRequiresAuth(event)) {
 		const session = await auth.api.getSession({
