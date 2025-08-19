@@ -22,6 +22,7 @@
     "push": "drizzle-kit push",
     "migrate:prod": "drizzle-kit generate && wrangler d1 migrations apply prod --remote",
     "studio": "drizzle-kit studio",
+    "logs": "wrangler tail frontend",
     "clean": "rm -rf .svelte-kit && rm -rf node_modules && rm -rf .wrangler && rm -rf .svelte-kit && rm -f bun.lock && rm -f package-lock.json && bun i"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "drizzle-orm": "^1.0.0-beta.1-fd5d1e8",
     "drizzle-valibot": "^0.4.2",
     "flowbite-svelte": "^1.12.6",
+    "hash-wasm": "^4.1.0",
     "posthog-js": "^1.260.1",
     "resend": "^6.0.1",
     "stripe": "^18.4.0",

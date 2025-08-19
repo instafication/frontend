@@ -9,6 +9,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { getDb } from '$lib/server/db';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
+import { argon2id, argon2Verify } from "hash-wasm";
 
 export type AuthEnv = {
     DB: unknown;
@@ -21,6 +22,33 @@ export type AuthEnv = {
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
 export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | undefined) => {
     const isDev = (import.meta as any)?.env?.DEV ?? false;
+    // Use Argon2id for password hashing (tuned for Cloudflare Workers)
+    const argon2idHasher = {
+        hash: async (password: string) => {
+            const salt = new Uint8Array(16);
+            // Cloudflare Workers and Node 22+ expose WebCrypto getRandomValues
+            crypto.getRandomValues(salt);
+            // Conservative params for Workers CPU limits while remaining strong
+            const encoded = await argon2id({
+                password,
+                salt,
+                parallelism: 1,
+                iterations: 3,
+                memorySize: 32 * 1024, // 32 MiB
+                hashLength: 32,
+                outputType: 'encoded'
+            });
+            return encoded; // PHC encoded string ($argon2id$...)
+        },
+        verify: async (hash: string, password: string) => {
+            try {
+                return await argon2Verify({ hash, password });
+            } catch {
+                return false;
+            }
+        }
+    };
+
     const baseOptions: BetterAuthOptions = {
         basePath: '/api/auth',
         secret: env?.BETTER_AUTH_SECRET,
@@ -49,6 +77,12 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
             requireEmailVerification: false,
             // Relax password policy for local dev
             minPasswordLength: 1,
+            // Argon2id password hashing
+            password: {
+                hash: async (password: string) => argon2idHasher.hash(password),
+                verify: async ({ hash, password }: { hash: string; password: string }) =>
+                    argon2idHasher.verify(hash, password)
+            },
             // Forgot password: send email with reset link
             sendResetPassword: async ({ user, url, token }, _request) => {
                 const subject = 'Återställ ditt lösenord';
