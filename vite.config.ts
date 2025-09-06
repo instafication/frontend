@@ -11,8 +11,8 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	resolve: {
 		alias: {
-			'@react-email/render': resolve(__dirname, 'src/shims/react-email-render.ts'),
-			'resend': resolve(__dirname, 'src/shims/resend.ts'),
+			// '@react-email/render': resolve(__dirname, 'src/shims/react-email-render.ts'),
+			// 'resend': resolve(__dirname, 'src/shims/resend.ts'),
 			// Work around esbuild parsing issue in better-call ESM by preferring CJS build
 			'better-call': resolve(__dirname, 'node_modules/better-call/dist/index.cjs'),
 			// Avoid default import mismatch by mapping rou3 to its CJS build
