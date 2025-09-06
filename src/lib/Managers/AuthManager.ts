@@ -18,17 +18,17 @@ async function getSession(): Promise<any | null> {
 
 export async function getUserId(): Promise<string> {
 	const session = await getSession();
-	return session?.user?.id ?? '';
+	return session?.data?.user?.id ?? '';
 }
 
 export async function getUserEmail(): Promise<string> {
 	const session = await getSession();
-	return session?.user?.email ?? '';
+	return session?.data?.user?.email ?? '';
 }
 
 export async function isLoggedIn(): Promise<boolean> {
 	const session = await getSession();
-	return Boolean(session?.user);
+	return Boolean(session?.data?.user);
 }
 
 export async function signUp(email: string, password: string, _isPremium: boolean = false): Promise<boolean> {
