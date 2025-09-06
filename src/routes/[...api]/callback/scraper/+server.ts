@@ -1,8 +1,6 @@
 import type { RequestHandler } from './$types';
 import {
-    scraper_Create,
     scraper_ExistsByArea,
-    scraper_UpdateLastPingByOptionsKeyValue,
     scraper_UpdateLastUpdateByOptionsKeyValue,
     scraper_GetLastUpdateByArea,
     notification_Create,
@@ -10,8 +8,11 @@ import {
     profile_GetUsersWithCreditsByIds
 } from '../../../db.remote';
 import { sendLaundryNotification } from '$lib/Managers/EmailManager';
-import type { Scraper } from '../../../../../drizzle/types';
+import type { Scraper } from '../../../../drizzle/types';
 import type { JsonValue } from 'type-fest';
+import { db } from '$lib/db';
+import { scrapers } from '../../../../../drizzle/schema';
+import { sql } from 'drizzle-orm';
 
 export interface postTemplate {
     company: string;
@@ -24,7 +25,16 @@ export interface postParamsSssb {
     area: string;
 }
 
-async function HandleSssb(scraper: Scraper, fetch: typeof globalThis.fetch): Promise<Response> {
+// Generate a 32-char lowercase hex ID (similar to lower(hex(randomblob(16))))
+const generateHexId = (): string => {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    let out = '';
+    for (let i = 0; i < bytes.length; i++) out += bytes[i].toString(16).padStart(2, '0');
+    return out;
+};
+
+async function HandleSssb(scraper: Scraper): Promise<Response> {
     const params = scraper.params as JsonValue;
     const area =
         params && typeof params === 'object' && 'area' in params ? (params as { area: string }).area : '';
@@ -50,7 +60,7 @@ async function HandleSssb(scraper: Scraper, fetch: typeof globalThis.fetch): Pro
     dateObj.setUTCHours(dateObj.getUTCHours() + 2); // force CET/CEST again
 
     /* ────────────── Business checks ────────────── */
-    const storedLastUpdated = await scraper_GetLastUpdateByArea({ key: 'area', value: area }, fetch);
+    const storedLastUpdated = await scraper_GetLastUpdateByArea({ key: 'area', value: area });
     if (storedLastUpdated === dateObj.getTime()) {
         console.log('[Scraper] Duplicate data – skipping.');
         return new Response('Duplicate data', { status: 200 });
@@ -63,7 +73,7 @@ async function HandleSssb(scraper: Scraper, fetch: typeof globalThis.fetch): Pro
     }
 
     /* ────────────── Persist new timestamp ────────────── */
-    await scraper_UpdateLastUpdateByOptionsKeyValue({ key: 'area', value: area, unixTimestamp: dateObj.getTime()}, fetch);
+    await scraper_UpdateLastUpdateByOptionsKeyValue({ key: 'area', value: area, unixTimestamp: dateObj.getTime() });
 
     /* ────────────── Create notification row ────────────── */
     await notification_Create({
@@ -106,7 +116,7 @@ async function HandleSssb(scraper: Scraper, fetch: typeof globalThis.fetch): Pro
 }
 
 /* ─────────────────────── POST handler ─────────────────────── */
-export const POST = (async ({ request, fetch }) => {
+export const POST = (async ({ request }) => {
     try {
         const scraper: Scraper = await request.json();
         console.log('[Scraper] Incoming payload:', JSON.stringify(scraper, null, 2));
@@ -121,21 +131,40 @@ export const POST = (async ({ request, fetch }) => {
         }
 
         /* Ensure scraper row exists */
-        const exists = await scraper_ExistsByArea({ key: 'area', value: params.area }, fetch);
+        const exists = await scraper_ExistsByArea({ key: 'area', value: params.area });
         if (!exists) {
-            await scraper_Create(scraper, fetch);
+            // await scraper_Create(scraper);
+            const now = Date.now();
+            const r = await db()
+                .insert(scrapers)
+                .values({
+                    ...scraper,
+                    id: (scraper as any).id ?? generateHexId(),
+                    frequency: scraper.frequency ?? 5,
+                    services: (scraper as any).services ?? [],
+                    params: (scraper as any).params ?? {},
+                    last_ping: now,
+                    last_update: now
+                });
             console.log(`[Scraper] New scraper row created for area ${params.area}`);
+            return new Response('New scraper row created', { status: 200 });
         }
 
         /* Always bump last_ping */
-        await scraper_UpdateLastPingByOptionsKeyValue(
-            { key: 'area', value: params.area, unixTimestamp: Date.now() },
-            fetch
-        );
+        // await scraper_UpdateLastPingByOptionsKeyValue(
+        //     { key: 'area', value: params.area, unixTimestamp: Date.now() }
+        // );
 
-        return await HandleSssb(scraper, fetch);
+        const r2 = await db()
+            .update(scrapers)
+            .set({ last_ping: Date.now() })
+            .where(sql`params->>'${sql.raw('area')}' = ${params.area}`)
+            .then(r => r.success);
+        console.log(`[Scraper] Last ping updated for area ${params.area}: ${r2}`);
+
+        return await HandleSssb(scraper);
     } catch (error) {
         console.error(`[Scraper] Unhandled error: ${error}`);
-        return new Response(`Internal error: ${error}`, { status: 500 });
+        return new Response(`Internal error: ${error instanceof Error ? error.message : String(error)}`, { status: 500 })
     }
 }) satisfies RequestHandler;
