@@ -9,7 +9,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { getDb } from '$lib/server/db';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
-import { subtle as webSubtle, getRandomValues as webGetRandomValues } from '@better-auth/utils';
+import { subtle as webSubtle, getRandomValues as webGetRandomValues } from '@better-auth/utils/random';
 
 export type AuthEnv = {
     DB: unknown;
