@@ -9,7 +9,29 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { getDb } from '$lib/server/db';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
-import { subtle as webSubtle, getRandomValues as webGetRandomValues } from '@better-auth/utils/random';
+function resolveCrypto(): Crypto {
+    const scoped = (globalThis as typeof globalThis & { webcrypto?: Crypto | undefined })?.crypto;
+    if (scoped && typeof scoped.getRandomValues === 'function') {
+        return scoped;
+    }
+    const fallback = (globalThis as typeof globalThis & { webcrypto?: Crypto | undefined }).webcrypto;
+    if (fallback && typeof fallback.getRandomValues === 'function') {
+        return fallback;
+    }
+    throw new Error('crypto.getRandomValues must be defined');
+}
+
+function resolveSubtle(): SubtleCrypto {
+    const subtle = resolveCrypto().subtle;
+    if (!subtle) {
+        throw new Error('crypto.subtle must be defined');
+    }
+    return subtle;
+}
+
+function fillRandomValues<T extends ArrayBufferView>(view: T): T {
+    return resolveCrypto().getRandomValues(view);
+}
 
 export type AuthEnv = {
     DB: unknown;
@@ -23,7 +45,7 @@ export type AuthEnv = {
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
 export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | undefined) => {
     const isDev = (import.meta as any)?.env?.DEV ?? false;
-    // Workers-safe PBKDF2-HMAC-SHA256 using Web Crypto via @better-auth/utils (uncrypto)
+    // Workers-safe PBKDF2-HMAC-SHA256 using Web Crypto (Cloudflare-compatible)
     function toBase64(data: Uint8Array): string {
         if (typeof Buffer !== 'undefined') return Buffer.from(data).toString('base64');
         let binary = '';
@@ -51,13 +73,14 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
         // Encodes as: pbkdf2$algo=sha256$it=100000$salt=<b64>$dk=<b64>
         hash: async (password: string) => {
             const salt = new Uint8Array(16);
-            webGetRandomValues(salt);
+            fillRandomValues(salt);
             const iterations = Number((env as any)?.PBKDF2_ITERS) || (isDev ? 100_000 : 100_000);
             const hashAlgo = 'SHA-256';
             const dkLen = 32;
             const passwordBytes = new TextEncoder().encode(password);
-            const key = await webSubtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
-            const bits = await webSubtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: hashAlgo }, key, dkLen * 8);
+            const subtle = resolveSubtle();
+            const key = await subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
+            const bits = await subtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: hashAlgo }, key, dkLen * 8);
             const derivedKey = new Uint8Array(bits);
             return `pbkdf2$algo=sha256$it=${iterations}$salt=${toBase64(salt)}$dk=${toBase64(derivedKey)}`;
         },
@@ -74,8 +97,9 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
                 const salt = fromBase64(parts.salt);
                 const expected = fromBase64(parts.dk);
                 const passwordBytes = new TextEncoder().encode(password);
-                const key = await webSubtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
-                const bits = await webSubtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, key, expected.length * 8);
+                const subtle = resolveSubtle();
+                const key = await subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
+                const bits = await subtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, key, expected.length * 8);
                 const derivedKey = new Uint8Array(bits);
                 return timingSafeEqualBytes(derivedKey, expected);
             } catch {
@@ -455,5 +479,3 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 
 // Export for CLI usage to generate schemas when env is not provided
 export const auth = createAuth();
-
-
