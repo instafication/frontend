@@ -1,8 +1,9 @@
 // src/lib/server/emailManager.ts
-import { RESEND_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const FROM_ADDRESS = 'Instafication <no-reply@transactional.instafication.shop>';
+const RESEND_API_KEY = env.RESEND_API_KEY;
 
 type Recipient = string | string[];
 
@@ -17,6 +18,11 @@ interface SendParams {
  * Returns true on 2xx; logs and returns false otherwise.
  */
 async function sendViaResend({ to, subject, html }: SendParams): Promise<boolean> {
+	if (!RESEND_API_KEY) {
+		console.error('[EmailManager] RESEND_API_KEY is missing; cannot send email.');
+		return false;
+	}
+
 	try {
 		const res = await fetch(RESEND_ENDPOINT, {
 			method: 'POST',
