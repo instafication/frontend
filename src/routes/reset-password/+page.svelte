@@ -18,16 +18,20 @@ async function handleSubmit(e: Event) {
 		alert('Ogiltig återställningslänk');
 		return;
 	}
-	_isLoading = true;
+	isLoading = true;
 	try {
-		await (authClient as any).resetPassword?.({ newPassword, token });
+		await (
+			authClient as unknown as {
+				resetPassword?: (opts: { newPassword: string; token: string }) => Promise<void>;
+			}
+		).resetPassword?.({ newPassword, token });
 		alert('Lösenordet är ändrat. Logga in igen.');
 		location.assign('/');
 	} catch (err) {
 		console.error('Reset password error', err);
 		alert('Kunde inte återställa lösenordet');
 	} finally {
-		_isLoading = false;
+		isLoading = false;
 	}
 }
 </script>

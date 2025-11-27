@@ -8,12 +8,12 @@ import {
 	service_RemoveByUserIdAndServiceName
 } from '../../../routes/db.remote';
 
-const _AREA_LIST = [
+const AREA_LIST = [
 	{ value: 'lappkärrsberget', label: 'lappkärrsberget' },
 	{ value: 'kungshamra', label: 'kungshamra' }
 ] as const;
 
-const _WITHIN_TIME_LIST = [
+const WITHIN_TIME_LIST = [
 	{ value: '1800', label: 'Inom 30 minuter' },
 	{ value: '10800', label: 'Inom 3 timmar' },
 	{ value: '28800', label: 'Inom 8 timmar' },
@@ -22,19 +22,25 @@ const _WITHIN_TIME_LIST = [
 	{ value: '259200', label: 'Inom 3 dagar' }
 ] as const;
 
-const _NOTIFICATION_METHOD_LIST = [{ value: 'e-post', label: 'E-post' }] as const;
+const NOTIFICATION_METHOD_LIST = [{ value: 'e-post', label: 'E-post' }] as const;
 
 let selectedNotificationMethod = $state<string>('');
 let selectedWithinTime = $state<string>('');
 let selectedArea = $state<string>('');
-let _loading = $state<boolean>(false);
+let loading = $state<boolean>(false);
 let hasActiveService = $state<boolean>(false);
 
+interface ServiceConfig {
+	notificationMethod?: string;
+	notificationWithinTime?: string | number;
+	options?: { area?: string };
+}
+
 onMount(async () => {
-	const cfg: any = await service_GetConfigByCompanyName({
+	const cfg = (await service_GetConfigByCompanyName({
 		companyName: 'Stockholms Studentbostäder',
 		userId: await getUserId()
-	});
+	})) as ServiceConfig | null;
 	if (cfg) {
 		selectedNotificationMethod = cfg.notificationMethod ?? '';
 		selectedWithinTime = String(cfg.notificationWithinTime ?? '');
@@ -43,7 +49,7 @@ onMount(async () => {
 	}
 });
 
-const _placeholder = 'Välj…';
+const placeholder = 'Välj…';
 
 function validateForm() {
 	return selectedNotificationMethod && selectedWithinTime && selectedArea;
@@ -54,7 +60,7 @@ async function toggleService() {
 		toast.error('Du måste fylla i alla fält innan du sparar.');
 		return;
 	}
-	_loading = true;
+	loading = true;
 
 	if (hasActiveService) {
 		console.log(hasActiveService);
@@ -83,7 +89,7 @@ async function toggleService() {
 			toast.error('Det gick inte att skapa bevakningen.');
 		}
 	}
-	_loading = false;
+	loading = false;
 }
 </script>
 

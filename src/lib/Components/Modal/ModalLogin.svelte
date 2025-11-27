@@ -8,7 +8,7 @@ const password = $state('');
 let loading = $state(false);
 
 /* ───────── actions ───────── */
-const _handlePasswordLogin = async (e?: Event) => {
+const handlePasswordLogin = async (e?: Event) => {
 	e?.preventDefault?.();
 	if (loading) return;
 	loading = true;
@@ -22,7 +22,7 @@ const _handlePasswordLogin = async (e?: Event) => {
 	}
 };
 
-const _handleGoogleLogin = async () => {
+const handleGoogleLogin = async () => {
 	if (loading) return;
 	loading = true;
 	try {

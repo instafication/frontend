@@ -4,16 +4,15 @@ import { onMount } from 'svelte';
 import { profile_EnsureExistsByUserId, profile_GetCreditsByUserId } from '../../routes/db.remote';
 
 let id = $state('');
-const _email = $state<string>('');
-let _credits = $state<number>(0);
+let credits = $state<number>(0);
 
 onMount(async () => {
 	id = await getUserId();
 	// Optimistic default while ensuring profile exists
-	_credits = 3;
+	credits = 3;
 	if (id) {
 		await profile_EnsureExistsByUserId(id);
-		_credits = await profile_GetCreditsByUserId(id);
+		credits = await profile_GetCreditsByUserId(id);
 	}
 	// [email, phone, credits] = await Promise.all([
 	// 	trpc.email.query(id),

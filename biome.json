@@ -21,6 +21,9 @@
 			"correctness": {
 				"noUnusedImports": "warn",
 				"noUnusedVariables": "warn"
+			},
+			"suspicious": {
+				"noExplicitAny": "off"
 			}
 		}
 	},
@@ -29,5 +32,17 @@
 			"quoteStyle": "single",
 			"trailingCommas": "none"
 		}
-	}
+	},
+	"overrides": [
+		{
+			"include": ["**/*.svelte"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off"
+					}
+				}
+			}
+		}
+	]
 }

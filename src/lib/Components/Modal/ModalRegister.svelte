@@ -8,7 +8,7 @@ const password = $state('');
 let loading = $state(false);
 
 /* ───────── helpers ───────── */
-const _register = async (e?: Event) => {
+const register = async (e?: Event) => {
 	e?.preventDefault?.();
 	if (loading) return;
 	loading = true;
@@ -17,7 +17,7 @@ const _register = async (e?: Event) => {
 		if (ok) {
 			$showRegisterModal = false;
 		}
-	} catch (_err: any) {
+	} catch {
 		toast.error("Error, can't create account. Try again.");
 	} finally {
 		loading = false;

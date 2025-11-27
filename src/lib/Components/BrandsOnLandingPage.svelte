@@ -2,8 +2,8 @@
 import { onMount } from 'svelte';
 import { scraper_GetLastUpdateByCompanyName } from '../../routes/db.remote';
 
-let _lastSearchedMinutes = $state(0);
-let _loading = $state(true);
+let lastSearchedMinutes = $state(0);
+let loading = $state(true);
 
 function calculateMinutesSince(timestamp: number): number {
 	if (timestamp <= 0) return 0;
@@ -14,15 +14,15 @@ function calculateMinutesSince(timestamp: number): number {
 
 async function fetchLastUpdateTime() {
 	try {
-		_loading = true;
-		_lastSearchedMinutes = calculateMinutesSince(
+		loading = true;
+		lastSearchedMinutes = calculateMinutesSince(
 			await scraper_GetLastUpdateByCompanyName('Stockholms Studentbostäder')
 		);
-	} catch (_err) {
-		console.error('Error: ', _err);
-		_lastSearchedMinutes = -1;
+	} catch (err) {
+		console.error('Error: ', err);
+		lastSearchedMinutes = -1;
 	} finally {
-		_loading = false;
+		loading = false;
 	}
 }
 
