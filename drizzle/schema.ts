@@ -1,7 +1,5 @@
-
-import { sqliteTable, text, integer, unique } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
-
+import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 
 export const profiles = sqliteTable('profiles', {
 	id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),
@@ -13,14 +11,18 @@ export const profiles = sqliteTable('profiles', {
 	raw_user_meta_data: text('raw_user_meta_data', { mode: 'json' })
 });
 
-export const services = sqliteTable('services', {
-	id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),
-	user: text('user').notNull(),
-	name: text('name').notNull(),
-	notificationMethod: text('notification_method').notNull(),
-	notificationWithinTime: text('notification_within_time').notNull(),
-	options: text('options', { mode: 'json' }).default('{}')
-}, (t) => [unique('services_user_name_unique').on(t.user, t.name)]);
+export const services = sqliteTable(
+	'services',
+	{
+		id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),
+		user: text('user').notNull(),
+		name: text('name').notNull(),
+		notificationMethod: text('notification_method').notNull(),
+		notificationWithinTime: text('notification_within_time').notNull(),
+		options: text('options', { mode: 'json' }).default('{}')
+	},
+	(t) => [unique('services_user_name_unique').on(t.user, t.name)]
+);
 
 export const scrapers = sqliteTable('scrapers', {
 	id: text('id').primaryKey().default(sql`lower(hex(randomblob(16)))`),
@@ -39,7 +41,6 @@ export const notifications = sqliteTable('notifications', {
 	date: integer('date', { mode: 'number' }).default(sql`(strftime('%s','now'))`),
 	area: text('area').notNull()
 });
-
 
 // ---------------------------------------------------------------------------
 //  BetterAuth core tables (SQLite). If you use @better-auth/cli, prefer
@@ -66,33 +67,37 @@ export const sessions = sqliteTable('sessions', {
 	created_at: integer('session_created_at', { mode: 'number' }).default(sql`(strftime('%s','now'))`)
 });
 
-export const accounts = sqliteTable('accounts', {
-	id: text('id').primaryKey(),
-	user_id: text('user_id').notNull(),
-	provider_id: text('provider_id').notNull(),
-	provider_user_id: text('provider_user_id').notNull(),
-	access_token: text('access_token'),
-	refresh_token: text('refresh_token'),
-	expires_at: integer('expires_at', { mode: 'number' }),
-	password: text('password')
-}, (t) => [unique('provider_user').on(t.provider_id, t.provider_user_id)]);
+export const accounts = sqliteTable(
+	'accounts',
+	{
+		id: text('id').primaryKey(),
+		user_id: text('user_id').notNull(),
+		provider_id: text('provider_id').notNull(),
+		provider_user_id: text('provider_user_id').notNull(),
+		access_token: text('access_token'),
+		refresh_token: text('refresh_token'),
+		expires_at: integer('expires_at', { mode: 'number' }),
+		password: text('password')
+	},
+	(t) => [unique('provider_user').on(t.provider_id, t.provider_user_id)]
+);
 
-export const verification_tokens = sqliteTable('verification_tokens', {
-	id: text('id').primaryKey(),
-	identifier: text('identifier').notNull(),
-	token: text('token').notNull(),
-	expires_at: integer('vt_expires_at', { mode: 'number' }).notNull()
-}, (t) => [unique('identifier_token').on(t.identifier, t.token)]);
+export const verification_tokens = sqliteTable(
+	'verification_tokens',
+	{
+		id: text('id').primaryKey(),
+		identifier: text('identifier').notNull(),
+		token: text('token').notNull(),
+		expires_at: integer('vt_expires_at', { mode: 'number' }).notNull()
+	},
+	(t) => [unique('identifier_token').on(t.identifier, t.token)]
+);
 
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-valibot';
 // ---------------------------------------------------------------------------
 //  Valibot schemas & types (generated via drizzle-valibot)
 // ---------------------------------------------------------------------------
 import * as v from 'valibot';
-import {
-	createSelectSchema,
-	createInsertSchema,
-	createUpdateSchema
-} from 'drizzle-valibot';
 
 /* PROFILES */
 export const ProfileSelectSchema = createSelectSchema(profiles);
@@ -109,7 +114,7 @@ export type ProfileUpdate = v.InferInput<typeof ProfileUpdateSchema>;
 */
 export const ServiceSelectSchema = createSelectSchema(services);
 export const ServiceInsertSchema = createInsertSchema(services, {
-	notificationWithinTime: v.number()          // overwrite field schema
+	notificationWithinTime: v.number() // overwrite field schema
 });
 export const ServiceUpdateSchema = createUpdateSchema(services, {
 	notificationWithinTime: v.optional(v.number())

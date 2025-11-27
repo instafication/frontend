@@ -8,11 +8,11 @@ export default {
 		runes: true,
 		experimental: {
 			async: true
-		},
+		}
 	},
 	kit: {
 		experimental: {
-			remoteFunctions: true,
+			remoteFunctions: true
 		},
 		adapter: adapter({
 			// See below for an explanation of these options
@@ -27,9 +27,9 @@ export default {
 			//   include: ['/*'],
 			//   exclude: ['<all>']
 			// }
-		}),
+		})
 		// alias: {
 		// "@/*": "./src/lib/*",
 		// },
-	},
+	}
 };

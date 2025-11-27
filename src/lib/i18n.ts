@@ -1,6 +1,6 @@
-import { derived, writable } from 'svelte/store';
-import translations from '$lib/translations';
 import { selectedLanguage } from '$lib/sharedStore';
+import translations from '$lib/translations';
+import { derived } from 'svelte/store';
 
 export const locales = Object.keys(translations);
 

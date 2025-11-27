@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
-import { toast } from 'svelte-sonner';
 import authClient from '$lib/authClient';
 import { userLoggedIn } from '$lib/sharedStore';
+import { toast } from 'svelte-sonner';
 
 type AnyAuthClient = any;
 const client: AnyAuthClient = authClient as AnyAuthClient;
@@ -31,7 +31,11 @@ export async function isLoggedIn(): Promise<boolean> {
 	return Boolean(session?.data?.user);
 }
 
-export async function signUp(email: string, password: string, _isPremium: boolean = false): Promise<boolean> {
+export async function signUp(
+	email: string,
+	password: string,
+	_isPremium = false
+): Promise<boolean> {
 	if (!browser) {
 		toast.error('Authentication not available');
 		return false;
@@ -85,7 +89,7 @@ export async function signInWithPassword(email: string, password: string): Promi
 	}
 }
 
-export async function signInWithOAuth(_provider: string = 'google') {
+export async function signInWithOAuth(_provider = 'google') {
 	toast.error('OAuth sign-in not configured');
 }
 
@@ -139,7 +143,9 @@ export async function updateEmail(_email: string): Promise<boolean> {
 		}
 
 		if (isCurrentlyVerified) {
-			toast.info('Vi har skickat en bekräftelselänk till din nuvarande e‑post. Följ länken för att slutföra ändringen.');
+			toast.info(
+				'Vi har skickat en bekräftelselänk till din nuvarande e‑post. Följ länken för att slutföra ändringen.'
+			);
 		} else {
 			// For unverified accounts, the change is immediate
 			toast.success('Din e‑post har uppdaterats.');

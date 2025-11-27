@@ -63,10 +63,7 @@ async function SendEmailWhenSubscriptionProlonged(
 	try {
 		return await sendViaResend({ to, subject, html: body });
 	} catch (err) {
-		console.error(
-			`[EmailManager] Error sending 'subscription prolonged' email:`,
-			err
-		);
+		console.error(`[EmailManager] Error sending 'subscription prolonged' email:`, err);
 		return false;
 	}
 }
@@ -79,10 +76,7 @@ async function SendEmailWhenUserIsCreated(
 	try {
 		return await sendViaResend({ to, subject, html: body });
 	} catch (err) {
-		console.error(
-			`[EmailManager] Error sending 'user created' email:`,
-			err
-		);
+		console.error(`[EmailManager] Error sending 'user created' email:`, err);
 		return false;
 	}
 }
@@ -95,10 +89,7 @@ async function SendEmailWhenSubscription(to: string): Promise<boolean> {
 			html: 'Välkommen till Instafication Premium!'
 		});
 	} catch (err) {
-		console.error(
-			`[EmailManager] Error sending 'subscription welcome' email:`,
-			err
-		);
+		console.error(`[EmailManager] Error sending 'subscription welcome' email:`, err);
 		return false;
 	}
 }
@@ -108,7 +99,7 @@ async function sendEmail(to: string, subject: string, html: string): Promise<boo
 	try {
 		return await sendViaResend({ to, subject, html });
 	} catch (err) {
-		console.error(`[EmailManager] Error sending generic email:`, err);
+		console.error('[EmailManager] Error sending generic email:', err);
 		return false;
 	}
 }
@@ -160,13 +151,11 @@ async function sendLaundryNotification(
 	try {
 		const ok = await sendViaResend({ to, subject, html });
 		if (ok) {
-			console.log(
-				`[EmailManager] Laundry notification sent to ${to} (${area} - ${date} ${time})`
-			);
+			console.log(`[EmailManager] Laundry notification sent to ${to} (${area} - ${date} ${time})`);
 		}
 		return ok;
 	} catch (err) {
-		console.error(`[EmailManager] Error sending laundry notification email:`, err);
+		console.error('[EmailManager] Error sending laundry notification email:', err);
 		return false;
 	}
 }

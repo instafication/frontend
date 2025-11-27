@@ -1,20 +1,15 @@
 <script lang="ts">
-	import * as Dialog from '$lib/Components/ui/dialog/index.js';
-	import { resetPasswordForEmail } from '$lib/Managers/AuthManager';
-	import { showLostPasswordModal } from '$lib/sharedStore';
-	import { t } from '$lib/i18n';
-	import { Button, Label, Input } from 'flowbite-svelte';
-	import { RotateCcwKey, Loader2 } from '@lucide/svelte';
+import { resetPasswordForEmail } from '$lib/Managers/AuthManager';
 
-	let email = $state('');
-	let isLoading = $state(false);
+const email = $state('');
+let _isLoading = $state(false);
 
-	const handleReset = async (e: Event) => {
-		e.preventDefault();
-		isLoading = true;
-		await resetPasswordForEmail(email);
-		isLoading = false;
-	};
+const _handleReset = async (e: Event) => {
+	e.preventDefault();
+	_isLoading = true;
+	await resetPasswordForEmail(email);
+	_isLoading = false;
+};
 </script>
 
 <Dialog.Root bind:open={$showLostPasswordModal}>

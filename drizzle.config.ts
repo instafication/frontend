@@ -1,13 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { defineConfig } from 'drizzle-kit';
-import fs from 'fs';
-import path from 'path';
 import toml from 'toml';
 
 function readWranglerToml() {
 	try {
 		const filePath = path.resolve(process.cwd(), 'wrangler.toml');
 		const content = fs.readFileSync(filePath, 'utf8');
-		return toml.parse(content) as any;
+		return toml.parse(content) as Record<string, unknown>;
 	} catch (_) {
 		return null;
 	}
@@ -25,13 +25,13 @@ export default defineConfig({
 	dialect: 'sqlite',
 	...(useD1 && d1AccountId && d1DatabaseId && d1Token
 		? {
-			driver: 'd1-http' as const,
-			dbCredentials: {
-				accountId: d1AccountId,
-				databaseId: d1DatabaseId,
-				token: d1Token
+				driver: 'd1-http' as const,
+				dbCredentials: {
+					accountId: d1AccountId,
+					databaseId: d1DatabaseId,
+					token: d1Token
+				}
 			}
-		}
 		: { dbCredentials: { url: 'file:./dev.db' } }),
 	verbose: true,
 	strict: true,

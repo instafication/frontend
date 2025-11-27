@@ -1,29 +1,24 @@
 <script lang="ts">
-	import * as Dialog from '$lib/Components/ui/dialog/index.js';
-	import { Label, Input } from 'flowbite-svelte';
-	import { Button } from '$lib/Components/ui/button/index.js';
-	import { Save, Loader2 } from '@lucide/svelte';
-	import * as authManager from '$lib/Managers/AuthManager';
-	import { showProfileSettingsModal } from '$lib/sharedStore';
-	import { onMount } from 'svelte';
-	import { t } from '$lib/i18n';
+import * as authManager from '$lib/Managers/AuthManager';
+import { showProfileSettingsModal } from '$lib/sharedStore';
+import { onMount } from 'svelte';
 
-	let email = $state<string>('');
-	let loading = $state<boolean>(false);
+let email = $state<string>('');
+let _loading = $state<boolean>(false);
 
-	const handleSave = async (e: Event) => {
-		e.preventDefault();
-		loading = true;
-		const ok = await authManager.updateEmail(email);
-		loading = false;
-		if (ok) showProfileSettingsModal.set(false);
-	};
+const _handleSave = async (e: Event) => {
+	e.preventDefault();
+	_loading = true;
+	const ok = await authManager.updateEmail(email);
+	_loading = false;
+	if (ok) showProfileSettingsModal.set(false);
+};
 
-	async function loadUserData() {
-		email = await authManager.getUserEmail();
-	}
+async function loadUserData() {
+	email = await authManager.getUserEmail();
+}
 
-	onMount(loadUserData);
+onMount(loadUserData);
 </script>
 
 <Dialog.Root bind:open={$showProfileSettingsModal}>

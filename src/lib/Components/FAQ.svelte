@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	/* Radix‑style accordion re‑export */
-	import * as Accordion from '$lib/components/ui/accordion/index.js';
+
 </script>
 
 <p

@@ -1,35 +1,27 @@
 <script lang="ts">
-	import '../app.css';
-	import { isLoggedIn } from '$lib/Managers/AuthManager';
-	import { userLoggedIn } from '$lib/sharedStore';
-	import HeaderLoggedIn from '$lib/Components/HeaderLoggedIn.svelte';
-	import Header from '$lib/Components/Header.svelte';
-	import Footer from '$lib/Components/Footer.svelte';
-	import ModalLogin from '$lib/Components/Modal/ModalLogin.svelte';
-	import ModalLostPassword from '$lib/Components/Modal/ModalLostPassword.svelte';
-	import ModalServices from '$lib/Components/Modal/ModalServices.svelte';
-	import ModalRegister from '$lib/Components/Modal/ModalRegister.svelte';
-	import ProfileSettingsModal from '$lib/Components/Modal/Profile/ProfileSettingsModal.svelte';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
-	import { beforeNavigate, afterNavigate } from '$app/navigation';
-	import posthog from 'posthog-js';
-	import { Toaster } from '$lib/Components/ui/sonner/index.js';
+import '../app.css';
+import { browser } from '$app/environment';
+import { afterNavigate, beforeNavigate } from '$app/navigation';
+import { isLoggedIn } from '$lib/Managers/AuthManager';
+import posthog from 'posthog-js';
+import { onMount } from 'svelte';
 
-	let { children } = $props();
-	let lastAuthStatus = $state('');
-	let lastSession = $state<any | null>(null);
+const { children } = $props();
+const _lastAuthStatus = $state('');
+const _lastSession = $state<any | null>(null);
 
-	if (browser) {
-		beforeNavigate(() => posthog.capture('$pageleave'));
-		afterNavigate(() => posthog.capture('$pageview'));
-	}
+if (browser) {
+	beforeNavigate(() => posthog.capture('$pageleave'));
+	afterNavigate(() => posthog.capture('$pageview'));
+}
 
-	onMount(async () => {
-		$userLoggedIn = await isLoggedIn();
-		// touch session to refresh expiry (sliding window)
-		try { await isLoggedIn(); } catch {}
-	});
+onMount(async () => {
+	$userLoggedIn = await isLoggedIn();
+	// touch session to refresh expiry (sliding window)
+	try {
+		await isLoggedIn();
+	} catch {}
+});
 
 // BetterAuth client does not expose an auth state listener here; we rely on page reload and explicit store updates.
 </script>

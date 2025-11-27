@@ -1,37 +1,35 @@
 <script lang="ts">
-	import authClient from '$lib/authClient';
-	import { onMount } from 'svelte';
-	import * as Dialog from '$lib/Components/ui/dialog/index.js';
-	import { Button } from '$lib/Components/ui/button/index.js';
+import authClient from '$lib/authClient';
+import { onMount } from 'svelte';
 
-	let newPassword = $state<string>('');
-	let isLoading = $state<boolean>(false);
-	let token = $state<string | null>(null);
-	let open = $state<boolean>(true);
+const newPassword = $state<string>('');
+let isLoading = $state<boolean>(false);
+let token = $state<string | null>(null);
+const open = $state<boolean>(true);
 
-	onMount(() => {
-		const params = new URLSearchParams(location.search);
-		token = params.get('token') ?? null;
-	});
+onMount(() => {
+	const params = new URLSearchParams(location.search);
+	token = params.get('token') ?? null;
+});
 
-	async function handleSubmit(e: Event) {
-		e.preventDefault();
-		if (!token) {
-			alert('Ogiltig återställningslänk');
-			return;
-		}
-		isLoading = true;
-		try {
-			await (authClient as any).resetPassword?.({ newPassword, token });
-			alert('Lösenordet är ändrat. Logga in igen.');
-			location.assign('/');
-		} catch (err) {
-			console.error('Reset password error', err);
-			alert('Kunde inte återställa lösenordet');
-		} finally {
-			isLoading = false;
-		}
+async function handleSubmit(e: Event) {
+	e.preventDefault();
+	if (!token) {
+		alert('Ogiltig återställningslänk');
+		return;
 	}
+	_isLoading = true;
+	try {
+		await (authClient as any).resetPassword?.({ newPassword, token });
+		alert('Lösenordet är ändrat. Logga in igen.');
+		location.assign('/');
+	} catch (err) {
+		console.error('Reset password error', err);
+		alert('Kunde inte återställa lösenordet');
+	} finally {
+		_isLoading = false;
+	}
+}
 </script>
 
 <Dialog.Root bind:open>

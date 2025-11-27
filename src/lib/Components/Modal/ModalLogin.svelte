@@ -1,56 +1,46 @@
 <script lang="ts">
-	/* ───── UI kit ───── */
-	import * as Dialog from '$lib/Components/ui/dialog/index.js';
-	import { Button, Label, Input } from 'flowbite-svelte';
-	import { Loader2, LogIn } from '@lucide/svelte';
-	import Checkbox from '$lib/Components/Custom/Checkbox.svelte';
+/* auth + stores */
+import { signInWithOAuth, signInWithPassword } from '$lib/Managers/AuthManager';
 
-	/* auth + stores */
-	import { signInWithOAuth, signInWithPassword } from '$lib/Managers/AuthManager';
-	import { showLoginModal, showRegisterModal, showLostPasswordModal } from '$lib/sharedStore';
+/* ───────── reactive state ───────── */
+const email = $state('');
+const password = $state('');
+let loading = $state(false);
 
-	/* i18n */
-	import { t } from '$lib/i18n';
-
-	/* ───────── reactive state ───────── */
-	let email = $state('');
-	let password = $state('');
-	let loading = $state(false);
-
-	/* ───────── actions ───────── */
-	const handlePasswordLogin = async (e?: Event) => {
-		e?.preventDefault?.();
-		if (loading) return;
-		loading = true;
-		try {
-			const success = await signInWithPassword(email, password);
-			if (success) {
-				$showLoginModal = false;
-			}
-		} finally {
-			loading = false;
+/* ───────── actions ───────── */
+const _handlePasswordLogin = async (e?: Event) => {
+	e?.preventDefault?.();
+	if (loading) return;
+	loading = true;
+	try {
+		const success = await signInWithPassword(email, password);
+		if (success) {
+			$showLoginModal = false;
 		}
-	};
-
-	const handleGoogleLogin = async () => {
-		if (loading) return;
-		loading = true;
-		try {
-			await signInWithOAuth();
-		} finally {
-			loading = false;
-		}
-	};
-
-	function openLostPassword() {
-		$showLostPasswordModal = true;
-		$showLoginModal = false;
+	} finally {
+		loading = false;
 	}
+};
 
-	function openRegister() {
-		$showRegisterModal = true;
-		$showLoginModal = false;
+const _handleGoogleLogin = async () => {
+	if (loading) return;
+	loading = true;
+	try {
+		await signInWithOAuth();
+	} finally {
+		loading = false;
 	}
+};
+
+function openLostPassword() {
+	$showLostPasswordModal = true;
+	$showLoginModal = false;
+}
+
+function openRegister() {
+	$showRegisterModal = true;
+	$showLoginModal = false;
+}
 </script>
 
 <Dialog.Root

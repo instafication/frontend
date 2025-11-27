@@ -1,24 +1,24 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+import { createEventDispatcher } from 'svelte';
 
-	let {
-		checked = $bindable(false),
-		disabled = false,
-		value,
-		class: className,
-		children,
-		...restProps
-	} = $props();
+const {
+	checked = $bindable(false),
+	disabled = false,
+	value,
+	class: className,
+	children,
+	...restProps
+} = $props();
 
-	const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
 
-	// Generate a unique id per component instance for a11y label association
-	const checkboxId = `chk-${Math.random().toString(36).slice(2, 9)}`;
+// Generate a unique id per component instance for a11y label association
+const checkboxId = `chk-${Math.random().toString(36).slice(2, 9)}`;
 
-	function handleChange(event: Event) {
-		const target = event.target as HTMLInputElement;
-		dispatch('change', { checked: target.checked });
-	}
+function handleChange(event: Event) {
+	const target = event.target as HTMLInputElement;
+	dispatch('change', { checked: target.checked });
+}
 </script>
 
 <div class="flex items-center">

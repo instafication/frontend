@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { selectedLanguage } from '$lib/sharedStore';
-	import { Us, Se } from 'svelte-flag-icons';
-	import { Button } from '$lib/components/ui/button/index.js';
+
 </script>
 
 {#if $selectedLanguage == 'sv'}

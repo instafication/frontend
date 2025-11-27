@@ -1,36 +1,34 @@
 <script lang="ts">
-	import { Card, Avatar } from 'flowbite-svelte';
-	import { Badge } from '$lib/Components/ui/badge';
-	import { t } from '$lib/i18n';
-	import { onMount } from 'svelte';
-	import Activity from '@lucide/svelte/icons/activity';
-	import { scraper_GetLastUpdateByCompanyName } from "../../routes/db.remote";
+import { onMount } from 'svelte';
+import { scraper_GetLastUpdateByCompanyName } from '../../routes/db.remote';
 
-	let lastSearchedMinutes = $state(0);
-	let loading = $state(true);
+let _lastSearchedMinutes = $state(0);
+let _loading = $state(true);
 
-	function calculateMinutesSince(timestamp: number): number {
-		if (timestamp <= 0) return 0;
-		const now = Date.now();
-		const diffMs = now - timestamp;
-		return Math.floor(diffMs / 60000);
+function calculateMinutesSince(timestamp: number): number {
+	if (timestamp <= 0) return 0;
+	const now = Date.now();
+	const diffMs = now - timestamp;
+	return Math.floor(diffMs / 60000);
+}
+
+async function fetchLastUpdateTime() {
+	try {
+		_loading = true;
+		_lastSearchedMinutes = calculateMinutesSince(
+			await scraper_GetLastUpdateByCompanyName('Stockholms Studentbostäder')
+		);
+	} catch (_err) {
+		console.error('Error: ', _err);
+		_lastSearchedMinutes = -1;
+	} finally {
+		_loading = false;
 	}
+}
 
-	async function fetchLastUpdateTime() {
-		try {
-			loading = true;
-			lastSearchedMinutes = calculateMinutesSince(await scraper_GetLastUpdateByCompanyName("Stockholms Studentbostäder"));
-		} catch (_err) {
-			console.error("Error: ", _err);
-			lastSearchedMinutes = -1;
-		} finally {
-			loading = false;
-		}
-	}
-
-	onMount(() => {
-		fetchLastUpdateTime();
-	});
+onMount(() => {
+	fetchLastUpdateTime();
+});
 </script>
 
 <Card

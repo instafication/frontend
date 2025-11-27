@@ -1,18 +1,13 @@
 <script lang="ts">
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { notification_GetLatest } from '../../../routes/db.remote';
-	import { BellRing } from '@lucide/svelte';
-	import { Button } from '$lib/Components/ui/button/index.js';
-
-	// let loading = $state<boolean>(true);
-	// let notifications = $state([]);
-	// onMount(async () => {
-	// 	try {
-	// 		notifications = await notification_getLatest(3);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// });
+// let loading = $state<boolean>(true);
+// let notifications = $state([]);
+// onMount(async () => {
+// 	try {
+// 		notifications = await notification_getLatest(3);
+// 	} finally {
+// 		loading = false;
+// 	}
+// });
 </script>
 
 <DropdownMenu.Root>

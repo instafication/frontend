@@ -1,33 +1,28 @@
 <script lang="ts">
-	import * as Dialog from '$lib/Components/ui/dialog/index.js';
-	import { Button, Label, Input } from 'flowbite-svelte';
-	import { Loader2, UserRoundPlus } from '@lucide/svelte';
-	import { toast } from 'svelte-sonner';
-	import { signUp } from '$lib/Managers/AuthManager';
-	import { showRegisterModal } from '$lib/sharedStore';
-	import { t } from '$lib/i18n';
+import { signUp } from '$lib/Managers/AuthManager';
+import { toast } from 'svelte-sonner';
 
-	/* ───────── reactive state ───────── */
-	let email = $state('');
-	let password = $state('');
-	let loading = $state(false);
+/* ───────── reactive state ───────── */
+const email = $state('');
+const password = $state('');
+let loading = $state(false);
 
-	/* ───────── helpers ───────── */
-	const register = async (e?: Event) => {
-		e?.preventDefault?.();
-		if (loading) return;
-		loading = true;
-		try {
-			const ok = await signUp(email, password);
-			if (ok) {
-				$showRegisterModal = false;
-			}
-		} catch (err: any) {
-			toast.error("Error, can't create account. Try again.");
-		} finally {
-			loading = false;
+/* ───────── helpers ───────── */
+const _register = async (e?: Event) => {
+	e?.preventDefault?.();
+	if (loading) return;
+	loading = true;
+	try {
+		const ok = await signUp(email, password);
+		if (ok) {
+			$showRegisterModal = false;
 		}
-	};
+	} catch (_err: any) {
+		toast.error("Error, can't create account. Try again.");
+	} finally {
+		loading = false;
+	}
+};
 </script>
 
 <Dialog.Root bind:open={$showRegisterModal}>

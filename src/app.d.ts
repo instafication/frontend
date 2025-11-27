@@ -19,5 +19,3 @@ declare global {
 		// interface PageData {}
 	}
 }
-
-export {};

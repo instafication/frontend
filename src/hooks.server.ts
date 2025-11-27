@@ -1,10 +1,10 @@
+import { building } from '$app/environment';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
-import { building } from '$app/environment';
 
-import { getDb } from './lib/server/db';
 import { initDB } from '$lib/db';
-import { createAuth, type AuthEnv } from './lib/server/auth';
+import { type AuthEnv, createAuth } from './lib/server/auth';
+import { getDb } from './lib/server/db';
 
 const loginRoute = '/';
 function routeRequiresAuth(_event: RequestEvent) {
@@ -21,13 +21,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 			method: event.request.method,
 			path: u.pathname
 		});
-	} catch { }
+	} catch {}
 
 	const env = event.platform?.env as unknown as AuthEnv | undefined;
 	if (env?.DB) {
 		// Initialize global DB instance used by remote functions in `$lib/db`
-		initDB(env as any);
-		event.locals.db = getDb({ d1Binding: env.DB }) as any;
+		initDB(env as AuthEnv);
+		event.locals.db = getDb({ d1Binding: env.DB });
 		console.log('[hooks] D1 binding detected and initialized');
 	}
 
@@ -52,4 +52,4 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.auth = auth;
 
 	return resolve(event);
-}
+};

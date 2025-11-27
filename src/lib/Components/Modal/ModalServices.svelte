@@ -1,91 +1,90 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import * as Dialog from '$lib/Components/ui/dialog/index.js';
-	import * as Select from '$lib/Components/ui/select/index.js';
-	import { Button } from '$lib/Components/ui/button/index.js';
-	import { Avatar, Label } from 'flowbite-svelte';
-	import { Save, Loader2 } from '@lucide/svelte';
-	import { showServicesModal } from '$lib/sharedStore';
-	import { t } from '$lib/i18n';
-	import { toast } from 'svelte-sonner';
-	import {
-		service_GetConfigByCompanyName,
-		service_RemoveByUserIdAndServiceName,
-		service_CreateOrUpdate
-	} from '../../../routes/db.remote';
-	import { getUserId } from '$lib/Managers/AuthManager';
+import { getUserId } from '$lib/Managers/AuthManager';
+import { onMount } from 'svelte';
+import { toast } from 'svelte-sonner';
+import {
+	service_CreateOrUpdate,
+	service_GetConfigByCompanyName,
+	service_RemoveByUserIdAndServiceName
+} from '../../../routes/db.remote';
 
-	const AREA_LIST = [
-		{ value: 'lappkärrsberget', label: 'lappkärrsberget' },
-		{ value: 'kungshamra', label: 'kungshamra' }
-	] as const;
+const _AREA_LIST = [
+	{ value: 'lappkärrsberget', label: 'lappkärrsberget' },
+	{ value: 'kungshamra', label: 'kungshamra' }
+] as const;
 
-	const WITHIN_TIME_LIST = [
-		{ value: '1800', label: 'Inom 30 minuter' },
-		{ value: '10800', label: 'Inom 3 timmar' },
-		{ value: '28800', label: 'Inom 8 timmar' },
-		{ value: '86400', label: 'Inom 24 timmar' },
-		{ value: '172800', label: 'Inom 2 dagar' },
-		{ value: '259200', label: 'Inom 3 dagar' }
-	] as const;
+const _WITHIN_TIME_LIST = [
+	{ value: '1800', label: 'Inom 30 minuter' },
+	{ value: '10800', label: 'Inom 3 timmar' },
+	{ value: '28800', label: 'Inom 8 timmar' },
+	{ value: '86400', label: 'Inom 24 timmar' },
+	{ value: '172800', label: 'Inom 2 dagar' },
+	{ value: '259200', label: 'Inom 3 dagar' }
+] as const;
 
-	const NOTIFICATION_METHOD_LIST = [{ value: 'e-post', label: 'E-post' }] as const;
+const _NOTIFICATION_METHOD_LIST = [{ value: 'e-post', label: 'E-post' }] as const;
 
-	let selectedNotificationMethod = $state<string>('');
-	let selectedWithinTime = $state<string>('');
-	let selectedArea = $state<string>('');
-	let loading = $state<boolean>(false);
-	let hasActiveService = $state<boolean>(false);
+let selectedNotificationMethod = $state<string>('');
+let selectedWithinTime = $state<string>('');
+let selectedArea = $state<string>('');
+let _loading = $state<boolean>(false);
+let hasActiveService = $state<boolean>(false);
 
-	onMount(async () => {
-		const cfg: any = await service_GetConfigByCompanyName({ companyName: 'Stockholms Studentbostäder', userId: await getUserId() });
-		if (cfg) {
-			selectedNotificationMethod = cfg.notificationMethod ?? '';
-			selectedWithinTime = String(cfg.notificationWithinTime ?? '');
-			selectedArea = cfg.options?.area ?? '';
-			hasActiveService = true;
-		}
+onMount(async () => {
+	const cfg: any = await service_GetConfigByCompanyName({
+		companyName: 'Stockholms Studentbostäder',
+		userId: await getUserId()
 	});
-
-	const placeholder = 'Välj…';
-
-	function validateForm() {
-		return selectedNotificationMethod && selectedWithinTime && selectedArea;
+	if (cfg) {
+		selectedNotificationMethod = cfg.notificationMethod ?? '';
+		selectedWithinTime = String(cfg.notificationWithinTime ?? '');
+		selectedArea = cfg.options?.area ?? '';
+		hasActiveService = true;
 	}
+});
 
-	async function toggleService() {
-		if (!validateForm()) {
-			toast.error('Du måste fylla i alla fält innan du sparar.');
-			return;
-		}
-		loading = true;
+const _placeholder = 'Välj…';
 
-		if (hasActiveService) {
-			console.log(hasActiveService);
-			const isRemoved: boolean = await service_RemoveByUserIdAndServiceName({userId: await getUserId(), "serviceName": "Stockholms Studentbostäder"});
-			if (isRemoved) {
-				toast.success('Bevakningen har tagits bort.');
-				hasActiveService = false;
-			} else {
-				toast.error('Det gick inte att ta bort bevakningen.');
-			}
+function validateForm() {
+	return selectedNotificationMethod && selectedWithinTime && selectedArea;
+}
+
+async function toggleService() {
+	if (!validateForm()) {
+		toast.error('Du måste fylla i alla fält innan du sparar.');
+		return;
+	}
+	_loading = true;
+
+	if (hasActiveService) {
+		console.log(hasActiveService);
+		const isRemoved: boolean = await service_RemoveByUserIdAndServiceName({
+			userId: await getUserId(),
+			serviceName: 'Stockholms Studentbostäder'
+		});
+		if (isRemoved) {
+			toast.success('Bevakningen har tagits bort.');
+			hasActiveService = false;
 		} else {
-			const isCreated: boolean = await service_CreateOrUpdate({
-				user: await getUserId(),
-				name: 'Stockholms Studentbostäder',
-				notificationMethod: selectedNotificationMethod,
-				notificationWithinTime: Number(selectedWithinTime),
-				options: { area: selectedArea }
-			});
-			if (isCreated) {
-				toast.success('Bevakningen har skapats.');
-				hasActiveService = true;
-			} else {
-				toast.error('Det gick inte att skapa bevakningen.');
-			}
+			toast.error('Det gick inte att ta bort bevakningen.');
 		}
-		loading = false;
+	} else {
+		const isCreated: boolean = await service_CreateOrUpdate({
+			user: await getUserId(),
+			name: 'Stockholms Studentbostäder',
+			notificationMethod: selectedNotificationMethod,
+			notificationWithinTime: Number(selectedWithinTime),
+			options: { area: selectedArea }
+		});
+		if (isCreated) {
+			toast.success('Bevakningen har skapats.');
+			hasActiveService = true;
+		} else {
+			toast.error('Det gick inte att skapa bevakningen.');
+		}
 	}
+	_loading = false;
+}
 </script>
 
 <Dialog.Root bind:open={$showServicesModal}>

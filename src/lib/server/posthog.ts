@@ -1,5 +1,5 @@
-import posthog, { PostHog } from 'posthog-node';
 import { env } from '$env/dynamic/public';
+import posthog, { type PostHog } from 'posthog-node';
 
 let _client: PostHog | null = null;
 const PUBLIC_POSTHOG_KEY = env.PUBLIC_POSTHOG_KEY;
