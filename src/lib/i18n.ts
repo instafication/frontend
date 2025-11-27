@@ -1,6 +1,6 @@
+import { derived } from 'svelte/store';
 import { selectedLanguage } from '$lib/sharedStore';
 import translations from '$lib/translations';
-import { derived } from 'svelte/store';
 
 export const locales = Object.keys(translations);
 
@@ -21,7 +21,7 @@ function translate(selectedLanguage: string, key: string, vars) {
 	if (!text) throw new Error(`no translation found for ${selectedLanguage}.${key}`);
 
 	// Replace any passed in variables in the translation string.
-	Object.keys(vars).map((k) => {
+	Object.keys(vars).forEach((k) => {
 		const regex = new RegExp(`{{${k}}}`, 'g');
 		text = text.replace(regex, vars[k]);
 	});

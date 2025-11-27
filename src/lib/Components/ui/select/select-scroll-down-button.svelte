@@ -1,12 +1,14 @@
 <script lang="ts">
+import { ChevronDown as ChevronDownIcon } from '@lucide/svelte';
+import { Select as SelectPrimitive, type Select as SelectPrimitiveType } from 'bits-ui';
 import type { WithoutChildrenOrChild } from '$lib/utils.js';
-import type { Select as SelectPrimitive } from 'bits-ui';
+import { cn } from '$lib/utils.js';
 
-const {
+let {
 	ref = $bindable(null),
 	class: className,
 	...restProps
-}: WithoutChildrenOrChild<SelectPrimitive.ScrollDownButtonProps> = $props();
+}: WithoutChildrenOrChild<SelectPrimitiveType.ScrollDownButtonProps> = $props();
 </script>
 
 <SelectPrimitive.ScrollDownButton

@@ -1,7 +1,8 @@
-import { db } from '$lib/db';
 import { and, desc, gt, inArray, sql } from 'drizzle-orm';
-// src/routes/api/callback/scraper/+server.ts
-import type { RequestHandler } from './$types';
+import { db } from '$lib/db';
+// If this mailer works in CF Workers, you can keep it.
+// If not, you can stub it or guard it with try/catch as below.
+import { sendLaundryNotification } from '$lib/Managers/EmailManager';
 
 // ⬇️ Import your Drizzle tables here
 import {
@@ -10,10 +11,8 @@ import {
 	scrapers,
 	services as servicesTable
 } from '../../../../../drizzle/schema';
-
-// If this mailer works in CF Workers, you can keep it.
-// If not, you can stub it or guard it with try/catch as below.
-import { sendLaundryNotification } from '$lib/Managers/EmailManager';
+// src/routes/api/callback/scraper/+server.ts
+import type { RequestHandler } from './$types';
 
 /* --------------------------- Payload interfaces --------------------------- */
 

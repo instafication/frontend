@@ -1,5 +1,5 @@
-import { browser } from '$app/environment';
 import posthog from 'posthog-js';
+import { browser } from '$app/environment';
 import type { LayoutLoad } from './$types';
 
 export const load = (async ({ data }) => {

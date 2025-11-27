@@ -1,5 +1,6 @@
 <script lang="ts">
-
+import * as Accordion from '$lib/Components/ui/accordion';
+import { t } from '$lib/i18n';
 </script>
 
 <p

@@ -1,37 +1,32 @@
 <script lang="ts">
-// let loading = $state<boolean>(true);
-// let notifications = $state([]);
-// onMount(async () => {
-// 	try {
-// 		notifications = await notification_getLatest(3);
-// 	} finally {
-// 		loading = false;
-// 	}
-// });
+import { BellRing } from '@lucide/svelte';
+import { Button } from '$lib/Components/ui/button';
+import {
+	DropdownMenu,
+	Content as DropdownMenuContent,
+	Item as DropdownMenuItem,
+	Trigger as DropdownMenuTrigger
+} from '$lib/Components/ui/dropdown-menu';
+import { notification_GetLatest } from '../../../routes/db.remote';
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger>
+	<DropdownMenuTrigger>
 		<Button variant="outline" class="hover:cursor-pointer">
 			<BellRing />Notifikationer
 		</Button>
-	</DropdownMenu.Trigger>
+	</DropdownMenuTrigger>
 
-	<DropdownMenu.Content>
-		<!-- {#if loading}
-			<DropdownMenu.Item disabled>Loading …</DropdownMenu.Item>
-		{:else if notifications.length === 0}
-			<DropdownMenu.Item disabled>No notifications</DropdownMenu.Item>
-		{:else} -->
+	<DropdownMenuContent>
 		<svelte:boundary>
 			{#each await notification_GetLatest(3) as notification}
-				<DropdownMenu.Item class="whitespace-normal">
+				<DropdownMenuItem class="whitespace-normal">
 					{notification.body}
-				</DropdownMenu.Item>
+				</DropdownMenuItem>
 			{/each}
 			{#snippet pending()}
 				<p>Loading...</p>
 			{/snippet}
 		</svelte:boundary>
-	</DropdownMenu.Content>
+	</DropdownMenuContent>
 </DropdownMenu.Root>

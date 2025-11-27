@@ -41,7 +41,7 @@
 		"valibot": "^1.2.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
+		"@biomejs/biome": "^2.3.8",
 		"@internationalized/date": "^3.10.0",
 		"@lucide/svelte": "latest",
 		"@sveltejs/adapter-cloudflare": "^7.2.4",

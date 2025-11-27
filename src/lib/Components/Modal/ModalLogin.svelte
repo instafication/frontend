@@ -1,10 +1,22 @@
 <script lang="ts">
+import { Loader2, LogIn } from '@lucide/svelte';
+import { Input, Label } from 'flowbite-svelte';
+import Checkbox from '$lib/Components/Custom/Checkbox.svelte';
+import { Button } from '$lib/Components/ui/button';
+import {
+	Dialog,
+	Content as DialogContent,
+	Header as DialogHeader,
+	Title as DialogTitle
+} from '$lib/Components/ui/dialog';
 /* auth + stores */
+import { t } from '$lib/i18n';
 import { signInWithOAuth, signInWithPassword } from '$lib/Managers/AuthManager';
+import { showLoginModal, showLostPasswordModal, showRegisterModal } from '$lib/sharedStore';
 
 /* ───────── reactive state ───────── */
-const email = $state('');
-const password = $state('');
+let email = $state('');
+let password = $state('');
 let loading = $state(false);
 
 /* ───────── actions ───────── */
@@ -49,10 +61,10 @@ function openRegister() {
 >
 	<!-- Optional trigger elsewhere; Dialog.Trigger omitted here -->
 
-	<Dialog.Content class="w-full max-w-md">
-		<Dialog.Header>
-			<Dialog.Title>{$t('log_in_to_your_profile')}</Dialog.Title>
-		</Dialog.Header>
+	<DialogContent class="w-full max-w-md">
+		<DialogHeader>
+			<DialogTitle>{$t('log_in_to_your_profile')}</DialogTitle>
+		</DialogHeader>
 
 		<!-- onsubmit prevents page reload via preventDefault in handler -->
 		<form
@@ -123,5 +135,5 @@ function openRegister() {
 				</button>
 			</div>
 		</form>
-	</Dialog.Content>
+	</DialogContent>
 </Dialog.Root>

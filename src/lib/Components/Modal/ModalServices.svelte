@@ -1,7 +1,25 @@
 <script lang="ts">
-import { getUserId } from '$lib/Managers/AuthManager';
+import { Loader2, Save } from '@lucide/svelte';
+import { Avatar, Label } from 'flowbite-svelte';
 import { onMount } from 'svelte';
 import { toast } from 'svelte-sonner';
+import { Button } from '$lib/Components/ui/button';
+import {
+	Dialog,
+	Content as DialogContent,
+	Header as DialogHeader,
+	Title as DialogTitle
+} from '$lib/Components/ui/dialog';
+import {
+	Select,
+	Content as SelectContent,
+	Group as SelectGroup,
+	Item as SelectItem,
+	Trigger as SelectTrigger
+} from '$lib/Components/ui/select';
+import { t } from '$lib/i18n';
+import { getUserId } from '$lib/Managers/AuthManager';
+import { showServicesModal } from '$lib/sharedStore';
 import {
 	service_CreateOrUpdate,
 	service_GetConfigByCompanyName,
@@ -94,12 +112,12 @@ async function toggleService() {
 </script>
 
 <Dialog.Root bind:open={$showServicesModal}>
-	<Dialog.Content class="w-full max-w-md">
-		<Dialog.Header>
-			<Dialog.Title>
+	<DialogContent class="w-full max-w-md">
+		<DialogHeader>
+			<DialogTitle>
 				{$t('SERVICES_TITLE')}
-			</Dialog.Title>
-		</Dialog.Header>
+			</DialogTitle>
+		</DialogHeader>
 
 		<section
 			class="bg-white dark:bg-gray-900 grid md:grid-cols-auto gap-0 py-6 px-0 mx-auto max-w-screen-xl"
@@ -134,54 +152,54 @@ async function toggleService() {
 					<!-- Notification channel -->
 					<div>
 						<Label>{$t('SERVICES_OPTION1_TITLE')}</Label>
-						<Select.Root type="single" bind:value={selectedNotificationMethod}>
-							<Select.Trigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
-								{selectedNotificationMethod || placeholder}
-							</Select.Trigger>
-							<Select.Content>
-								<Select.Group>
-									{#each NOTIFICATION_METHOD_LIST as item (item.value)}
-										<Select.Item value={item.value} label={item.label} class="hover:cursor-pointer">
-											{item.label}
-										</Select.Item>
-									{/each}
-								</Select.Group>
-							</Select.Content>
-						</Select.Root>
+					<Select.Root type="single" bind:value={selectedNotificationMethod}>
+						<SelectTrigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
+							{selectedNotificationMethod || placeholder}
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								{#each NOTIFICATION_METHOD_LIST as item (item.value)}
+									<SelectItem value={item.value} label={item.label} class="hover:cursor-pointer">
+										{item.label}
+									</SelectItem>
+								{/each}
+							</SelectGroup>
+						</SelectContent>
+					</Select.Root>
 					</div>
 
 					<!-- Time window -->
 					<div>
 						<Label>{$t('SERVICES_OPTION2_TITLE')}</Label>
-						<Select.Root type="single" required bind:value={selectedWithinTime}>
-							<Select.Trigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
-								{selectedWithinTime || placeholder}
-							</Select.Trigger>
-							<Select.Content class="hover:cursor-pointer">
-								{#each WITHIN_TIME_LIST as item (item.value)}
-									<Select.Item value={item.value} label={item.label} class="hover:cursor-pointer">
-										{item.label}
-									</Select.Item>
-								{/each}
-							</Select.Content>
-						</Select.Root>
+					<Select.Root type="single" required bind:value={selectedWithinTime}>
+						<SelectTrigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
+							{selectedWithinTime || placeholder}
+						</SelectTrigger>
+						<SelectContent class="hover:cursor-pointer">
+							{#each WITHIN_TIME_LIST as item (item.value)}
+								<SelectItem value={item.value} label={item.label} class="hover:cursor-pointer">
+									{item.label}
+								</SelectItem>
+							{/each}
+						</SelectContent>
+					</Select.Root>
 					</div>
 
 					<!-- Area -->
 					<div>
 						<Label>{$t('SERVICES_OPTION3_TITLE')}</Label>
-						<Select.Root type="single" required bind:value={selectedArea}>
-							<Select.Trigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
-								{selectedArea || placeholder}
-							</Select.Trigger>
-							<Select.Content>
-								{#each AREA_LIST as item (item.value)}
-									<Select.Item value={item.value} label={item.label} class="hover:cursor-pointer">
-										{item.label}
-									</Select.Item>
-								{/each}
-							</Select.Content>
-						</Select.Root>
+					<Select.Root type="single" required bind:value={selectedArea}>
+						<SelectTrigger class="mt-2 w-full hover:cursor-pointer" disabled={loading}>
+							{selectedArea || placeholder}
+						</SelectTrigger>
+						<SelectContent>
+							{#each AREA_LIST as item (item.value)}
+								<SelectItem value={item.value} label={item.label} class="hover:cursor-pointer">
+									{item.label}
+								</SelectItem>
+							{/each}
+						</SelectContent>
+					</Select.Root>
 					</div>
 				</form>
 
@@ -207,5 +225,5 @@ async function toggleService() {
 				</Button>
 			</section>
 		</section>
-	</Dialog.Content>
+	</DialogContent>
 </Dialog.Root>

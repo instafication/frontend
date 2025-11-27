@@ -1,9 +1,11 @@
 <script lang="ts">
-import type { WithoutChildrenOrChild } from '$lib/utils.js';
-import type { DropdownMenu as DropdownMenuPrimitive } from 'bits-ui';
+import { Check as CheckIcon, Minus as MinusIcon } from '@lucide/svelte';
+import type { DropdownMenu, DropdownMenu as DropdownMenuPrimitive } from 'bits-ui';
 import type { Snippet } from 'svelte';
+import type { WithoutChildrenOrChild } from '$lib/utils.js';
+import { cn } from '$lib/utils.js';
 
-const {
+let {
 	ref = $bindable(null),
 	checked = $bindable(false),
 	indeterminate = $bindable(false),

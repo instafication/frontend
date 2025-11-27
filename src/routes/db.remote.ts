@@ -1,29 +1,28 @@
+import { and, desc, eq, gt, inArray, sql } from 'drizzle-orm';
+import * as v from 'valibot';
 import { command, query } from '$app/server';
 import { db } from '$lib/db';
-import * as v from 'valibot';
 
+import { getUserId } from '$lib/Managers/AuthManager';
 import {
 	type NotificationInsert,
 	NotificationInsertSchema,
+	notifications,
 	/* TS helper types */
 	type ProfileInsert,
 	/* Valibot schemas */
 	ProfileInsertSchema,
 	type ProfileUpdate,
 	ProfileUpdateSchema,
+	/* Drizzle tables */
+	profiles,
 	type ScraperInsert,
 	ScraperInsertSchema,
 	type ServiceInsert,
 	ServiceInsertSchema,
-	notifications,
-	/* Drizzle tables */
-	profiles,
 	scrapers,
 	services
 } from '../../drizzle/schema';
-
-import { getUserId } from '$lib/Managers/AuthManager';
-import { and, desc, eq, gt, inArray, sql } from 'drizzle-orm';
 
 // Generate a 32-char lowercase hex ID (similar to lower(hex(randomblob(16))))
 const generateHexId = (): string => {

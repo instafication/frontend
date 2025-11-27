@@ -1,14 +1,15 @@
-import { getRequestEvent } from '$app/server';
-import { betterAuth } from 'better-auth';
 import type { BetterAuthOptions } from 'better-auth';
-import { withCloudflare } from 'better-auth-cloudflare';
-import type { CloudflareGeolocation } from 'better-auth-cloudflare';
+import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
+import type { CloudflareGeolocation } from 'better-auth-cloudflare';
+import { withCloudflare } from 'better-auth-cloudflare';
+import { getRequestEvent } from '$app/server';
 
 import { getDb } from '$lib/server/db';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
+
 function resolveCrypto(): Crypto {
 	const scoped = (globalThis as typeof globalThis & { webcrypto?: Crypto | undefined })?.crypto;
 	if (scoped && typeof scoped.getRandomValues === 'function') {
@@ -44,7 +45,7 @@ export type AuthEnv = {
 
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
 export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | undefined) => {
-	const isDev = (import.meta as any)?.env?.DEV ?? false;
+	const isDev = import.meta.env.DEV ?? false;
 	// Workers-safe PBKDF2-HMAC-SHA256 using Web Crypto (Cloudflare-compatible)
 	function toBase64(data: Uint8Array): string {
 		if (typeof Buffer !== 'undefined') return Buffer.from(data).toString('base64');

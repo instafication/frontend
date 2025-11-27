@@ -1,5 +1,7 @@
 <script lang="ts">
-
+import { Button } from 'flowbite-svelte';
+import { t } from '$lib/i18n';
+import { showRegisterModal } from '$lib/sharedStore';
 </script>
 
 <section class="bg-white dark:bg-gray-900">

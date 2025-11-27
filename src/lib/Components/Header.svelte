@@ -1,5 +1,10 @@
 <script lang="ts">
-
+import { LogIn, UserRoundPlus } from '@lucide/svelte';
+import { NavBrand, Navbar } from 'flowbite-svelte';
+import LanguageSelector from '$lib/Components/LanguageSelector.svelte';
+import { Button } from '$lib/Components/ui/button';
+import { t } from '$lib/i18n';
+import { showLoginModal, showRegisterModal } from '$lib/sharedStore';
 </script>
 
 <Navbar class="px-0">

@@ -1,11 +1,19 @@
 <script lang="ts">
-import authClient from '$lib/authClient';
 import { onMount } from 'svelte';
+import authClient from '$lib/authClient';
+import { Button } from '$lib/Components/ui/button';
+import {
+	Dialog,
+	Content as DialogContent,
+	Header as DialogHeader,
+	Title as DialogTitle,
+	Footer as DialogFooter
+} from '$lib/Components/ui/dialog';
 
-const newPassword = $state<string>('');
+let newPassword = $state<string>('');
 let isLoading = $state<boolean>(false);
 let token = $state<string | null>(null);
-const open = $state<boolean>(true);
+let open = $state<boolean>(true);
 
 onMount(() => {
 	const params = new URLSearchParams(location.search);
@@ -37,10 +45,10 @@ async function handleSubmit(e: Event) {
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Content class="w-full max-w-xs">
-		<Dialog.Header>
-			<Dialog.Title>Återställ lösenord</Dialog.Title>
-		</Dialog.Header>
+	<DialogContent class="w-full max-w-xs">
+		<DialogHeader>
+			<DialogTitle>Återställ lösenord</DialogTitle>
+		</DialogHeader>
 
 		<form class="flex flex-col space-y-6" onsubmit={handleSubmit}>
 			<label class="space-y-2">
@@ -61,7 +69,7 @@ async function handleSubmit(e: Event) {
 				</p>
 			{/if}
 
-			<Dialog.Footer>
+			<DialogFooter>
 				<Button type="submit" variant="outline" class="w-full" disabled={isLoading}>
 					{#if isLoading}
 						Bearbetar...
@@ -69,7 +77,7 @@ async function handleSubmit(e: Event) {
 						Återställ lösenord
 					{/if}
 				</Button>
-			</Dialog.Footer>
+			</DialogFooter>
 		</form>
-	</Dialog.Content>
+	</DialogContent>
 </Dialog.Root>

@@ -1,11 +1,8 @@
 <script lang="ts">
-import type { Dialog as DialogPrimitive } from 'bits-ui';
+import { type Dialog, Dialog as DialogPrimitive } from 'bits-ui';
+import { cn } from '$lib/utils.js';
 
-const {
-	ref = $bindable(null),
-	class: className,
-	...restProps
-}: DialogPrimitive.DescriptionProps = $props();
+let { ref = $bindable(null), class: className, ...restProps }: Dialog.DescriptionProps = $props();
 </script>
 
 <DialogPrimitive.Description

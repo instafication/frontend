@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createEventDispatcher } from 'svelte';
 
-const {
+let {
 	checked = $bindable(false),
 	disabled = false,
 	value,

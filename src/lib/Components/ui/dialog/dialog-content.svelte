@@ -1,24 +1,27 @@
 <script lang="ts">
-import type { WithoutChildrenOrChild } from '$lib/utils.js';
-import type { Dialog as DialogPrimitive } from 'bits-ui';
+import { X as XIcon } from '@lucide/svelte';
+import { Dialog as DialogPrimitive, type Dialog as DialogPrimitiveType } from 'bits-ui';
 import type { Snippet } from 'svelte';
+import type { WithoutChildrenOrChild } from '$lib/utils.js';
+import { cn } from '$lib/utils.js';
+import DialogOverlay from './dialog-overlay.svelte';
 
-const {
+let {
 	ref = $bindable(null),
 	class: className,
 	portalProps,
 	children,
 	showCloseButton = true,
 	...restProps
-}: WithoutChildrenOrChild<DialogPrimitive.ContentProps> & {
-	portalProps?: DialogPrimitive.PortalProps;
+}: WithoutChildrenOrChild<DialogPrimitiveType.ContentProps> & {
+	portalProps?: DialogPrimitiveType.PortalProps;
 	children: Snippet;
 	showCloseButton?: boolean;
 } = $props();
 </script>
 
-<Dialog.Portal {...portalProps}>
-	<Dialog.Overlay />
+<DialogPrimitive.Portal {...portalProps}>
+	<DialogOverlay />
 	<DialogPrimitive.Content
 		bind:ref
 		data-slot="dialog-content"
@@ -38,4 +41,4 @@ const {
 			</DialogPrimitive.Close>
 		{/if}
 	</DialogPrimitive.Content>
-</Dialog.Portal>
+</DialogPrimitive.Portal>

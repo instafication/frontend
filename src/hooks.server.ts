@@ -1,6 +1,6 @@
-import { building } from '$app/environment';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
+import { building } from '$app/environment';
 
 import { initDB } from '$lib/db';
 import { type AuthEnv, createAuth } from './lib/server/auth';
@@ -38,15 +38,22 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const auth = createAuth(env, event.platform?.cf);
 	console.log('[hooks] auth created');
 
-	if (routeRequiresAuth(event)) {
+	// Always try to get the session to make it available for layouts
+	try {
 		const session = await auth.api.getSession({
 			headers: event.request.headers
 		});
-
-		if (!session || !session.user) {
-			return redirect(302, loginRoute);
+		if (session?.user) {
+			event.locals.user = session.user;
+			event.locals.session = session;
 		}
-		event.locals.user = session.user;
+	} catch (e) {
+		console.warn('[hooks] Failed to get session:', e);
+	}
+
+	// Redirect to login for protected routes
+	if (routeRequiresAuth(event) && !event.locals.user) {
+		return redirect(302, loginRoute);
 	}
 
 	event.locals.auth = auth;

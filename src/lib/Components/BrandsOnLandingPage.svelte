@@ -1,5 +1,8 @@
 <script lang="ts">
+import { Activity } from '@lucide/svelte';
+import { Avatar, Badge, Card } from 'flowbite-svelte';
 import { onMount } from 'svelte';
+import { t } from '$lib/i18n';
 import { scraper_GetLastUpdateByCompanyName } from '../../routes/db.remote';
 
 let lastSearchedMinutes = $state(0);

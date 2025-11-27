@@ -1,7 +1,7 @@
+import { toast } from 'svelte-sonner';
 import { browser } from '$app/environment';
 import authClient from '$lib/authClient';
 import { userLoggedIn } from '$lib/sharedStore';
-import { toast } from 'svelte-sonner';
 
 type AnyAuthClient = any;
 const client: AnyAuthClient = authClient as AnyAuthClient;

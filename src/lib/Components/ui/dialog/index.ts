@@ -1,5 +1,7 @@
-import { Dialog as DialogPrimitive } from 'bits-ui';
+// Re-export the bits-ui Dialog namespace for components that need Root/Portal
+export { Dialog } from 'bits-ui';
 
+// Custom wrapper components
 import Close from './dialog-close.svelte';
 import Content from './dialog-content.svelte';
 import Description from './dialog-description.svelte';
@@ -9,13 +11,8 @@ import Overlay from './dialog-overlay.svelte';
 import Title from './dialog-title.svelte';
 import Trigger from './dialog-trigger.svelte';
 
-const Root = DialogPrimitive.Root;
-const Portal = DialogPrimitive.Portal;
-
 export {
-	Root,
 	Title,
-	Portal,
 	Footer,
 	Header,
 	Trigger,
@@ -24,9 +21,7 @@ export {
 	Description,
 	Close,
 	//
-	Root as Dialog,
 	Title as DialogTitle,
-	Portal as DialogPortal,
 	Footer as DialogFooter,
 	Header as DialogHeader,
 	Trigger as DialogTrigger,

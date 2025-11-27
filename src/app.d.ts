@@ -10,6 +10,7 @@ declare global {
 			db: DrizzleD1Database;
 			auth: ReturnType<typeof createAuth>;
 			user?: unknown;
+			session?: unknown;
 		}
 		interface Platform {
 			env: Env;

@@ -1,22 +1,33 @@
 <script lang="ts">
+import { Loader2, RotateCcwKey } from '@lucide/svelte';
+import { Input, Label } from 'flowbite-svelte';
+import { Button } from '$lib/Components/ui/button';
+import {
+	Dialog,
+	Content as DialogContent,
+	Header as DialogHeader,
+	Title as DialogTitle
+} from '$lib/Components/ui/dialog';
+import { t } from '$lib/i18n';
 import { resetPasswordForEmail } from '$lib/Managers/AuthManager';
+import { showLostPasswordModal } from '$lib/sharedStore';
 
-const email = $state('');
-let _isLoading = $state(false);
+let email = $state('');
+let isLoading = $state(false);
 
-const _handleReset = async (e: Event) => {
+const handleReset = async (e: Event) => {
 	e.preventDefault();
-	_isLoading = true;
+	isLoading = true;
 	await resetPasswordForEmail(email);
-	_isLoading = false;
+	isLoading = false;
 };
 </script>
 
 <Dialog.Root bind:open={$showLostPasswordModal}>
-	<Dialog.Content class="w-full max-w-xs">
-		<Dialog.Header>
-			<Dialog.Title>{$t('lost_password_reset_password')}</Dialog.Title>
-		</Dialog.Header>
+	<DialogContent class="w-full max-w-xs">
+		<DialogHeader>
+			<DialogTitle>{$t('lost_password_reset_password')}</DialogTitle>
+		</DialogHeader>
 
 		<form class="flex flex-col space-y-6" onsubmit={handleReset}>
 			<Label class="space-y-2">
@@ -39,5 +50,5 @@ const _handleReset = async (e: Event) => {
 				{$t('lost_password_reset_password_button')}
 			</Button>
 		</form>
-	</Dialog.Content>
+	</DialogContent>
 </Dialog.Root>

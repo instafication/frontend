@@ -1,5 +1,16 @@
 <script lang="ts">
+import { Button, Modal, Timeline } from 'flowbite-svelte';
+import BrandsOnLandingPage from '$lib/Components/BrandsOnLandingPage.svelte';
+import FAQ from '$lib/Components/FAQ.svelte';
+import HeaderPhone from '$lib/Components/HeaderPhone.svelte';
+import PriceSection from '$lib/Components/PriceSection.svelte';
+import TimelineItem from '$lib/Components/TimelineItem.svelte';
+import { t } from '$lib/i18n';
+import { showInformationModal, showLoginModal, showRegisterModal } from '$lib/sharedStore';
+import { notification_GetLatest } from './db.remote';
 
+// Alias for backwards compatibility
+const CardWithList = BrandsOnLandingPage;
 </script>
 
 <Modal

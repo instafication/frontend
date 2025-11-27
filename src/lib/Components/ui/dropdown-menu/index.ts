@@ -1,8 +1,11 @@
-import { DropdownMenu as DropdownMenuPrimitive } from 'bits-ui';
+// Re-export the bits-ui DropdownMenu namespace for components that need Root/Sub
+export { DropdownMenu } from 'bits-ui';
+
+// Custom wrapper components
 import CheckboxItem from './dropdown-menu-checkbox-item.svelte';
 import Content from './dropdown-menu-content.svelte';
-import GroupHeading from './dropdown-menu-group-heading.svelte';
 import Group from './dropdown-menu-group.svelte';
+import GroupHeading from './dropdown-menu-group-heading.svelte';
 import Item from './dropdown-menu-item.svelte';
 import Label from './dropdown-menu-label.svelte';
 import RadioGroup from './dropdown-menu-radio-group.svelte';
@@ -12,13 +15,10 @@ import Shortcut from './dropdown-menu-shortcut.svelte';
 import SubContent from './dropdown-menu-sub-content.svelte';
 import SubTrigger from './dropdown-menu-sub-trigger.svelte';
 import Trigger from './dropdown-menu-trigger.svelte';
-const Sub = DropdownMenuPrimitive.Sub;
-const Root = DropdownMenuPrimitive.Root;
 
 export {
 	CheckboxItem,
 	Content,
-	Root as DropdownMenu,
 	CheckboxItem as DropdownMenuCheckboxItem,
 	Content as DropdownMenuContent,
 	Group as DropdownMenuGroup,
@@ -28,7 +28,6 @@ export {
 	RadioItem as DropdownMenuRadioItem,
 	Separator as DropdownMenuSeparator,
 	Shortcut as DropdownMenuShortcut,
-	Sub as DropdownMenuSub,
 	SubContent as DropdownMenuSubContent,
 	SubTrigger as DropdownMenuSubTrigger,
 	Trigger as DropdownMenuTrigger,
@@ -39,10 +38,8 @@ export {
 	Label,
 	RadioGroup,
 	RadioItem,
-	Root,
 	Separator,
 	Shortcut,
-	Sub,
 	SubContent,
 	SubTrigger,
 	Trigger

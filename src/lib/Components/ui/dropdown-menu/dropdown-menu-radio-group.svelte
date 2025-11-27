@@ -1,11 +1,14 @@
 <script lang="ts">
-import type { DropdownMenu as DropdownMenuPrimitive } from 'bits-ui';
+import {
+	DropdownMenu as DropdownMenuPrimitive,
+	type DropdownMenu as DropdownMenuPrimitiveType
+} from 'bits-ui';
 
-const {
+let {
 	ref = $bindable(null),
 	value = $bindable(),
 	...restProps
-}: DropdownMenuPrimitive.RadioGroupProps = $props();
+}: DropdownMenuPrimitiveType.RadioGroupProps = $props();
 </script>
 
 <DropdownMenuPrimitive.RadioGroup

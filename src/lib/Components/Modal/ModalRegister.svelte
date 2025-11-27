@@ -1,10 +1,21 @@
 <script lang="ts">
-import { signUp } from '$lib/Managers/AuthManager';
+import { Loader2, UserRoundPlus } from '@lucide/svelte';
+import { Input, Label } from 'flowbite-svelte';
 import { toast } from 'svelte-sonner';
+import { Button } from '$lib/Components/ui/button';
+import {
+	Dialog,
+	Content as DialogContent,
+	Header as DialogHeader,
+	Title as DialogTitle
+} from '$lib/Components/ui/dialog';
+import { t } from '$lib/i18n';
+import { signUp } from '$lib/Managers/AuthManager';
+import { showRegisterModal } from '$lib/sharedStore';
 
 /* ───────── reactive state ───────── */
-const email = $state('');
-const password = $state('');
+let email = $state('');
+let password = $state('');
 let loading = $state(false);
 
 /* ───────── helpers ───────── */
@@ -27,10 +38,10 @@ const register = async (e?: Event) => {
 
 <Dialog.Root bind:open={$showRegisterModal}>
 	<!-- Optional trigger can be placed elsewhere -->
-	<Dialog.Content class="w-full max-w-xs">
-		<Dialog.Header>
-			<Dialog.Title>{$t('register_new_account_title')}</Dialog.Title>
-		</Dialog.Header>
+	<DialogContent class="w-full max-w-xs">
+		<DialogHeader>
+			<DialogTitle>{$t('register_new_account_title')}</DialogTitle>
+		</DialogHeader>
 
 		<!-- prevent reload in handler -->
 		<form class="flex flex-col space-y-6" onsubmit={register}>
@@ -70,5 +81,5 @@ const register = async (e?: Event) => {
 				<span>{$t('register_your_account')}</span>
 			</Button>
 		</form>
-	</Dialog.Content>
+	</DialogContent>
 </Dialog.Root>

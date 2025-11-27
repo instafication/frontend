@@ -1,5 +1,5 @@
 <script lang="ts">
-
+import { t } from '$lib/i18n';
 </script>
 
 <footer class="p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-800">

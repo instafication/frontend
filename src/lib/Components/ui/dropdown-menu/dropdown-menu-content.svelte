@@ -1,14 +1,18 @@
 <script lang="ts">
-import type { DropdownMenu as DropdownMenuPrimitive } from 'bits-ui';
+import {
+	DropdownMenu as DropdownMenuPrimitive,
+	type DropdownMenu as DropdownMenuPrimitiveType
+} from 'bits-ui';
+import { cn } from '$lib/utils.js';
 
-const {
+let {
 	ref = $bindable(null),
 	sideOffset = 4,
 	portalProps,
 	class: className,
 	...restProps
-}: DropdownMenuPrimitive.ContentProps & {
-	portalProps?: DropdownMenuPrimitive.PortalProps;
+}: DropdownMenuPrimitiveType.ContentProps & {
+	portalProps?: DropdownMenuPrimitiveType.PortalProps;
 } = $props();
 </script>
 

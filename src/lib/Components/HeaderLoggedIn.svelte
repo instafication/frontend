@@ -1,6 +1,25 @@
 <script lang="ts">
-import { getUserId } from '$lib/Managers/AuthManager';
+import { Coins, LogOut, Settings, UserCog } from '@lucide/svelte';
+import { NavBrand, Navbar } from 'flowbite-svelte';
 import { onMount } from 'svelte';
+import LanguageSelector from '$lib/Components/LanguageSelector.svelte';
+import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
+import {
+	Fallback as AvatarFallback,
+	Image as AvatarImage,
+	Root as AvatarRoot
+} from '$lib/Components/ui/avatar';
+import { Button } from '$lib/Components/ui/button';
+import {
+	DropdownMenu,
+	Content as DropdownMenuContent,
+	Item as DropdownMenuItem,
+	Separator as DropdownMenuSeparator,
+	Trigger as DropdownMenuTrigger
+} from '$lib/Components/ui/dropdown-menu';
+import { t } from '$lib/i18n';
+import { getUserId, signOut } from '$lib/Managers/AuthManager';
+import { showProfileSettingsModal, showServicesModal } from '$lib/sharedStore';
 import { profile_EnsureExistsByUserId, profile_GetCreditsByUserId } from '../../routes/db.remote';
 
 let id = $state('');
@@ -49,33 +68,33 @@ onMount(async () => {
 				<Settings />Bevakningar
 			</Button>
 
-			<DropdownMenu.Root class="px-4">
-				<DropdownMenu.Trigger class="hover:cursor-pointer">
-					<Avatar.Root>
-						<Avatar.Image src="./images/profile.avif" alt="Profile Logo" />
-						<Avatar.Fallback>CN</Avatar.Fallback>
-					</Avatar.Root>
-				</DropdownMenu.Trigger>
+		<DropdownMenu.Root class="px-4">
+			<DropdownMenuTrigger class="hover:cursor-pointer">
+				<AvatarRoot>
+					<AvatarImage src="./images/profile.avif" alt="Profile Logo" />
+					<AvatarFallback>CN</AvatarFallback>
+				</AvatarRoot>
+			</DropdownMenuTrigger>
 
-				<DropdownMenu.Content class="w-56">
-					<DropdownMenu.Item>
-						<Coins />{$t('HEADER_LOGGEDIN_I1')}
-						{credits}
-					</DropdownMenu.Item>
+			<DropdownMenuContent class="w-56">
+				<DropdownMenuItem>
+					<Coins />{$t('HEADER_LOGGEDIN_I1')}
+					{credits}
+				</DropdownMenuItem>
 
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item
-						class="hover:cursor-pointer"
-						onSelect={() => showProfileSettingsModal.set(true)}
-					>
-						<UserCog />{$t('HEADER_LOGGEDIN_I3')}
-					</DropdownMenu.Item>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item class="hover:cursor-pointer " onSelect={signOut}>
-						<LogOut class="" />{$t('HEADER_LOGGEDIN_I4')}
-					</DropdownMenu.Item>
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem
+					class="hover:cursor-pointer"
+					onSelect={() => showProfileSettingsModal.set(true)}
+				>
+					<UserCog />{$t('HEADER_LOGGEDIN_I3')}
+				</DropdownMenuItem>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem class="hover:cursor-pointer " onSelect={signOut}>
+					<LogOut class="" />{$t('HEADER_LOGGEDIN_I4')}
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu.Root>
 		</div>
 	</div>
 </Navbar>

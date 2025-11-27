@@ -1,5 +1,5 @@
 <script lang="ts">
-
+import { t } from '$lib/i18n';
 </script>
 
 <div class="relative isolate bg-white px-0 py-24 sm:py-0 lg:px-8">

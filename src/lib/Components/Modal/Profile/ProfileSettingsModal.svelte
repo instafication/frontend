@@ -1,16 +1,28 @@
 <script lang="ts">
+import { Loader2, Save } from '@lucide/svelte';
+import { Input, Label } from 'flowbite-svelte';
+import { onMount } from 'svelte';
+import { Button } from '$lib/Components/ui/button';
+import {
+	Dialog,
+	Trigger as DialogTrigger,
+	Content as DialogContent,
+	Header as DialogHeader,
+	Title as DialogTitle,
+	Footer as DialogFooter
+} from '$lib/Components/ui/dialog';
+import { t } from '$lib/i18n';
 import * as authManager from '$lib/Managers/AuthManager';
 import { showProfileSettingsModal } from '$lib/sharedStore';
-import { onMount } from 'svelte';
 
 let email = $state<string>('');
-let _loading = $state<boolean>(false);
+let loading = $state<boolean>(false);
 
-const _handleSave = async (e: Event) => {
+const handleSave = async (e: Event) => {
 	e.preventDefault();
-	_loading = true;
+	loading = true;
 	const ok = await authManager.updateEmail(email);
-	_loading = false;
+	loading = false;
 	if (ok) showProfileSettingsModal.set(false);
 };
 
@@ -22,11 +34,11 @@ onMount(loadUserData);
 </script>
 
 <Dialog.Root bind:open={$showProfileSettingsModal}>
-	<Dialog.Trigger class="hidden" />
-	<Dialog.Content class="w-full max-w-xs">
-		<Dialog.Header>
-			<Dialog.Title>{$t('profile_settings')}</Dialog.Title>
-		</Dialog.Header>
+	<DialogTrigger class="hidden" />
+	<DialogContent class="w-full max-w-xs">
+		<DialogHeader>
+			<DialogTitle>{$t('profile_settings')}</DialogTitle>
+		</DialogHeader>
 		<form class="flex flex-col space-y-6" onsubmit={handleSave}>
 			<Label class="space-y-2">
 				<span>{$t('profile_your_email')}</span>
@@ -39,7 +51,7 @@ onMount(loadUserData);
 				/>
 			</Label>
 
-			<Dialog.Footer>
+			<DialogFooter>
 				<Button
 					variant="outline"
 					type="submit"
@@ -53,7 +65,7 @@ onMount(loadUserData);
 					{/if}
 					{$t('profile_save_changes')}
 				</Button>
-			</Dialog.Footer>
+			</DialogFooter>
 		</form>
-	</Dialog.Content>
+	</DialogContent>
 </Dialog.Root>
