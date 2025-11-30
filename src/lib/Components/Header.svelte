@@ -18,7 +18,7 @@ import { showLoginModal, showRegisterModal } from '$lib/sharedStore';
 				class="mr-3 h-6 sm:h-9"
 				alt="Instafication Logo"
 			/>
-			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white hidden sm:inline">
 				Instafication
 			</span>
 		</NavBrand>
@@ -26,7 +26,7 @@ import { showLoginModal, showRegisterModal } from '$lib/sharedStore';
 		<!-- mobile hamburger -->
 		<!-- <NavHamburger /> -->
 		<!-- right-hand tools -->
-		<div class="flex items-center gap-2">
+		<div class="flex items-center gap-1 sm:gap-2">
 			<LanguageSelector />
 			<Button
 				variant="outline"
@@ -34,10 +34,10 @@ import { showLoginModal, showRegisterModal } from '$lib/sharedStore';
 					$showLoginModal = true;
 				}}
 				color="alternative"
-				class="cursor-pointer"
+				class="cursor-pointer px-2 sm:px-4"
 			>
-				<LogIn />
-				<span>{$t('log_in')}</span>
+				<LogIn class="h-4 w-4" />
+				<span class="hidden sm:inline ml-1">{$t('log_in')}</span>
 			</Button>
 
 			<!-- register -->
@@ -45,10 +45,10 @@ import { showLoginModal, showRegisterModal } from '$lib/sharedStore';
 				onclick={() => {
 					$showRegisterModal = true;
 				}}
-				class="cursor-pointer bg-blue-700 hover:bg-blue-800"
+				class="cursor-pointer bg-blue-700 hover:bg-blue-800 px-2 sm:px-4"
 			>
-				<UserRoundPlus />
-				{$t('register')}
+				<UserRoundPlus class="h-4 w-4" />
+				<span class="hidden sm:inline ml-1">{$t('register')}</span>
 			</Button>
 		</div>
 	</div>

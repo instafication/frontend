@@ -8,6 +8,7 @@ import { withCloudflare } from 'better-auth-cloudflare';
 import { getRequestEvent } from '$app/server';
 
 import { getDb } from '$lib/server/db';
+import { sendEmail, EmailTemplates, isLocalEnvironment } from '$lib/server/email';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
 
 function resolveCrypto(): Crypto {
@@ -153,97 +154,20 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 			},
 			// Forgot password: send email with reset link
 			sendResetPassword: async ({ user, url, token }, _request) => {
-				const subject = 'Återställ ditt lösenord';
-				const body = `
-                    <p>Hej!</p>
-                    <p>Du har begärt att återställa ditt lösenord hos Instafication.</p>
-                    <p>Klicka på länken nedan för att återställa ditt lösenord:</p>
-                    <p><a href="${url}">${url}</a></p>
-                    <p>Om du inte begärt denna åtgärd kan du ignorera detta mail.</p>
-                `;
-				try {
-					const host = (() => {
-						try {
-							return new URL(url).hostname;
-						} catch {
-							return '';
-						}
-					})();
-					const tokenPreview =
-						typeof token === 'string' ? `${token.slice(0, 6)}…(${token.length})` : 'n/a';
-					console.log('[BetterAuth] reset email debug start', {
-						to: user?.email,
-						url,
-						host,
-						tokenPreview
-					});
-				} catch {}
-				try {
-					const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
-					console.log('[BetterAuth] RESEND_API_KEY present?', {
-						present: Boolean(apiKey),
-						length: apiKey?.length ?? 0
-					});
-					if (!apiKey) {
-						console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send reset email');
-						return;
-					}
-					const preferredFrom = 'Instafication <no-reply@transactional.instafication.shop>';
-					const fallbackFrom = 'Instafication <onboarding@resend.dev>';
-					const payloadPreferred = { from: preferredFrom, to: user.email, subject, html: body };
-					const payloadFallback = { from: fallbackFrom, to: user.email, subject, html: body };
+				const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
+				if (!apiKey) {
+					console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send reset email');
+					return;
+				}
 
-					async function sendDirect(payload: any) {
-						console.log('[BetterAuth] Resend POST /emails (direct)', {
-							from: payload.from,
-							to: payload.to
-						});
-						const res = await fetch('https://api.resend.com/emails', {
-							method: 'POST',
-							headers: {
-								Authorization: `Bearer ${apiKey}`,
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(payload)
-						});
-						const txt = await res.text();
-						let json: any = null;
-						try {
-							json = JSON.parse(txt);
-						} catch {}
-						console.log('[BetterAuth] Resend response', {
-							status: res.status,
-							ok: res.ok,
-							id: json?.id ?? null,
-							error: json?.error ?? null,
-							raw: txt
-						});
-						if (!res.ok) throw new Error(`Resend error ${res.status}`);
-						return json;
-					}
+				const template = EmailTemplates.resetPassword(url);
+				const result = await sendEmail(
+					{ to: user.email, ...template },
+					{ apiKey, isLocal: isLocalEnvironment(url) }
+				);
 
-					// In dev, use onboarding sender to avoid unverified domain; in prod, try preferred then fallback
-					const isLocal = /localhost|127\./.test(
-						(() => {
-							try {
-								return new URL(url).hostname;
-							} catch {
-								return '';
-							}
-						})()
-					);
-					if (isLocal) {
-						await sendDirect(payloadFallback);
-					} else {
-						try {
-							await sendDirect(payloadPreferred);
-						} catch (e) {
-							console.warn('[BetterAuth] Preferred sender failed, trying fallback', e);
-							await sendDirect(payloadFallback);
-						}
-					}
-				} catch (e) {
-					console.error('[BetterAuth] sendResetPassword failed', e);
+				if (!result.success) {
+					console.error('[BetterAuth] sendResetPassword failed', result.error);
 				}
 			},
 			resetPasswordTokenExpiresIn: 60 * 60 // 1 hour
@@ -287,99 +211,20 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 			changeEmail: {
 				enabled: true,
 				sendChangeEmailVerification: async ({ user, newEmail, url, token }, _request) => {
-					const subject = 'Bekräfta ändring av e‑post';
-					const body = `
-                        <p>Hej!</p>
-                        <p>Du har begärt att ändra din e‑post till <strong>${newEmail}</strong>.</p>
-                        <p>Klicka på länken nedan för att bekräfta ändringen:</p>
-                        <p><a href="${url}">${url}</a></p>
-                        <p>Om du inte begärt denna ändring kan du ignorera detta mail.</p>
-                    `;
-					try {
-						const host = (() => {
-							try {
-								return new URL(url).hostname;
-							} catch {
-								return '';
-							}
-						})();
-						const tokenPreview =
-							typeof token === 'string' ? `${token.slice(0, 6)}…(${token.length})` : 'n/a';
-						console.log('[BetterAuth] change-email email debug start', {
-							to: user?.email,
-							newEmail,
-							url,
-							host,
-							tokenPreview
-						});
-					} catch {}
-					try {
-						const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
-						console.log('[BetterAuth] RESEND_API_KEY present?', {
-							present: Boolean(apiKey),
-							length: apiKey?.length ?? 0
-						});
-						if (!apiKey) {
-							console.error(
-								'[BetterAuth] RESEND_API_KEY is missing; cannot send change-email verification'
-							);
-							return;
-						}
-						const preferredFrom = 'Instafication <no-reply@transactional.instafication.shop>';
-						const fallbackFrom = 'Instafication <onboarding@resend.dev>';
-						const payloadPreferred = { from: preferredFrom, to: user.email, subject, html: body };
-						const payloadFallback = { from: fallbackFrom, to: user.email, subject, html: body };
+					const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
+					if (!apiKey) {
+						console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send change-email verification');
+						return;
+					}
 
-						async function sendDirect(payload: any) {
-							console.log('[BetterAuth] Resend POST /emails (direct)', {
-								from: payload.from,
-								to: payload.to
-							});
-							const res = await fetch('https://api.resend.com/emails', {
-								method: 'POST',
-								headers: {
-									Authorization: `Bearer ${apiKey}`,
-									'Content-Type': 'application/json'
-								},
-								body: JSON.stringify(payload)
-							});
-							const txt = await res.text();
-							let json: any = null;
-							try {
-								json = JSON.parse(txt);
-							} catch {}
-							console.log('[BetterAuth] Resend response', {
-								status: res.status,
-								ok: res.ok,
-								id: json?.id ?? null,
-								error: json?.error ?? null,
-								raw: txt
-							});
-							if (!res.ok) throw new Error(`Resend error ${res.status}`);
-							return json;
-						}
+					const template = EmailTemplates.changeEmail(newEmail, url);
+					const result = await sendEmail(
+						{ to: user.email, ...template },
+						{ apiKey, isLocal: isLocalEnvironment(url) }
+					);
 
-						const isLocal = /localhost|127\./.test(
-							(() => {
-								try {
-									return new URL(url).hostname;
-								} catch {
-									return '';
-								}
-							})()
-						);
-						if (isLocal) {
-							await sendDirect(payloadFallback);
-						} else {
-							try {
-								await sendDirect(payloadPreferred);
-							} catch (e) {
-								console.warn('[BetterAuth] Preferred sender failed, trying fallback', e);
-								await sendDirect(payloadFallback);
-							}
-						}
-					} catch (e) {
-						console.error('[BetterAuth] sendChangeEmailVerification failed', e);
+					if (!result.success) {
+						console.error('[BetterAuth] sendChangeEmailVerification failed', result.error);
 					}
 				}
 			}

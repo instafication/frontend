@@ -14,6 +14,10 @@ export default {
 		HEADER_LOGGEDIN_I3: 'Inställningar',
 		HEADER_LOGGEDIN_I4: 'Logga ut',
 
+		// Timeline / Notifications
+		timeline_new_laundry_time_found: 'Ny tvättid hittad för Stockholms studentbostäder',
+		timeline_loading: 'Laddar...',
+
 		// FAQ
 		FAQ_TITLE: 'Vanliga frågor',
 		FAQ_Q1: 'Vad är Instafication?',
@@ -149,6 +153,10 @@ export default {
 		HEADER_LOGGEDIN_I2: 'Services',
 		HEADER_LOGGEDIN_I3: 'Settings',
 		HEADER_LOGGEDIN_I4: 'Sign out',
+
+		// Timeline / Notifications
+		timeline_new_laundry_time_found: 'New laundry time found for Stockholm Student Housing',
+		timeline_loading: 'Loading...',
 
 		// FAQ
 		FAQ_TITLE: 'Frequently asked questions',

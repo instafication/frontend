@@ -30,20 +30,23 @@ experimental_remote = true
 [vars]
 ENVIRONMENT = "production"
 
-RESEND_API_KEY="" # re_AAAmwAAA_MW4D5qz4BoAMof1nugRXnmA7"
+# Public keys (safe to commit)
+PUBLIC_POSTHOG_KEY = ""
+PUBLIC_POSTHOG_HOST = "https://eu.i.posthog.com"
+STRIPE_PUBLISHABLE_KEY = ""
 
-CLOUDFLARE_ACCOUNT_ID="" # 0AAAA391e70VVBBBB433693af250bda9"
-CLOUDFLARE_DATABASE_ID="" # AAAAAAAA-VVV2-4e54-aeab-ea0a2fa81a6d"
-CLOUDFLARE_D1_TOKEN="" # ykEaZAVAAAAA07NSjeVLLapLAHDf34678TvgYj4g_l"
-
-# BetterAuth (D1 + Drizzle)
-BETTER_AUTH_SECRET="change-me"
-
-# PostHog
-PUBLIC_POSTHOG_KEY="" # phc_AVCCKOIJEIUWHGEYUEILTzlVfThdLuh7wtYH"
-PUBLIC_POSTHOG_HOST="" # https://eu.i.posthog.com"
-
-# Stripe
-STRIPE_PUBLISHABLE_KEY=""
-STRIPE_SECRET_KEY=""
-STRIPE_WEBHOOK_SECRET=""
+# ============================================================================
+# SECRETS - Set these via Cloudflare dashboard or `wrangler secret put`
+# Do NOT put actual values in this file!
+# ============================================================================
+#
+# Required secrets:
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put BETTER_AUTH_SECRET
+#   wrangler secret put STRIPE_SECRET_KEY
+#   wrangler secret put STRIPE_WEBHOOK_SECRET
+#   wrangler secret put CLOUDFLARE_D1_TOKEN
+#
+# Generate a secure BETTER_AUTH_SECRET:
+#   openssl rand -base64 32
+# ============================================================================

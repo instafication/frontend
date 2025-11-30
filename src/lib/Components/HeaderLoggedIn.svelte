@@ -52,23 +52,24 @@ onMount(async () => {
 				class="mr-3 h-6 sm:h-9"
 				alt="Instafication logo"
 			/>
-			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white hidden sm:inline">
 				Instafication
 			</span>
 		</NavBrand>
 
-		<div class="flex items-center md:order-1 gap-1">
+		<div class="flex items-center md:order-1 gap-1 sm:gap-2">
 			<LanguageSelector />
 			<NotificationDropdown />
 			<Button
 				variant="outline"
-				class="hover:cursor-pointer"
+				class="hover:cursor-pointer px-2 sm:px-4"
 				onclick={() => showServicesModal.set(true)}
 			>
-				<Settings />Bevakningar
+				<Settings class="h-4 w-4" />
+				<span class="hidden sm:inline ml-1">Bevakningar</span>
 			</Button>
 
-		<DropdownMenu.Root class="px-4">
+		<DropdownMenu.Root class="px-2 sm:px-4">
 			<DropdownMenuTrigger class="hover:cursor-pointer">
 				<AvatarRoot>
 					<AvatarImage src="./images/profile.avif" alt="Profile Logo" />

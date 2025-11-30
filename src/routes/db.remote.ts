@@ -33,19 +33,32 @@ const generateHexId = (): string => {
 	return out;
 };
 
+// Allowed JSON keys for dynamic queries - prevents SQL injection via sql.raw()
+const ALLOWED_PARAM_KEYS = ['area', 'company', 'service', 'type'] as const;
+type AllowedParamKey = (typeof ALLOWED_PARAM_KEYS)[number];
+
+function validateParamKey(key: string): AllowedParamKey {
+	if (!ALLOWED_PARAM_KEYS.includes(key as AllowedParamKey)) {
+		throw new Error(`Invalid param key: ${key}. Allowed: ${ALLOWED_PARAM_KEYS.join(', ')}`);
+	}
+	return key as AllowedParamKey;
+}
+
 /*──────────────────────── SCRAPERS ──────────────────────*/
 /** Get the latest `last_update` for a scraper row
  *  whose JSON param key matches the supplied value. */
 export const scraper_GetLastUpdateByArea = query(
 	v.object({ key: v.string(), value: v.any() }),
-	async ({ key, value }): Promise<number> =>
-		await db()
+	async ({ key, value }): Promise<number> => {
+		const safeKey = validateParamKey(key);
+		return await db()
 			.select({ last_update: scrapers.last_update })
 			.from(scrapers)
-			.where(sql`params->>'${sql.raw(key)}' = ${value}`)
+			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
 			.orderBy(desc(scrapers.last_update))
 			.limit(1)
-			.then((r) => r[0]?.last_update ?? -1)
+			.then((r) => r[0]?.last_update ?? -1);
+	}
 );
 
 export const scraper_GetAll = query(async () => await db().select().from(scrapers));
@@ -64,13 +77,15 @@ export const scraper_GetLastUpdateByCompanyName = query(
 
 export const scraper_ExistsByArea = query(
 	v.object({ key: v.string(), value: v.any() }),
-	async ({ key, value }) =>
-		await db()
+	async ({ key, value }) => {
+		const safeKey = validateParamKey(key);
+		return await db()
 			.select()
 			.from(scrapers)
-			.where(sql`params->>'${sql.raw(key)}' = ${value}`)
+			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
 			.limit(1)
-			.then((r) => r.length > 0)
+			.then((r) => r.length > 0);
+	}
 );
 
 export const scraper_Create = command(ScraperInsertSchema, async (payload: ScraperInsert) => {
@@ -91,22 +106,26 @@ export const scraper_Create = command(ScraperInsertSchema, async (payload: Scrap
 
 export const scraper_UpdateLastPingByOptionsKeyValue = command(
 	v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }),
-	async ({ key, value, unixTimestamp }) =>
-		await db()
+	async ({ key, value, unixTimestamp }) => {
+		const safeKey = validateParamKey(key);
+		return await db()
 			.update(scrapers)
 			.set({ last_ping: unixTimestamp })
-			.where(sql`params->>'${sql.raw(key)}' = ${value}`)
-			.then((r) => r.success)
+			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
+			.then((r) => r.success);
+	}
 );
 
 export const scraper_UpdateLastUpdateByOptionsKeyValue = command(
 	v.object({ key: v.string(), value: v.any(), unixTimestamp: v.number() }),
-	async ({ key, value, unixTimestamp }) =>
-		await db()
+	async ({ key, value, unixTimestamp }) => {
+		const safeKey = validateParamKey(key);
+		return await db()
 			.update(scrapers)
 			.set({ last_update: unixTimestamp })
-			.where(sql`params->>'${sql.raw(key)}' = ${value}`)
-			.then((r) => r.success)
+			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
+			.then((r) => r.success);
+	}
 );
 
 /*──────────────────────── PROFILES ─────────────────────*/
@@ -317,11 +336,13 @@ export const service_GetConfigByCompanyName = query(
 
 export const service_GetUserIdsByOptions = query(
 	v.object({ key: v.string(), value: v.any() }),
-	async ({ key, value }) =>
-		await db()
+	async ({ key, value }) => {
+		const safeKey = validateParamKey(key);
+		return await db()
 			.select()
 			.from(services)
-			.where(sql`options->>'${sql.raw(key)}' = ${value}`)
+			.where(sql`options->>'${sql.raw(safeKey)}' = ${value}`);
+	}
 );
 
 export const service_CreateOrUpdate = command(

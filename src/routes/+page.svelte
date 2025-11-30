@@ -77,7 +77,7 @@ const CardWithList = BrandsOnLandingPage;
 					{#each await notification_GetLatest(3) as notification}
 						<TimelineItem
 							customDiv={'bg-green-300'}
-							title="Ny tvättid hittad för Stockholms studentbostäder"
+							title={$t('timeline_new_laundry_time_found')}
 							date={notification.date?.toString() ?? undefined}
 						>
 							<p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
@@ -86,7 +86,7 @@ const CardWithList = BrandsOnLandingPage;
 						</TimelineItem>
 					{/each}
 					{#snippet pending()}
-						<p>Loading...</p>
+						<p>{$t('timeline_loading')}</p>
 					{/snippet}
 				</svelte:boundary>
 			</Timeline>
