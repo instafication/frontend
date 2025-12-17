@@ -2,23 +2,23 @@
 import { Coins, LogOut, Settings, UserCog } from '@lucide/svelte';
 import { NavBrand, Navbar } from 'flowbite-svelte';
 import { onMount } from 'svelte';
-import LanguageSelector from '$lib/Components/LanguageSelector.svelte';
-import NotificationDropdown from '$lib/Components/Modal/NotificationDropdown.svelte';
+import LanguageSelector from '$lib/components/LanguageSelector.svelte';
+import NotificationDropdown from '$lib/components/Modal/NotificationDropdown.svelte';
 import {
 	Fallback as AvatarFallback,
 	Image as AvatarImage,
 	Root as AvatarRoot
-} from '$lib/Components/ui/avatar';
-import { Button } from '$lib/Components/ui/button';
+} from '$lib/components/ui/avatar';
+import { Button } from '$lib/components/ui/button';
 import {
 	DropdownMenu,
 	Content as DropdownMenuContent,
 	Item as DropdownMenuItem,
 	Separator as DropdownMenuSeparator,
 	Trigger as DropdownMenuTrigger
-} from '$lib/Components/ui/dropdown-menu';
+} from '$lib/components/ui/dropdown-menu';
 import { t } from '$lib/i18n';
-import { getUserId, signOut } from '$lib/Managers/AuthManager';
+import { getUserId, signOut } from '$lib/managers/AuthManager';
 import { showProfileSettingsModal, showServicesModal } from '$lib/sharedStore';
 import { profile_EnsureExistsByUserId, profile_GetCreditsByUserId } from '../../routes/db.remote';
 

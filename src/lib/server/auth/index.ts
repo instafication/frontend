@@ -5,35 +5,14 @@ import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import type { CloudflareGeolocation } from 'better-auth-cloudflare';
 import { withCloudflare } from 'better-auth-cloudflare';
+import { eq } from 'drizzle-orm';
 import { getRequestEvent } from '$app/server';
 
 import { getDb } from '$lib/server/db';
 import { EmailTemplates, isLocalEnvironment, sendEmail } from '$lib/server/email';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
-
-function resolveCrypto(): Crypto {
-	const scoped = (globalThis as typeof globalThis & { webcrypto?: Crypto | undefined })?.crypto;
-	if (scoped && typeof scoped.getRandomValues === 'function') {
-		return scoped;
-	}
-	const fallback = (globalThis as typeof globalThis & { webcrypto?: Crypto | undefined }).webcrypto;
-	if (fallback && typeof fallback.getRandomValues === 'function') {
-		return fallback;
-	}
-	throw new Error('crypto.getRandomValues must be defined');
-}
-
-function resolveSubtle(): SubtleCrypto {
-	const subtle = resolveCrypto().subtle;
-	if (!subtle) {
-		throw new Error('crypto.subtle must be defined');
-	}
-	return subtle;
-}
-
-function fillRandomValues<T extends ArrayBufferView>(view: T): T {
-	return resolveCrypto().getRandomValues(view);
-}
+import { profiles } from '../../../../drizzle/schema';
+import { createPbkdf2Hasher } from './pbkdf2';
 
 export type AuthEnv = {
 	DB: unknown;
@@ -42,95 +21,62 @@ export type AuthEnv = {
 	RESEND_API_KEY?: string;
 	ENVIRONMENT?: string;
 	PBKDF2_ITERS?: string;
+	TRUSTED_ORIGINS?: string;
+	MIN_PASSWORD_LENGTH?: string;
 };
+
+// Default trusted origins (fallback when env var not set)
+const DEFAULT_TRUSTED_ORIGINS = [
+	'http://localhost:8787',
+	'http://localhost:8787/reset-password',
+	'http://127.0.0.1:8787',
+	'http://127.0.0.1:8787/reset-password',
+	'http://localhost:5173',
+	'https://instafication.shop',
+	'https://instafication.shop/reset-password',
+	'http://instafication.shop'
+];
+
+/**
+ * Parse trusted origins from environment variable or use defaults
+ */
+function getTrustedOrigins(env?: AuthEnv): string[] {
+	const envOrigins = env?.TRUSTED_ORIGINS;
+	if (envOrigins) {
+		return envOrigins
+			.split(',')
+			.map((origin) => origin.trim())
+			.filter(Boolean);
+	}
+	return DEFAULT_TRUSTED_ORIGINS;
+}
+
+/**
+ * Get minimum password length from environment (default: 8 for prod, 1 for dev)
+ */
+function getMinPasswordLength(env?: AuthEnv, isDev = false): number {
+	const envValue = env?.MIN_PASSWORD_LENGTH;
+	if (envValue) {
+		const parsed = Number(envValue);
+		if (!Number.isNaN(parsed) && parsed > 0) return parsed;
+	}
+	return isDev ? 1 : 8;
+}
 
 // Export for CLI schema generation (env undefined => include drizzleAdapter)
 export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | undefined) => {
 	const isDev = import.meta.env.DEV ?? false;
-	// Workers-safe PBKDF2-HMAC-SHA256 using Web Crypto (Cloudflare-compatible)
-	function toBase64(data: Uint8Array): string {
-		if (typeof Buffer !== 'undefined') return Buffer.from(data).toString('base64');
-		let binary = '';
-		for (let i = 0; i < data.length; i++) binary += String.fromCharCode(data[i]);
-		// btoa expects binary string
-		return btoa(binary);
-	}
 
-	function fromBase64(str: string): Uint8Array {
-		if (typeof Buffer !== 'undefined') return new Uint8Array(Buffer.from(str, 'base64'));
-		const binary = atob(str);
-		const out = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) out[i] = binary.charCodeAt(i);
-		return out;
-	}
-
-	function timingSafeEqualBytes(a: Uint8Array, b: Uint8Array): boolean {
-		if (a.length !== b.length) return false;
-		let diff = 0;
-		for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
-		return diff === 0;
-	}
-
-	const pbkdf2Hasher = {
-		// Encodes as: pbkdf2$algo=sha256$it=100000$salt=<b64>$dk=<b64>
-		hash: async (password: string) => {
-			const salt = new Uint8Array(16);
-			fillRandomValues(salt);
-			const iterations = Number((env as any)?.PBKDF2_ITERS) || (isDev ? 100_000 : 100_000);
-			const hashAlgo = 'SHA-256';
-			const dkLen = 32;
-			const passwordBytes = new TextEncoder().encode(password);
-			const subtle = resolveSubtle();
-			const key = await subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
-			const bits = await subtle.deriveBits(
-				{ name: 'PBKDF2', salt, iterations, hash: hashAlgo },
-				key,
-				dkLen * 8
-			);
-			const derivedKey = new Uint8Array(bits);
-			return `pbkdf2$algo=sha256$it=${iterations}$salt=${toBase64(salt)}$dk=${toBase64(derivedKey)}`;
-		},
-		verify: async (hash: string, password: string) => {
-			try {
-				if (!hash.startsWith('pbkdf2$')) return false;
-				const parts = Object.fromEntries(
-					hash
-						.split('$')
-						.slice(1) // drop 'pbkdf2'
-						.map((kv) => kv.split('='))
-				) as Record<string, string>;
-				const iterations = Number(parts.it);
-				const salt = fromBase64(parts.salt);
-				const expected = fromBase64(parts.dk);
-				const passwordBytes = new TextEncoder().encode(password);
-				const subtle = resolveSubtle();
-				const key = await subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
-				const bits = await subtle.deriveBits(
-					{ name: 'PBKDF2', salt: salt as BufferSource, iterations, hash: 'SHA-256' },
-					key,
-					expected.length * 8
-				);
-				const derivedKey = new Uint8Array(bits);
-				return timingSafeEqualBytes(derivedKey, expected);
-			} catch {
-				return false;
-			}
-		}
-	};
+	// Create PBKDF2 hasher with environment configuration
+	const pbkdf2Hasher = createPbkdf2Hasher({
+		iterations: Number(env?.PBKDF2_ITERS) || undefined,
+		isDev
+	});
 
 	const baseOptions: BetterAuthOptions = {
 		basePath: '/api/auth',
 		secret: env?.BETTER_AUTH_SECRET,
-		trustedOrigins: [
-			'http://localhost:8787',
-			'http://localhost:8787/reset-password',
-			'http://127.0.0.1:8787',
-			'http://127.0.0.1:8787/reset-password',
-			'http://localhost:5173',
-			'https://instafication.shop',
-			'https://instafication.shop/reset-password',
-			'http://instafication.shop'
-		],
+		trustedOrigins: getTrustedOrigins(env),
 		session: {
 			// Keep sessions for 30 days, and refresh expiry daily while active
 			expiresIn: 60 * 60 * 24 * 30,
@@ -144,8 +90,8 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 			enabled: true,
 			// Allow sign-up/sign-in without requiring email verification
 			requireEmailVerification: false,
-			// Relax password policy for local dev
-			minPasswordLength: 1,
+			// Use configurable password length (stricter in prod)
+			minPasswordLength: getMinPasswordLength(env, isDev),
 			// PBKDF2-HMAC-SHA256 password hashing (Workers-safe)
 			password: {
 				hash: async (password: string) => pbkdf2Hasher.hash(password),
@@ -194,7 +140,7 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 					const existing = await db
 						.select()
 						.from(authSchema.users)
-						.where((await import('drizzle-orm')).eq(authSchema.users.email, newEmail))
+						.where(eq(authSchema.users.email, newEmail))
 						.limit(1);
 					const currentUserId = ((ctx as any).session as any)?.user?.id as string | undefined;
 					if (existing?.length && existing[0]?.id !== currentUserId) {
@@ -253,8 +199,6 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 						});
 						try {
 							const db = getDb({ d1Binding: (env as any)?.DB });
-							const { profiles } = await import('../../../../drizzle/schema');
-							const { eq } = await import('drizzle-orm');
 							const existing = await db
 								.select()
 								.from(profiles)
@@ -276,8 +220,6 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 						// Keep profile email in sync with auth users table
 						try {
 							const db = getDb({ d1Binding: (env as any)?.DB });
-							const { profiles } = await import('../../../../drizzle/schema');
-							const { eq } = await import('drizzle-orm');
 							await db.update(profiles).set({ email: user.email }).where(eq(profiles.id, user.id));
 						} catch (e) {
 							console.error('[BetterAuth hook] failed to sync profile email on user.update', e);
@@ -322,8 +264,6 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 						// or any edge cases where profile creation failed.
 						try {
 							const db = getDb({ d1Binding: (env as any)?.DB });
-							const { profiles } = await import('../../../../drizzle/schema');
-							const { eq } = await import('drizzle-orm');
 							const existing = await db
 								.select()
 								.from(profiles)

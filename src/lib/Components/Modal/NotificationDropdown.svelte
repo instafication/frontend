@@ -1,12 +1,12 @@
 <script lang="ts">
 import { BellRing } from '@lucide/svelte';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import {
 	DropdownMenu,
 	Content as DropdownMenuContent,
 	Item as DropdownMenuItem,
 	Trigger as DropdownMenuTrigger
-} from '$lib/Components/ui/dropdown-menu';
+} from '$lib/components/ui/dropdown-menu';
 import { notification_GetLatest } from '../../../routes/db.remote';
 </script>
 

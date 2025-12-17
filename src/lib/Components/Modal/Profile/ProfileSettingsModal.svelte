@@ -2,7 +2,7 @@
 import { Loader2, Save } from '@lucide/svelte';
 import { Input, Label } from 'flowbite-svelte';
 import { onMount } from 'svelte';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
@@ -10,9 +10,9 @@ import {
 	Header as DialogHeader,
 	Title as DialogTitle,
 	Trigger as DialogTrigger
-} from '$lib/Components/ui/dialog';
+} from '$lib/components/ui/dialog';
 import { t } from '$lib/i18n';
-import * as authManager from '$lib/Managers/AuthManager';
+import * as authManager from '$lib/managers/AuthManager';
 import { showProfileSettingsModal } from '$lib/sharedStore';
 
 let email = $state<string>('');

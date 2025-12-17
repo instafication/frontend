@@ -3,22 +3,22 @@ import { Loader2, Save } from '@lucide/svelte';
 import { Avatar, Label } from 'flowbite-svelte';
 import { onMount } from 'svelte';
 import { toast } from 'svelte-sonner';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
 	Header as DialogHeader,
 	Title as DialogTitle
-} from '$lib/Components/ui/dialog';
+} from '$lib/components/ui/dialog';
 import {
 	Select,
 	Content as SelectContent,
 	Group as SelectGroup,
 	Item as SelectItem,
 	Trigger as SelectTrigger
-} from '$lib/Components/ui/select';
+} from '$lib/components/ui/select';
 import { t } from '$lib/i18n';
-import { getUserId } from '$lib/Managers/AuthManager';
+import { getUserId } from '$lib/managers/AuthManager';
 import { showServicesModal } from '$lib/sharedStore';
 import {
 	service_CreateOrUpdate,

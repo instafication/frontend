@@ -1,5 +1,5 @@
 <script lang="ts">
-import * as Accordion from '$lib/Components/ui/accordion';
+import * as Accordion from '$lib/components/ui/accordion';
 import { t } from '$lib/i18n';
 </script>
 

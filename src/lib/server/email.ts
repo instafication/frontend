@@ -44,34 +44,43 @@ export async function sendEmail(
 	const sendRequest = async (sender: string): Promise<EmailResult> => {
 		console.log('[EmailService] Sending email', { from: sender, to });
 
-		const response = await fetch(RESEND_API_URL, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${apiKey}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ from: sender, to, subject, html })
-		});
-
-		const text = await response.text();
-		let json: { id?: string; error?: string } | null = null;
+		// Create abort controller with 30 second timeout
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 30_000);
 
 		try {
-			json = JSON.parse(text);
-		} catch {}
+			const response = await fetch(RESEND_API_URL, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${apiKey}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ from: sender, to, subject, html }),
+				signal: controller.signal
+			});
 
-		console.log('[EmailService] Response', {
-			status: response.status,
-			ok: response.ok,
-			id: json?.id ?? null,
-			error: json?.error ?? null
-		});
+			const text = await response.text();
+			let json: { id?: string; error?: string } | null = null;
 
-		if (!response.ok) {
-			return { success: false, error: json?.error ?? `HTTP ${response.status}` };
+			try {
+				json = JSON.parse(text);
+			} catch {}
+
+			console.log('[EmailService] Response', {
+				status: response.status,
+				ok: response.ok,
+				id: json?.id ?? null,
+				error: json?.error ?? null
+			});
+
+			if (!response.ok) {
+				return { success: false, error: json?.error ?? `HTTP ${response.status}` };
+			}
+
+			return { success: true, id: json?.id };
+		} finally {
+			clearTimeout(timeoutId);
 		}
-
-		return { success: true, id: json?.id };
 	};
 
 	try {

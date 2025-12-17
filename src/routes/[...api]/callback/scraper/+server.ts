@@ -2,7 +2,7 @@ import { and, desc, gt, inArray, sql } from 'drizzle-orm';
 import { db } from '$lib/db';
 // If this mailer works in CF Workers, you can keep it.
 // If not, you can stub it or guard it with try/catch as below.
-import { sendLaundryNotification } from '$lib/Managers/EmailManager';
+import { sendLaundryNotification } from '$lib/managers/EmailManager';
 
 // ⬇️ Import your Drizzle tables here
 import {

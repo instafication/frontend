@@ -2,15 +2,15 @@
 import { Loader2, UserRoundPlus } from '@lucide/svelte';
 import { Input, Label } from 'flowbite-svelte';
 import { toast } from 'svelte-sonner';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
 	Header as DialogHeader,
 	Title as DialogTitle
-} from '$lib/Components/ui/dialog';
+} from '$lib/components/ui/dialog';
 import { t } from '$lib/i18n';
-import { signUp } from '$lib/Managers/AuthManager';
+import { signUp } from '$lib/managers/AuthManager';
 import { showRegisterModal } from '$lib/sharedStore';
 
 /* ───────── reactive state ───────── */

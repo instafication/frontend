@@ -1,15 +1,15 @@
 <script lang="ts">
 import { Loader2, RotateCcwKey } from '@lucide/svelte';
 import { Input, Label } from 'flowbite-svelte';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
 	Header as DialogHeader,
 	Title as DialogTitle
-} from '$lib/Components/ui/dialog';
+} from '$lib/components/ui/dialog';
 import { t } from '$lib/i18n';
-import { resetPasswordForEmail } from '$lib/Managers/AuthManager';
+import { resetPasswordForEmail } from '$lib/managers/AuthManager';
 import { showLostPasswordModal } from '$lib/sharedStore';
 
 let email = $state('');

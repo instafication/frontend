@@ -1,14 +1,14 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import authClient from '$lib/authClient';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
 	Footer as DialogFooter,
 	Header as DialogHeader,
 	Title as DialogTitle
-} from '$lib/Components/ui/dialog';
+} from '$lib/components/ui/dialog';
 
 let newPassword = $state<string>('');
 let isLoading = $state<boolean>(false);

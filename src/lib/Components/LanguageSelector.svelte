@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Se, Us } from 'svelte-flag-icons';
-import { Button } from '$lib/Components/ui/button';
+import { Button } from '$lib/components/ui/button';
 import { selectedLanguage } from '$lib/sharedStore';
 </script>
 

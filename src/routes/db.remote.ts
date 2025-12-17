@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { command, query } from '$app/server';
 import { db } from '$lib/db';
 
-import { getUserId } from '$lib/Managers/AuthManager';
+import { getUserId } from '$lib/managers/AuthManager';
 import {
 	type NotificationInsert,
 	NotificationInsertSchema,
@@ -72,7 +72,7 @@ export const scraper_GetLastUpdateByCompanyName = query(
 			.where(eq(scrapers.company, companyName))
 			.orderBy(desc(scrapers.last_update))
 			.limit(1)
-			.then((r) => r[0].last_update || -1)
+			.then((r) => r[0]?.last_update ?? -1)
 );
 
 export const scraper_ExistsByArea = query(

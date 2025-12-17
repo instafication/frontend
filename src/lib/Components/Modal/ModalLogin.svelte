@@ -1,17 +1,17 @@
 <script lang="ts">
 import { Loader2, LogIn } from '@lucide/svelte';
 import { Input, Label } from 'flowbite-svelte';
-import Checkbox from '$lib/Components/Custom/Checkbox.svelte';
-import { Button } from '$lib/Components/ui/button';
+import Checkbox from '$lib/components/Custom/Checkbox.svelte';
+import { Button } from '$lib/components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
 	Header as DialogHeader,
 	Title as DialogTitle
-} from '$lib/Components/ui/dialog';
+} from '$lib/components/ui/dialog';
 /* auth + stores */
 import { t } from '$lib/i18n';
-import { signInWithOAuth, signInWithPassword } from '$lib/Managers/AuthManager';
+import { signInWithOAuth, signInWithPassword } from '$lib/managers/AuthManager';
 import { showLoginModal, showLostPasswordModal, showRegisterModal } from '$lib/sharedStore';
 
 /* ───────── reactive state ───────── */
