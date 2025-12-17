@@ -11,7 +11,7 @@ import { t } from '$lib/i18n';
 </p>
 
 <!-- one‑at‑a‑time accordion -->
-<Accordion.Root type="single" collapsible class="w-full max-w-3xl mx-auto">
+<Accordion.Root type="single" class="w-full max-w-3xl mx-auto">
 	<!-- Q1 -->
 	<Accordion.Item value="q1" class="border-b last:border-b-0">
 		<Accordion.Trigger

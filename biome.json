@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -7,10 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": [
-			"**",
-			"!static"
-		]
+		"includes": ["**", "!static"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -44,9 +41,7 @@
 	},
 	"overrides": [
 		{
-			"includes": [
-				"**/*.svelte"
-			],
+			"includes": ["**/*.svelte"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -54,7 +49,15 @@
 						"noUnusedImports": "off"
 					},
 					"style": {
-						"useConst": "off"
+						"useConst": "off",
+						"useImportType": "off"
+					}
+				}
+			},
+			"assist": {
+				"actions": {
+					"source": {
+						"organizeImports": "off"
 					}
 				}
 			}

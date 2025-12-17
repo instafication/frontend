@@ -1,5 +1,6 @@
 <script lang="ts">
-import type { Separator as SeparatorPrimitive } from 'bits-ui';
+import { Separator as SeparatorPrimitive } from 'bits-ui';
+import type { Separator } from 'bits-ui';
 import { cn } from '$lib/utils.js';
 
 let {
@@ -9,7 +10,7 @@ let {
 }: SeparatorPrimitive.RootProps = $props();
 </script>
 
-<Separator
+<SeparatorPrimitive.Root
 	bind:ref
 	data-slot="select-separator"
 	class={cn('bg-border pointer-events-none -mx-1 my-1 h-px', className)}

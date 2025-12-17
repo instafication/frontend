@@ -4,7 +4,7 @@ import translations from '$lib/translations';
 
 export const locales = Object.keys(translations);
 
-function translate(selectedLanguage: string, key: string, vars) {
+function translate(selectedLanguage: string, key: string, vars: Record<string, string>) {
 	// Let's throw some errors if we're trying to use keys/locales that don't exist.
 	// We could improve this by using Typescript and/or fallback values.
 	if (!key) throw new Error('no key provided to $t()');
@@ -12,7 +12,7 @@ function translate(selectedLanguage: string, key: string, vars) {
 
 	// Grab the translation from the translations object.
 	// Fix: Add type safety for dynamic key access
-	const langTranslations = translations[selectedLanguage];
+	const langTranslations = translations[selectedLanguage as keyof typeof translations];
 	if (!langTranslations) {
 		throw new Error(`No translations found for language "${selectedLanguage}"`);
 	}

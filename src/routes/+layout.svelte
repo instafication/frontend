@@ -19,9 +19,11 @@ import { userLoggedIn } from '$lib/sharedStore';
 const { children, data } = $props();
 
 // Initialize with server-provided auth state to avoid hydration mismatch
-if (data?.isAuthenticated !== undefined) {
-	userLoggedIn.set(data.isAuthenticated);
-}
+$effect(() => {
+	if (data?.isAuthenticated !== undefined) {
+		userLoggedIn.set(data.isAuthenticated);
+	}
+});
 
 if (browser) {
 	beforeNavigate(() => posthog.capture('$pageleave'));

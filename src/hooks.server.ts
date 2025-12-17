@@ -26,7 +26,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const env = event.platform?.env as unknown as AuthEnv | undefined;
 	if (env?.DB) {
 		// Initialize global DB instance used by remote functions in `$lib/db`
-		initDB(env as AuthEnv);
+		initDB(env as unknown as Env);
 		event.locals.db = getDb({ d1Binding: env.DB });
 		console.log('[hooks] D1 binding detected and initialized');
 	}
@@ -35,7 +35,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.warn('[hooks] No D1 binding on platform.env');
 	}
 
-	const auth = createAuth(env, event.platform?.cf);
+	const auth = createAuth(
+		env,
+		event.platform?.cf as unknown as
+			| import('better-auth-cloudflare').CloudflareGeolocation
+			| undefined
+	);
 	console.log('[hooks] auth created');
 
 	// Always try to get the session to make it available for layouts

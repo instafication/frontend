@@ -69,7 +69,7 @@ onMount(async () => {
 				<span class="hidden sm:inline ml-1">Bevakningar</span>
 			</Button>
 
-		<DropdownMenu.Root class="px-2 sm:px-4">
+		<DropdownMenu.Root>
 			<DropdownMenuTrigger class="hover:cursor-pointer">
 				<AvatarRoot>
 					<AvatarImage src="./images/profile.avif" alt="Profile Logo" />

@@ -5,9 +5,9 @@ import { Button } from '$lib/Components/ui/button';
 import {
 	Dialog,
 	Content as DialogContent,
+	Footer as DialogFooter,
 	Header as DialogHeader,
-	Title as DialogTitle,
-	Footer as DialogFooter
+	Title as DialogTitle
 } from '$lib/Components/ui/dialog';
 
 let newPassword = $state<string>('');

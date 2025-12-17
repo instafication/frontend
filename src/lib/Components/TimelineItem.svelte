@@ -21,7 +21,7 @@ const {
 	customTimeClass = '',
 	children, // default slot snippet
 	icon // named slot snippet
-} = $props<TimelineItemProps>();
+} = $props();
 
 /* ---------- context ---------- */
 type Order = 'default' | 'vertical' | 'horizontal' | 'activity' | 'group' | 'custom';
@@ -34,7 +34,8 @@ const _liClasses = {
 	vertical: 'mb-10 ml-6',
 	horizontal: 'relative mb-6 sm:mb-0',
 	activity: 'mb-10 ml-6',
-	group: ''
+	group: '',
+	custom: ''
 } as const;
 
 const divBase = {
@@ -56,18 +57,19 @@ const timeBase = {
 } as const;
 
 /* ---------- derived helpers ---------- */
-const _divClass = $derived(() => {
-	if (order === 'default')
-		return `${customDiv} absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700`;
-	if (order === 'custom') return customDiv;
-	return divBase[order];
-});
+const _divClass = $derived(
+	order === 'default'
+		? `${customDiv} absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700`
+		: order === 'custom'
+			? customDiv
+			: divBase[order]
+);
 
-const _timeClass = $derived(() =>
+const _timeClass = $derived(
 	order === 'custom' ? customTimeClass : (timeBase[order] ?? customTimeClass)
 );
 
-const _h3Class = $derived(() =>
+const _h3Class = $derived(
 	clsx(
 		order === 'vertical'
 			? 'flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white'
@@ -88,41 +90,41 @@ const _defaultIconHtml = /*html*/ `
     </svg>`;
 </script>
 
-<li class={liClasses[order]}>
+<li class={_liClasses[order]}>
 	{#if order === 'default'}
-		<div class={divClass}></div>
-		{#if date}<time class={timeClass}>{date}</time>{/if}
-		{#if title}<h3 class={h3Class}>{title}</h3>{/if}
+		<div class={_divClass}></div>
+		{#if date}<time class={_timeClass}>{date}</time>{/if}
+		{#if title}<h3 class={_h3Class}>{title}</h3>{/if}
 		{@render children?.()}
 	{:else if order === 'vertical'}
-		<div class={divClass}></div>
+		<div class={_divClass}></div>
 		{#if icon}
 			{@render icon()}
 		{:else}
-			{@html defaultIconHtml}
+			{@html _defaultIconHtml}
 		{/if}
-		{#if title}<h3 class={h3Class}>{title}</h3>{/if}
-		{#if date}<time class={timeClass}>{date}</time>{/if}
+		{#if title}<h3 class={_h3Class}>{title}</h3>{/if}
+		{#if date}<time class={_timeClass}>{date}</time>{/if}
 		{@render children?.()}
 	{:else if order === 'horizontal'}
-		<div class={divClass}></div>
+		<div class={_divClass}></div>
 		{#if icon}
 			{@render icon()}
 		{:else}
-			{@html defaultIconHtml}
+			{@html _defaultIconHtml}
 		{/if}
-		{#if title}<h3 class={h3Class}>{title}</h3>{/if}
-		{#if date}<time class={timeClass}>{date}</time>{/if}
+		{#if title}<h3 class={_h3Class}>{title}</h3>{/if}
+		{#if date}<time class={_timeClass}>{date}</time>{/if}
 		{@render children?.()}
 	{:else}
-		<div class={divClass}></div>
+		<div class={_divClass}></div>
 		{#if icon}
 			{@render icon()}
 		{:else}
-			{@html defaultIconHtml}
+			{@html _defaultIconHtml}
 		{/if}
-		{#if title}<h3 class={h3Class}>{title}</h3>{/if}
-		{#if date}<time class={timeClass}>{date}</time>{/if}
+		{#if title}<h3 class={_h3Class}>{title}</h3>{/if}
+		{#if date}<time class={_timeClass}>{date}</time>{/if}
 		{@render children?.()}
 	{/if}
 </li>

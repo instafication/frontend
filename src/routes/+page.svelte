@@ -41,14 +41,14 @@ const CardWithList = BrandsOnLandingPage;
 		Du kan även skapa en profil för att se dina krediter via vår hemsida. Har du redan ett konto så kan
 		du enkelt logga in via knappen nedan.
 	</p>
-	<svelte:fragment slot="footer">
+	{#snippet footer()}
 		<Button onclick={() => ($showRegisterModal = true)}
 			>{$t('get_started_modal_create_account')}</Button
 		>
 		<Button onclick={() => ($showLoginModal = true)} color="alternative"
 			>{$t('get_started_modal_login')}</Button
 		>
-	</svelte:fragment>
+	{/snippet}
 </Modal>
 
 <section class="bg-white dark:bg-gray-900">
@@ -80,6 +80,9 @@ const CardWithList = BrandsOnLandingPage;
 							title={$t('timeline_new_laundry_time_found')}
 							date={notification.date?.toString() ?? undefined}
 						>
+							{#snippet icon()}
+								<span class="w-3 h-3 bg-green-500 rounded-full"></span>
+							{/snippet}
 							<p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
 								{notification.body}
 							</p>

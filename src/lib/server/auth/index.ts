@@ -8,7 +8,7 @@ import { withCloudflare } from 'better-auth-cloudflare';
 import { getRequestEvent } from '$app/server';
 
 import { getDb } from '$lib/server/db';
-import { sendEmail, EmailTemplates, isLocalEnvironment } from '$lib/server/email';
+import { EmailTemplates, isLocalEnvironment, sendEmail } from '$lib/server/email';
 import * as authSchema from '../../../../drizzle/generated.auth.schema';
 
 function resolveCrypto(): Crypto {
@@ -106,7 +106,7 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 				const subtle = resolveSubtle();
 				const key = await subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveBits']);
 				const bits = await subtle.deriveBits(
-					{ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
+					{ name: 'PBKDF2', salt: salt as BufferSource, iterations, hash: 'SHA-256' },
 					key,
 					expected.length * 8
 				);
@@ -153,7 +153,7 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 					pbkdf2Hasher.verify(hash, password)
 			},
 			// Forgot password: send email with reset link
-			sendResetPassword: async ({ user, url, token }, _request) => {
+			sendResetPassword: async ({ user, url, token: _token }, _request) => {
 				const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
 				if (!apiKey) {
 					console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send reset email');
@@ -196,7 +196,7 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 						.from(authSchema.users)
 						.where((await import('drizzle-orm')).eq(authSchema.users.email, newEmail))
 						.limit(1);
-					const currentUserId = (ctx.session as any)?.user?.id as string | undefined;
+					const currentUserId = ((ctx as any).session as any)?.user?.id as string | undefined;
 					if (existing?.length && existing[0]?.id !== currentUserId) {
 						throw new APIError('CONFLICT', {
 							message: 'E‑postadressen används redan.'
@@ -210,10 +210,12 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 		user: {
 			changeEmail: {
 				enabled: true,
-				sendChangeEmailVerification: async ({ user, newEmail, url, token }, _request) => {
+				sendChangeEmailVerification: async ({ user, newEmail, url, token: _token }, _request) => {
 					const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
 					if (!apiKey) {
-						console.error('[BetterAuth] RESEND_API_KEY is missing; cannot send change-email verification');
+						console.error(
+							'[BetterAuth] RESEND_API_KEY is missing; cannot send change-email verification'
+						);
 						return;
 					}
 

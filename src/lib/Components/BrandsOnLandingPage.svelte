@@ -73,9 +73,9 @@ onMount(() => {
 
 			<p class="text-sm text-gray-500 dark:text-gray-400">
 				{#if loading}
-					<Badge variant="secondary">Loading...</Badge>
+					<Badge>Loading...</Badge>
 				{:else}
-					<Badge variant="secondary">
+					<Badge>
 						<Activity />Last scan: {lastSearchedMinutes} minutes ago
 					</Badge>
 				{/if}

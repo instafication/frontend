@@ -5,11 +5,11 @@ import { onMount } from 'svelte';
 import { Button } from '$lib/Components/ui/button';
 import {
 	Dialog,
-	Trigger as DialogTrigger,
 	Content as DialogContent,
+	Footer as DialogFooter,
 	Header as DialogHeader,
 	Title as DialogTitle,
-	Footer as DialogFooter
+	Trigger as DialogTrigger
 } from '$lib/Components/ui/dialog';
 import { t } from '$lib/i18n';
 import * as authManager from '$lib/Managers/AuthManager';

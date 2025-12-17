@@ -39,7 +39,7 @@ export async function sendEmail(
 		return { success: false, error: 'API key missing' };
 	}
 
-	const from = isLocal ? FALLBACK_FROM : PREFERRED_FROM;
+	const _from = isLocal ? FALLBACK_FROM : PREFERRED_FROM;
 
 	const sendRequest = async (sender: string): Promise<EmailResult> => {
 		console.log('[EmailService] Sending email', { from: sender, to });

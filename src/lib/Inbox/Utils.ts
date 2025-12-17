@@ -7,7 +7,7 @@ function generateRandomUUID(): string {
 }
 
 function unixTimeStampToDateString(timestamp: bigint): string {
-	const date = new Date(timestamp * 1000);
+	const date = new Date(Number(timestamp) * 1000);
 	return date.toLocaleString();
 }
 
