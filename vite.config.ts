@@ -13,13 +13,6 @@ export default defineConfig(({ command }) => ({
 		alias:
 			command === 'build'
 				? [
-						// Work around esbuild parsing issue in better-call ESM by preferring CJS build
-						{
-							find: 'better-call',
-							replacement: resolve(__dirname, 'node_modules/better-call/dist/index.cjs')
-						},
-						// Avoid default import mismatch by mapping rou3 to its CJS build
-						{ find: 'rou3', replacement: resolve(__dirname, 'node_modules/rou3/dist/index.cjs') },
 						// Shim @better-auth/utils base import to provide a default export for esbuild compatibility
 						{
 							find: /^@better-auth\/utils$/,
@@ -35,6 +28,6 @@ export default defineConfig(({ command }) => ({
 					]
 	},
 	ssr: {
-		noExternal: ['better-auth-cloudflare', 'better-auth']
+		noExternal: ['better-auth-cloudflare', 'better-auth', 'better-call', 'rou3']
 	}
 }));
