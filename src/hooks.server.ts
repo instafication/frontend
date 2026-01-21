@@ -7,8 +7,12 @@ import { type AuthEnv, createAuth } from './lib/server/auth';
 import { getDb } from './lib/server/db';
 
 const loginRoute = '/';
-function routeRequiresAuth(_event: RequestEvent) {
-	return false;
+
+/** Routes that require authentication */
+const PROTECTED_ROUTES = ['/dashboard', '/settings', '/payment'];
+
+function routeRequiresAuth(event: RequestEvent): boolean {
+	return PROTECTED_ROUTES.some((route) => event.url.pathname.startsWith(route));
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
