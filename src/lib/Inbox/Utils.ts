@@ -26,8 +26,8 @@ function getMinutesDiffFromUnixTimestamp(unixTimestamp: bigint): number {
 }
 
 export {
+	DateTimeStringToUnixTimeStamp,
 	generateRandomUUID,
 	getMinutesDiffFromUnixTimestamp,
-	DateTimeStringToUnixTimeStamp,
 	unixTimeStampToDateString
 };

@@ -13,23 +13,23 @@ import Separator from './select-separator.svelte';
 import Trigger from './select-trigger.svelte';
 
 export {
-	Group,
-	Label,
-	Item,
 	Content,
-	Trigger,
-	Separator,
-	ScrollDownButton,
-	ScrollUpButton,
-	GroupHeading,
+	Content as SelectContent,
+	Group,
 	//
 	Group as SelectGroup,
-	Label as SelectLabel,
+	GroupHeading,
+	GroupHeading as SelectGroupHeading,
+	Item,
 	Item as SelectItem,
-	Content as SelectContent,
-	Trigger as SelectTrigger,
-	Separator as SelectSeparator,
+	Label,
+	Label as SelectLabel,
+	ScrollDownButton,
 	ScrollDownButton as SelectScrollDownButton,
+	ScrollUpButton,
 	ScrollUpButton as SelectScrollUpButton,
-	GroupHeading as SelectGroupHeading
+	Separator,
+	Separator as SelectSeparator,
+	Trigger,
+	Trigger as SelectTrigger
 };

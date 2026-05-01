@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { command, query } from '$app/server';
 import { db } from '$lib/db';
 
-import { getUserId } from '$lib/managers/AuthManager';
+import { getUserId } from '$lib/Managers/AuthManager';
 import {
 	type NotificationInsert,
 	NotificationInsertSchema,

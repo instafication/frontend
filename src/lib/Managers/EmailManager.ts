@@ -161,9 +161,9 @@ async function sendLaundryNotification(
 }
 
 export {
-	SendEmailWhenUserIsCreated,
-	sendEmail,
 	SendEmailWhenSubscription,
 	SendEmailWhenSubscriptionProlonged,
+	SendEmailWhenUserIsCreated,
+	sendEmail,
 	sendLaundryNotification
 };

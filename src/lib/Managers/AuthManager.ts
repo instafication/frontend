@@ -120,7 +120,7 @@ export async function updateEmail(_email: string): Promise<boolean> {
 	}
 
 	try {
-		if (!_email || !_email.includes('@')) {
+		if (!_email?.includes('@')) {
 			toast.error('Ogiltig e‑postadress');
 			return false;
 		}

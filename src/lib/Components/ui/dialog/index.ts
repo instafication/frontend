@@ -12,21 +12,21 @@ import Title from './dialog-title.svelte';
 import Trigger from './dialog-trigger.svelte';
 
 export {
-	Title,
-	Footer,
-	Header,
-	Trigger,
-	Overlay,
-	Content,
-	Description,
 	Close,
+	Close as DialogClose,
+	Content,
+	Content as DialogContent,
+	Description,
+	Description as DialogDescription,
+	Footer,
+	Footer as DialogFooter,
+	Header,
+	Header as DialogHeader,
+	Overlay,
+	Overlay as DialogOverlay,
+	Title,
 	//
 	Title as DialogTitle,
-	Footer as DialogFooter,
-	Header as DialogHeader,
-	Trigger as DialogTrigger,
-	Overlay as DialogOverlay,
-	Content as DialogContent,
-	Description as DialogDescription,
-	Close as DialogClose
+	Trigger,
+	Trigger as DialogTrigger
 };

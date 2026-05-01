@@ -2,6 +2,7 @@
 // for information about these interfaces
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import type { createAuth } from './lib/server/auth';
+
 declare global {
 	namespace App {
 		// interface Error {}

@@ -31,8 +31,8 @@ export function resolveSubtle(): SubtleCrypto {
 /**
  * Fills a typed array with cryptographically random values
  */
-export function fillRandomValues<T extends ArrayBufferView>(view: T): T {
-	return resolveCrypto().getRandomValues(view);
+export function fillRandomValues<T extends ArrayBufferView<ArrayBuffer>>(view: T): T {
+	return resolveCrypto().getRandomValues(view) as T;
 }
 
 /**

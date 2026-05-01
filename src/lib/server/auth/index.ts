@@ -156,7 +156,7 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 		user: {
 			changeEmail: {
 				enabled: true,
-				sendChangeEmailVerification: async ({ user, newEmail, url, token: _token }, _request) => {
+				sendChangeEmailConfirmation: async ({ user, newEmail, url, token: _token }, _request) => {
 					const apiKey = (env as any)?.RESEND_API_KEY as string | undefined;
 					if (!apiKey) {
 						console.error(
@@ -172,7 +172,7 @@ export const createAuth = (env?: AuthEnv, cf?: CloudflareGeolocation | null | un
 					);
 
 					if (!result.success) {
-						console.error('[BetterAuth] sendChangeEmailVerification failed', result.error);
+						console.error('[BetterAuth] sendChangeEmailConfirmation failed', result.error);
 					}
 				}
 			}
