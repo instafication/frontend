@@ -1,17 +1,14 @@
-import { and, desc, gt, inArray, sql } from 'drizzle-orm';
-import { db } from '$lib/db';
-// If this mailer works in CF Workers, you can keep it.
-// If not, you can stub it or guard it with try/catch as below.
 import { sendLaundryNotification } from '$lib/Managers/EmailManager';
-
-// ⬇️ Import your Drizzle tables here
 import {
-	notifications as notificationsTable,
-	profiles as profilesTable,
-	scrapers,
-	services as servicesTable
-} from '../../../../../drizzle/schema';
-// src/routes/api/callback/scraper/+server.ts
+	notification_Create,
+	profile_GetUsersWithCreditsByIds,
+	scraper_Create,
+	scraper_ExistsByArea,
+	scraper_GetLastUpdateByArea,
+	scraper_UpdateLastPingByOptionsKeyValue,
+	scraper_UpdateLastUpdateByOptionsKeyValue,
+	service_GetUserIdsByOptions
+} from '../../../db.remote';
 import type { RequestHandler } from './$types';
 
 /* --------------------------- Payload interfaces --------------------------- */
@@ -28,15 +25,6 @@ export interface postParamsSssb {
 }
 
 /* ------------------------------ Utilities -------------------------------- */
-
-// Generate a 32-char lowercase hex ID (similar to lower(hex(randomblob(16))))
-const generateHexId = (): string => {
-	const bytes = new Uint8Array(16);
-	crypto.getRandomValues(bytes);
-	let out = '';
-	for (let i = 0; i < bytes.length; i++) out += bytes[i].toString(16).padStart(2, '0');
-	return out;
-};
 
 // Parse "MON 8 SEP" + "13:00-16:10" -> booking start timestamp (ms)
 // NOTE: simple "+2h to force CET/CEST" like your original. Consider a real TZ lib later.
@@ -69,98 +57,6 @@ function parseCETDateTime(paramDate: string, paramTime: string): number {
 	return dt.getTime();
 }
 
-/* ------------------------- Inlined "remote" funcs ------------------------- */
-/* All these talk to Drizzle/D1 directly; no $app/server query/command wrappers. */
-
-// --- SCRAPERS ---
-async function scraper_ExistsByArea(area: string): Promise<boolean> {
-	return await db()
-		.select({ id: scrapers.id }) // select only primitive column to avoid JSON parsing
-		.from(scrapers)
-		.where(sql`json_extract(${scrapers.params}, '$.area') = ${area}`)
-		.limit(1)
-		.then((r) => r.length > 0);
-}
-
-async function scraper_GetLastUpdateByArea(area: string): Promise<number> {
-	return await db()
-		.select({ last_update: scrapers.last_update }) // avoid JSON col reads
-		.from(scrapers)
-		.where(sql`json_extract(${scrapers.params}, '$.area') = ${area}`)
-		.orderBy(desc(scrapers.last_update))
-		.limit(1)
-		.then((r) => (r[0]?.last_update ?? -1) as number);
-}
-
-async function scraper_UpdateLastUpdateByArea(
-	area: string,
-	unixTimestamp: number
-): Promise<boolean> {
-	return await db()
-		.update(scrapers)
-		.set({ last_update: unixTimestamp })
-		.where(sql`json_extract(${scrapers.params}, '$.area') = ${area}`)
-		.then((r) => (r as any).success ?? true);
-}
-
-async function scraper_UpdateLastPingByArea(area: string, unixTimestamp: number): Promise<boolean> {
-	return await db()
-		.update(scrapers)
-		.set({ last_ping: unixTimestamp })
-		.where(sql`json_extract(${scrapers.params}, '$.area') = ${area}`)
-		.then((r) => (r as any).success ?? true);
-}
-
-// --- NOTIFICATIONS ---
-type NotificationInsert = {
-	id?: string;
-	title: string;
-	body: string;
-	area: string;
-	date?: number; // seconds since epoch in your schema; adjust if ms
-};
-async function notification_Create(payload: NotificationInsert): Promise<boolean> {
-	const toInsert = {
-		...payload,
-		id: payload.id ?? generateHexId(),
-		// If your schema stores seconds (as your remote code implies), keep /1000.
-		// If it's ms in your schema, remove Math.floor and *1000 conversions.
-		date: payload.date ?? Math.floor(Date.now() / 1000)
-	};
-	return await db()
-		.insert(notificationsTable)
-		.values(toInsert)
-		.then((r) => (r as any).success ?? true);
-}
-
-// --- SERVICES ---
-async function service_GetUserIdsByOptionsArea(
-	area: string
-): Promise<Array<{ user: string; notificationWithinTime: string; notificationMethod: string }>> {
-	// Keep the shape your code expects: user, notificationWithinTime, notificationMethod
-	return await db()
-		.select({
-			user: servicesTable.user,
-			notificationWithinTime: servicesTable.notificationWithinTime,
-			notificationMethod: servicesTable.notificationMethod
-		})
-		.from(servicesTable)
-		.where(sql`json_extract(${servicesTable.options}, '$.area') = ${area}`);
-}
-
-// --- PROFILES ---
-async function profile_GetUsersWithCreditsByIds(ids: string[]) {
-	if (!ids?.length) return [];
-	return await db()
-		.select({
-			id: profilesTable.id,
-			email: profilesTable.email,
-			credits: profilesTable.credits
-		})
-		.from(profilesTable)
-		.where(and(gt(profilesTable.credits, 0), inArray(profilesTable.id, ids)));
-}
-
 /* ------------------------ Business handler (local) ------------------------ */
 
 async function HandleSssb(scraperPayload: postTemplate): Promise<Response> {
@@ -176,7 +72,7 @@ async function HandleSssb(scraperPayload: postTemplate): Promise<Response> {
 	const nowMs = Date.now();
 
 	// Duplicate/age checks
-	const storedLastUpdated = await scraper_GetLastUpdateByArea(area);
+	const storedLastUpdated = await scraper_GetLastUpdateByArea({ key: 'area', value: area }).run();
 	if (storedLastUpdated === bookingTs) {
 		console.log('[Scraper] Duplicate data – skipping.');
 		return new Response('Duplicate data', { status: 200 });
@@ -186,12 +82,20 @@ async function HandleSssb(scraperPayload: postTemplate): Promise<Response> {
 	if (!withinThreeDays) {
 		console.log('[Scraper] New slot is >3 days away – skipping notifications.');
 		// Still persist so future duplicates are ignored
-		await scraper_UpdateLastUpdateByArea(area, bookingTs);
+		await scraper_UpdateLastUpdateByOptionsKeyValue({
+			key: 'area',
+			value: area,
+			unixTimestamp: bookingTs
+		});
 		return new Response('Slot is too far in the future', { status: 200 });
 	}
 
 	// Persist new timestamp
-	await scraper_UpdateLastUpdateByArea(area, bookingTs);
+	await scraper_UpdateLastUpdateByOptionsKeyValue({
+		key: 'area',
+		value: area,
+		unixTimestamp: bookingTs
+	});
 
 	// Create notification row
 	await notification_Create({
@@ -204,14 +108,14 @@ async function HandleSssb(scraperPayload: postTemplate): Promise<Response> {
 
 	// Notify users
 	try {
-		const services = await service_GetUserIdsByOptionsArea(area);
+		const services = await service_GetUserIdsByOptions({ key: 'area', value: area }).run();
 		if (!services.length) {
 			console.log(`[Scraper] No users configured for area: ${area}`);
 			return new Response('No interested users', { status: 200 });
 		}
 
 		const userIds = services.map((s) => s.user);
-		const profiles = await profile_GetUsersWithCreditsByIds(userIds);
+		const profiles = await profile_GetUsersWithCreditsByIds(userIds).run();
 
 		for (const profile of profiles) {
 			const serviceCfg = services.find((s) => s.user === profile.id);
@@ -263,27 +167,27 @@ export const POST: RequestHandler = (async ({ request }) => {
 		}
 
 		/* Ensure scraper row exists (D1/SQLite json_extract) */
-		const exists = await scraper_ExistsByArea(params.area);
+		const exists = await scraper_ExistsByArea({ key: 'area', value: params.area }).run();
 		if (!exists) {
 			const now = Date.now();
-			await db()
-				.insert(scrapers)
-				.values({
-					// If your `id` is autoincrement int, remove the id field here.
-					id: generateHexId() as any,
-					company: scraper.company as any,
-					frequency: (scraper as any).frequency ?? 5,
-					services: (scraper as any).services ?? [],
-					params: (scraper as any).params ?? {},
-					last_ping: now,
-					last_update: now
-				});
+			await scraper_Create({
+				company: scraper.company,
+				frequency: (scraper as any).frequency ?? 5,
+				services: (scraper as any).services ?? [],
+				params: (scraper as any).params ?? {},
+				last_ping: now,
+				last_update: now
+			});
 			console.log(`[Scraper] New scraper row created for area ${params.area}`);
 			// (No early return; continue to normal handling)
 		}
 
 		/* Always bump last_ping */
-		await scraper_UpdateLastPingByArea(params.area, Date.now());
+		await scraper_UpdateLastPingByOptionsKeyValue({
+			key: 'area',
+			value: params.area,
+			unixTimestamp: Date.now()
+		});
 		console.log(`[Scraper] Last ping updated for area ${params.area}`);
 
 		/* Main business logic */

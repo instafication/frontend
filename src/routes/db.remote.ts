@@ -37,6 +37,10 @@ const generateHexId = (): string => {
 const ALLOWED_PARAM_KEYS = ['area', 'company', 'service', 'type'] as const;
 type AllowedParamKey = (typeof ALLOWED_PARAM_KEYS)[number];
 
+function jsonPath(key: AllowedParamKey): string {
+	return `$.${key}`;
+}
+
 function validateParamKey(key: string): AllowedParamKey {
 	if (!ALLOWED_PARAM_KEYS.includes(key as AllowedParamKey)) {
 		throw new Error(`Invalid param key: ${key}. Allowed: ${ALLOWED_PARAM_KEYS.join(', ')}`);
@@ -54,7 +58,7 @@ export const scraper_GetLastUpdateByArea = query(
 		return await db()
 			.select({ last_update: scrapers.last_update })
 			.from(scrapers)
-			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
+			.where(sql`json_extract(${scrapers.params}, ${jsonPath(safeKey)}) = ${value}`)
 			.orderBy(desc(scrapers.last_update))
 			.limit(1)
 			.then((r) => r[0]?.last_update ?? -1);
@@ -82,7 +86,7 @@ export const scraper_ExistsByArea = query(
 		return await db()
 			.select()
 			.from(scrapers)
-			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
+			.where(sql`json_extract(${scrapers.params}, ${jsonPath(safeKey)}) = ${value}`)
 			.limit(1)
 			.then((r) => r.length > 0);
 	}
@@ -111,7 +115,7 @@ export const scraper_UpdateLastPingByOptionsKeyValue = command(
 		return await db()
 			.update(scrapers)
 			.set({ last_ping: unixTimestamp })
-			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
+			.where(sql`json_extract(${scrapers.params}, ${jsonPath(safeKey)}) = ${value}`)
 			.then((r) => r.success);
 	}
 );
@@ -123,7 +127,7 @@ export const scraper_UpdateLastUpdateByOptionsKeyValue = command(
 		return await db()
 			.update(scrapers)
 			.set({ last_update: unixTimestamp })
-			.where(sql`params->>'${sql.raw(safeKey)}' = ${value}`)
+			.where(sql`json_extract(${scrapers.params}, ${jsonPath(safeKey)}) = ${value}`)
 			.then((r) => r.success);
 	}
 );
@@ -341,7 +345,7 @@ export const service_GetUserIdsByOptions = query(
 		return await db()
 			.select()
 			.from(services)
-			.where(sql`options->>'${sql.raw(safeKey)}' = ${value}`);
+			.where(sql`json_extract(${services.options}, ${jsonPath(safeKey)}) = ${value}`);
 	}
 );
 
